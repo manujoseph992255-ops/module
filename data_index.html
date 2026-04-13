@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KVJ Advanced Data Analytics Certification - KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .typing-container {
+            display: inline-block;
+            min-height: 2.2em;
+            position: relative;
+        }
+        .text-blue-accent { color: #38bdf8; }
+        .blinking-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: #38bdf8;
+            margin-left: 2px;
+            animation: blink-caret 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+        @keyframes blink-caret {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="landing-body">
+    <!-- Navbar -->
+    <nav class="kvj-navbar">
+        <div class="kvj-container nav-wrapper">
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="index.html" class="nav-back">
+                    Back
+                </a>
+                <a href="index.html" class="kvj-logo">
+                    <div class="logo-box">
+                        <img src="Kvj logo.jpeg" alt="KVJ" style="max-height: 45px; width: auto;">
+                    </div>
+                </a>
+            </div>
+            <div class="nav-links-right">
+                <a href="data_intro.html" class="kvj-btn kvj-btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="kvj-hero">
+        <div class="kvj-container hero-grid">
+            
+            <!-- Left Content -->
+            <div class="hero-left fade-in-up" style="animation-delay: 0.1s;">
+                <h1 class="hero-title typing-container">
+                    <span id="typewriter"></span><span class="blinking-cursor"></span>
+                </h1>
+                
+                <h2 class="hero-subtitle">
+                    KVJ Advanced Data Analytics Certification
+                </h2>
+                
+                <p class="hero-desc">
+                    Master the principles of Data Science and Analytics through our mathematically optimized curriculum. Experience liftoff with interactive modules designed for your success.
+                </p>
+                
+                <div class="hero-action">
+                    <a href="data_intro.html" class="kvj-btn kvj-btn-dark" style="background: #0ea5e9; box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3);">Explore Analytics</a>
+                </div>
+            </div>
+            
+            <!-- Right Content - Data Analysis Code Editor Graphic -->
+            <div class="hero-right fade-in-up" style="animation-delay: 0.3s;">
+                <div class="dashboard-mockup" style="background-color: #0f172a; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+                    <div class="window-controls" style="background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <div class="dot dot-r"></div>
+                        <div class="dot dot-y"></div>
+                        <div class="dot dot-g"></div>
+                        <div class="fy-text" style="color: #94a3b8; font-family: monospace;">analysis.py</div>
+                    </div>
+                    <div class="dash-content" style="padding: 30px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95rem; line-height: 1.7; color: #e2e8f0; overflow-x: auto;">
+                        <span style="color: #c678dd;">import</span> pandas <span style="color: #c678dd;">as</span> <span style="color: #e5c07b;">pd</span><br>
+                        <br>
+                        <span style="color: #5c6370; font-style: italic;"># Load and transform business data</span><br>
+                        df = pd.<span style="color: #61afef;">read_csv</span>(<span style="color: #98c379;">'kvj_intelligence.csv'</span>)<br>
+                        insights = df.<span style="color: #61afef;">groupby</span>(<span style="color: #98c379;">'Sector'</span>).<span style="color: #61afef;">mean</span>()<br>
+                        <br>
+                        <span style="color: #c678dd;">for</span> metric <span style="color: #c678dd;">in</span> insights.columns:<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;print(<span style="color: #98c379;">f"Deploying {metric} to Dashboard..."</span>)<br>
+                        <br>
+                        <span style="color: #c678dd;">return</span> <span style="color: #98c379;">"KVJ Data Mastery Achieved!"</span><span class="blinking-cursor" style="background-color: #528bff; width: 8px; margin-left: 5px;"></span><br>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    <script>
+        // Typing Effect logic
+        const textToType = "Experience liftoff with the next-generation Data Curriculum";
+        const typewriterEl = document.getElementById('typewriter');
+        let typeIndex = 0;
+        
+        const blueStyle = "<span class='text-blue'>";
+        const accentStyle = "<span class='text-blue-accent'>";
+        const closeSpan = "</span>";
+        
+        // Break lines for impact
+        const line1 = "Experience liftoff with ";
+        const line2 = "the next-generation<br>";
+        const line3 = "Data Curriculum";
+
+        let fullHTML = "";
+
+        function typeWriter() {
+            if (typeIndex < line1.length) {
+                fullHTML = blueStyle + line1.substring(0, typeIndex + 1) + closeSpan;
+                typewriterEl.innerHTML = fullHTML;
+                typeIndex++;
+                setTimeout(typeWriter, 35);
+            } 
+            else if (typeIndex < line1.length + line2.length) {
+                let idx2 = typeIndex - line1.length;
+                fullHTML = blueStyle + line1 + closeSpan + accentStyle + line2.substring(0, idx2 + 1) + closeSpan;
+                typewriterEl.innerHTML = fullHTML;
+                typeIndex++;
+                setTimeout(typeWriter, 35);
+            }
+            else if (typeIndex < line1.length + line2.length + line3.length) {
+                let idx3 = typeIndex - line1.length - line2.length;
+                fullHTML = blueStyle + line1 + closeSpan + accentStyle + line2 + closeSpan + blueStyle + line3.substring(0, idx3 + 1) + closeSpan;
+                typewriterEl.innerHTML = fullHTML;
+                typeIndex++;
+                setTimeout(typeWriter, 35);
+            }
+        }
+        
+        setTimeout(typeWriter, 400);
+    </script>
+</body>
+</html>

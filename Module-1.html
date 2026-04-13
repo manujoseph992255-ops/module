@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 1: Foundation | KVJ</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --secondary-blue: #008eab;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Top Nav */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .kvj-logo-img {
+            max-height: 35px;
+            width: auto;
+        }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            padding: 8px 18px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 6px;
+            transition: opacity 0.3s;
+            text-transform: uppercase;
+        }
+
+        /* Header Banner */
+        .header-banner {
+            background: var(--primary-blue);
+            color: white;
+            padding: 120px 20px 60px;
+            text-align: center;
+        }
+
+        .header-banner h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 38px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        /* Layout Container */
+        .layout-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 40px auto;
+            gap: 40px;
+            width: 95%;
+            padding-bottom: 60px;
+        }
+
+        .sidebar {
+            width: 300px;
+            flex-shrink: 0;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--secondary-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #f8fafc;
+            color: var(--primary-blue);
+        }
+
+        .sidebar a.active {
+            background: #eff6ff;
+            color: var(--primary-blue);
+            font-weight: 700;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 40px 60px;
+            border-radius: 12px;
+        }
+
+        .section-header {
+            margin-bottom: 30px;
+            border-bottom: 3px solid var(--bg-light);
+            padding-bottom: 15px;
+        }
+
+        .section-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-blue);
+            font-size: 28px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        /* Content Styles */
+        p {
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: #334155;
+            font-size: 17px;
+        }
+
+        strong {
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+
+        .interaction-box strong {
+            color: var(--secondary-blue);
+        }
+
+        .interaction-box {
+            background-color: #f7f9fc;
+            border-left: 5px solid var(--secondary-blue);
+            padding: 25px;
+            margin: 30px 0;
+            border-radius: 0 10px 10px 0;
+            font-size: 15px;
+        }
+
+        h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-blue);
+            margin: 40px 0 20px;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        /* Code Block Styling */
+        pre {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 14px;
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .output-box {
+            background-color: #ecfeff;
+            border: 1px solid #cffafe;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+            margin-bottom: 30px;
+            color: var(--secondary-blue);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .static-output::before {
+            content: "> Result: ";
+            margin-right: 10px;
+            opacity: 0.6;
+        }
+
+        .live-output-box {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+            min-height: 40px;
+            white-space: pre-wrap;
+            display: none;
+        }
+
+        .live-output-box.active {
+            display: block;
+        }
+
+        /* Keywords */
+        .keyword {
+            color: #f472b6;
+        }
+
+        .function {
+            color: #4ade80;
+        }
+
+        .string {
+            color: #fbbf24;
+        }
+
+        .comment {
+            color: #94a3b8;
+        }
+
+        /* Quiz CTA */
+        .quiz-cta {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #008eab 100%);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+
+        .quiz-cta h3 {
+            color: #ffffff !important;
+            margin-top: 0;
+            font-size: 24px;
+            border: none;
+            padding: 0;
+        }
+
+        .quiz-cta p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 25px;
+        }
+
+        .btn-start-quiz {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        .btn-start-quiz:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            background: #f8fafc;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+            font-size: 13px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        /* Practice Space Styling */
+        .practice-space {
+            background: #ffffff;
+            border: 2px solid var(--secondary-blue);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 4px 15px rgba(0, 142, 171, 0.1);
+        }
+
+        .practice-space h3 {
+            margin-top: 0;
+            color: var(--secondary-blue);
+            font-size: 20px;
+        }
+
+        .practice-box {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .practice-box input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .practice-box button {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background 0.3s;
+        }
+
+        .practice-box button:hover {
+            background: var(--secondary-blue);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            font-weight: 700;
+            display: none;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .feedback.correct {
+            color: #065f46;
+            background: #ecfdf5;
+            display: block;
+            border: 1px solid #a7f3d0;
+        }
+
+        .feedback.wrong {
+            color: #991b1b;
+            background: #fef2f2;
+            display: block;
+            border: 1px solid #fecaca;
+        }
+
+        /* Coding Practice Styling */
+        .coding-practice {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .coding-practice h3 {
+            margin-top: 0;
+            color: #7dd3fc;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .coding-practice p {
+            color: #e2e8f0;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .coding-practice strong {
+            color: #f8fafc;
+            font-weight: 800;
+        }
+
+        .coding-practice textarea {
+            width: 100%;
+            height: 120px;
+            background: #0f172a;
+            color: #38bdf8;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            resize: vertical;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        .coding-practice textarea:focus {
+            border-color: #38bdf8;
+        }
+
+        .coding-practice .btn-run {
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .coding-practice .btn-reset {
+            background: #334155;
+            color: #f8fafc;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .coding-practice .btn-run:hover, .coding-practice .btn-reset:hover {
+            background: #7dd3fc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .coding-practice .btn-reset:hover { background: #475569; }
+
+        /* Visual Illustrations */
+        .illustration-container {
+            position: fixed;
+            right: 20px;
+            top: 200px;
+            width: 280px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .illustration-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .illustration-card img {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .illustration-card span {
+            display: block;
+            font-weight: 800;
+            color: var(--primary-blue);
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Module Illustrations */
+        .illustration-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .illustration-card {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            border: 1px solid var(--border-color);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .illustration-card img {
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        .illustration-card span {
+            display: block;
+            font-weight: 800;
+            color: var(--primary-blue);
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .main-content li {
+            list-style: none;
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 12px;
+        }
+
+        .main-content li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, var(--secondary-blue), var(--primary-blue));
+            border-radius: 2px;
+            transform: rotate(45deg);
+        }
+
+        @media (max-width: 1024px) {
+            .illustration-container {
+                display: none;
+            }
+        }
+
+        @media (max-width: 1600px) {
+            .illustration-container {
+                display: none;
+            }
+        }
+
+
+
+        @media (max-width: 992px) {
+            .layout-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                margin-bottom: 30px;
+            }
+
+            .main-content {
+                padding: 30px;
+            }
+
+            .practice-box {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="python_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        <a href="roadmap.html" class="logout-btn">EXIT</a>
+    </nav>
+
+    <header class="header-banner">
+        <h1>MODULE 1: FOUNDATION</h1>
+    </header>
+
+    <div class="illustration-container">
+        <div class="illustration-card" style="animation-delay: 0s;">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python">
+            <span>Core Logic</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 2s;">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg"
+                style="filter: hue-rotate(180deg);" alt="Data">
+            <span>Data Structures</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 4s;">
+            <img src="https://img.icons8.com/isometric/100/code.png" alt="Code">
+            <span>Execution</span>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        <aside class="sidebar">
+            <h3>Module Path</h3>
+            <a href="Module-1.html" class="active">01 Foundation</a>
+            <a href="Module-2.html">02 Flow Control</a>
+            <a href="Module-3.html">03 I/O Operations</a>
+            <a href="Module-4.html">04 Documentation</a>
+            <a href="Module-5.html">05 Error Handling</a>
+            <a href="Module-6.html">06 Built-in Modules</a>
+
+            <h3 style="margin-top:35px;">Navigation</h3>
+            <a href="roadmap.html" style="background: #f8fafc;">&larr; Return to Roadmap</a>
+        </aside>
+
+        <main class="main-content">
+            <div class="section-header">
+                <h2>MODULE 1</h2>
+                <p style="font-weight: 600; color: var(--secondary-blue);">Data Types, Data Structures & Operators</p>
+            </div>
+
+                    <h3>Introduction to Python</h3>
+                    <p>Python is a high-level programming language used to write instructions for computers.</p>
+                    <p>It is widely used because it is:</p>
+                    <ul>
+                        <li>Easy to read</li>
+                        <li>Beginner friendly</li>
+                        <li>Powerful</li>
+                        <li>Used in many industries</li>
+                    </ul>
+
+                    <p style="margin-top: 30px;"><strong>Python is used in:</strong></p>
+                    <ul>
+                        <li>Data Science &amp; Business Intelligence</li>
+                        <li>Artificial Intelligence &amp; Machine Learning</li>
+                        <li>Web &amp; Backend Development</li>
+                        <li>Finance, Banking &amp; FinTech</li>
+                        <li>Business Process Automation</li>
+                        <li>Cybersecurity &amp; Scripting</li>
+                    </ul>
+
+                    <p style="margin-top: 30px;"><strong>Common job roles where Python is used:</strong></p>
+                    <ul style="margin-bottom: 40px;">
+                        <li>Data Analyst / Business Analyst</li>
+                        <li>Backend Developer / Fullstack Developer</li>
+                        <li>Machine Learning Engineer</li>
+                        <li>Financial Analyst / Quantitative Developer</li>
+                        <li>Automation Engineer / DevOps Scientist</li>
+                    </ul>
+
+            <p>The concepts in this module form the foundation for learning Python.</p>
+
+            <div class="section-header">
+                <h2>1.1 Understanding Data Types</h2>
+            </div>
+            <p>Python automatically assigns a data type based on the value stored.</p>
+            <p>This is called <strong>dynamic typing</strong>.</p>
+
+            <h3>Integer (int)</h3>
+            <p>Whole numbers without decimals.</p>
+            <p><strong>Example:</strong></p>
+            <pre>
+units_sold = <span class="number">150</span>
+<span class="function">print</span>(<span class="function">type</span>(units_sold))
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">&lt;class 'int'&gt;</div>
+            <div class="interaction-box">
+                The value 150 is a whole number, so Python assigns it the integer data type.
+            </div>
+            <!-- Coding Practice: Integer -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Integer</h3>
+                <p><strong>Challenge:</strong> Assign the number <code>250</code> to a variable called
+                    <code>stock</code> and print its type.</p>
+                <textarea id="coding-ans-int" placeholder="# Write your code here..."></textarea>
+                <button class="btn-run" onclick="runSkulpt('int', '<class \'int\'>')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('int')">Reset</button>
+                <div id="coding-output-int" class="live-output-box"></div>
+                <div id="coding-feedback-int" class="feedback"></div>
+            </div>
+
+            <h3>Float (float)</h3>
+            <p>Numbers with decimal values.</p>
+            <p><strong>Example</strong></p>
+            <pre>
+product_price = <span class="number">199.99</span>
+<span class="function">print</span>(<span class="function">type</span>(product_price))
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">&lt;class 'float'&gt;</div>
+            <div class="interaction-box">
+                Decimal numbers are stored as float values.
+            </div>
+            <!-- Coding Practice: Float -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Float</h3>
+                <p><strong>Challenge:</strong> Create a variable <code>discount</code> with value <code>0.15</code> and
+                    print its type.</p>
+                <textarea id="coding-ans-float" placeholder="# Write your code here..."></textarea>
+                <button class="btn-run" onclick="runSkulpt('float', '<class \'float\'>')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('float')">Reset</button>
+                <div id="coding-output-float" class="live-output-box"></div>
+                <div id="coding-feedback-float" class="feedback"></div>
+            </div>
+
+            <h3>String (str)</h3>
+            <p>Strings store text data such as names, product labels, or company names.</p>
+            <p><strong>Example</strong></p>
+            <pre>
+company_name = <span class="string">"Global Finance Ltd"</span>
+<span class="function">print</span>(<span class="function">type</span>(company_name))
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">&lt;class 'str'&gt;</div>
+            <!-- Coding Practice: String -->
+            <div class="coding-practice">
+                <h3>Coding Practice: String</h3>
+                <p><strong>Challenge:</strong> Store the name <code>"KVJ"</code> in a variable and print its
+                    type.</p>
+                <textarea id="coding-ans-str" placeholder="# Write your code here..."></textarea>
+                <button class="btn-run" onclick="runSkulpt('str', '<class \'str\'>')">Run & Check</button>
+                <div id="coding-output-str" class="live-output-box"></div>
+                <div id="coding-feedback-str" class="feedback"></div>
+            </div>
+
+            <h3>Important comparison</h3>
+            <pre>
+<span class="function">print</span>(<span class="function">type</span>(<span class="string">"10"</span>))
+<span class="function">print</span>(<span class="function">type</span>(<span class="number">10</span>))
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">
+                &lt;class 'str'&gt;<br>
+                &lt;class 'int'&gt;
+            </div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                "10" → text<br>
+                10 → number
+            </div>
+
+            <h3>Boolean (bool)</h3>
+            <p>Boolean values represent True or False.</p>
+            <p><strong>Example</strong></p>
+            <pre>
+profit = <span class="number">5000</span>
+result = profit > <span class="number">0</span>
+<span class="function">print</span>(result)
+<span class="function">print</span>(<span class="function">type</span>(result))
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">
+                True<br>
+                &lt;class 'bool'&gt;
+            </div>
+            <div class="interaction-box">
+                The comparison profit > 0 returns a Boolean value.
+            </div>
+            <!-- Coding Practice: Boolean -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Boolean</h3>
+                <p><strong>Challenge:</strong> Write an expression that checks if <code>500 > 200</code> and print the
+                    result.</p>
+                <textarea id="coding-ans-bool" placeholder="# Write your code here..."></textarea>
+                <button class="btn-run" onclick="runSkulpt('bool', 'True')">Run & Check</button>
+                <div id="coding-output-bool" class="live-output-box"></div>
+                <div id="coding-feedback-bool" class="feedback"></div>
+            </div>
+
+            <h3>Evaluating Expressions</h3>
+            <pre>
+sales = <span class="number">5000</span>
+tax_rate = <span class="number">0.05</span>
+customer = <span class="string">"Rahul"</span>
+status = sales > <span class="number">3000</span>
+<span class="function">print</span>(<span class="function">type</span>(sales))
+<span class="function">print</span>(<span class="function">type</span>(tax_rate))
+<span class="function">print</span>(<span class="function">type</span>(customer))
+<span class="function">print</span>(<span class="function">type</span>(status))
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">
+                &lt;class 'int'&gt;<br>
+                &lt;class 'float'&gt;<br>
+                &lt;class 'str'&gt;<br>
+                &lt;class 'bool'&gt;
+            </div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                sales → integer<br>
+                tax_rate → float<br>
+                customer → string<br>
+                status → boolean
+            </div>
+
+            <h3>Type Conversion</h3>
+            <p>Type conversion changes data from one type to another.</p>
+            <p><strong>Example</strong></p>
+            <pre>
+x = <span class="function">int</span>(<span class="string">"100"</span>)
+y = <span class="function">float</span>(<span class="string">"10.5"</span>)
+z = <span class="function">str</span>(<span class="number">500</span>)
+w = <span class="function">bool</span>(<span class="number">0</span>)
+<span class="function">print</span>(x)
+<span class="function">print</span>(y)
+<span class="function">print</span>(z)
+<span class="function">print</span>(w)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">
+                100<br>
+                10.5<br>
+                500<br>
+                False
+            </div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                bool() converts to Boolean
+            </div>
+
+
+            <div class="section-header">
+                <h2>1.2 Constructing Data Structures</h2>
+            </div>
+            <p>Python provides structures for storing collections of data.</p>
+
+            <h3>List</h3>
+            <p>A list stores ordered values.</p>
+            <p>Example: monthly sales data.</p>
+            <pre>
+monthly_sales = [<span class="number">5000</span>, <span class="number">7200</span>, <span class="number">6500</span>]
+<span class="function">print</span>(monthly_sales)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">[5000, 7200, 6500]</div>
+            <p><strong>Characteristics</strong></p>
+            <ul>
+                <li>Ordered</li>
+                <li>Mutable</li>
+                <li>Allows duplicates</li>
+            </ul>
+
+            <h3>Indexing</h3>
+            <pre>
+<span class="function">print</span>(monthly_sales[<span class="number">0</span>])
+<span class="function">print</span>(monthly_sales[<span class="number">-1</span>])
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">
+                5000<br>
+                6500
+            </div>
+            <div class="interaction-box">
+                Index 0 refers to the first value.
+            </div>
+            <!-- Coding Practice: Indexing -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Indexing</h3>
+                <p><strong>Challenge:</strong> From the list <code>prices = [10.5, 20.0, 35.5]</code>, print the
+                    **second** element.</p>
+                <textarea id="coding-ans-index" placeholder="# Write your code here..."></textarea>
+                <button class="btn-run" onclick="runSkulpt('index', '20.0')">Run & Check</button>
+                <div id="coding-output-index" class="live-output-box"></div>
+                <div id="coding-feedback-index" class="feedback"></div>
+            </div>
+
+            <!-- Coding Practice 2 -->
+            <div class="coding-practice">
+                <h3>Coding Practice: List Indexing</h3>
+                <p><strong>Challenge:</strong> Create a list called <code>scores</code> with values
+                    <code>[85, 90, 95]</code> and print the <strong>first</strong> element.</p>
+                <textarea id="coding-ans-2" placeholder="# Write your code here..."></textarea>
+                <button class="btn-run" onclick="runSkulpt(2, '85')">Run & Check</button>
+                <div id="coding-output-2" class="live-output-box"></div>
+                <div id="coding-feedback-2" class="feedback"></div>
+            </div>
+
+            <h3>Slicing</h3>
+            <pre>
+<span class="function">print</span>(monthly_sales[<span class="number">0</span>:<span class="number">2</span>])
+<span class="function">print</span>(monthly_sales[:<span class="number">2</span>])
+<span class="function">print</span>(monthly_sales[<span class="number">1</span>:])
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">
+                [5000, 7200]<br>
+                [5000, 7200]<br>
+                [7200, 6500]
+            </div>
+
+            <h3>List Operations</h3>
+            <p><strong>append()</strong></p>
+            <pre>
+monthly_sales.append(<span class="number">9000</span>)
+<span class="function">print</span>(monthly_sales)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">[5000, 7200, 6500, 9000]</div>
+
+            <p><strong>insert()</strong></p>
+            <pre>
+monthly_sales.insert(<span class="number">1</span>, <span class="number">6000</span>)
+<span class="function">print</span>(monthly_sales)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">[5000, 6000, 7200, 6500, 9000]</div>
+
+            <p><strong>remove()</strong></p>
+            <pre>
+monthly_sales.remove(<span class="number">6500</span>)
+<span class="function">print</span>(monthly_sales)
+</pre>
+
+            <p><strong>sort()</strong></p>
+            <pre>
+monthly_sales.sort()
+<span class="function">print</span>(monthly_sales)
+</pre>
+
+            <p><strong>reverse()</strong></p>
+            <pre>
+monthly_sales.reverse()
+<span class="function">print</span>(monthly_sales)
+</pre>
+
+            <p><strong>max() and min()</strong></p>
+            <pre>
+<span class="function">print</span>(<span class="function">max</span>(monthly_sales))
+<span class="function">print</span>(<span class="function">min</span>(monthly_sales))
+</pre>
+
+            <h3>Tuple</h3>
+            <p>Tuples store fixed data that should not change.</p>
+            <p>Example: store coordinates of a branch office.</p>
+            <pre>
+location = (<span class="number">10</span>, <span class="number">20</span>)
+<span class="function">print</span>(location)
+</pre>
+            <p>Tuples are <strong>immutable</strong>.</p>
+            <!-- Coding Practice: Tuple -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Tuple</h3>
+                <p><strong>Challenge:</strong> Create a tuple named <code>dimensions</code> with values
+                    <code>(1080, 1920)</code> and print it.</p>
+                <textarea id="coding-ans-tuple" placeholder="# Write your code here..."></textarea>
+                <button class="btn-run" onclick="runSkulpt('tuple', '(1080, 1920)')">Run & Check</button>
+                <div id="coding-output-tuple" class="live-output-box"></div>
+                <div id="coding-feedback-tuple" class="feedback"></div>
+            </div>
+
+            <h3>Set</h3>
+            <p>Sets store unique values.</p>
+            <p>Example: unique product IDs.</p>
+            <pre>
+product_ids = {<span class="number">101</span>, <span class="number">102</span>, <span class="number">103</span>, <span class="number">103</span>}
+<span class="function">print</span>(product_ids)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">{101, 102, 103}</div>
+            <!-- Coding Practice: Set -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Set</h3>
+                <p><strong>Challenge:</strong> Create a set <code>tags = {"python", "data", "python"}</code> and print
+                    it. Observe what happens to duplicate values.</p>
+                <textarea id="coding-ans-set" placeholder="# Write your code here..."></textarea>
+                <button class="btn-run" onclick="runSkulpt('set', 'data')">Run & Check</button>
+                <div id="coding-output-set" class="live-output-box"></div>
+                <div id="coding-feedback-set" class="feedback"></div>
+            </div>
+
+            <h3>Dictionary</h3>
+            <p>Dictionaries store key-value pairs.</p>
+            <p>Example: customer information.</p>
+            <pre>
+customer = {
+    <span class="string">"name"</span>: <span class="string">"Rahul"</span>,
+    <span class="string">"balance"</span>: <span class="number">5000</span>,
+    <span class="string">"account_type"</span>: <span class="string">"Savings"</span>
+}
+<span class="function">print</span>(customer[<span class="string">"name"</span>])
+</pre>
+            <!-- Coding Practice: Dictionary -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Dictionary</h3>
+                <p><strong>Challenge:</strong> Create a dictionary <code>car = {"brand": "Tesla", "model": "S"}</code>
+                    and print the value of <code>brand</code>.</p>
+                <textarea id="coding-ans-dict" placeholder="# Write your code here..."></textarea>
+                <button class="btn-run" onclick="runSkulpt('dict', 'Tesla')">Run & Check</button>
+                <div id="coding-output-dict" class="live-output-box"></div>
+                <div id="coding-feedback-dict" class="feedback"></div>
+            </div>
+
+            <div class="section-header">
+                <h2>1.3 Operators</h2>
+            </div>
+            <h3>Arithmetic Operators</h3>
+            <p>Arithmetic operators are used to perform mathematical calculations. Here is the complete list of
+                operators in Python:</p>
+
+            <div class="interaction-box">
+                <ul>
+                    <li><strong>Addition (+):</strong> Adds two numbers. (<code>10 + 5 = 15</code>)</li>
+                    <li><strong>Subtraction (-):</strong> Subtracts one number from another. (<code>10 - 5 = 5</code>)
+                    </li>
+                    <li><strong>Multiplication (*):</strong> Multiplies two numbers. (<code>10 * 5 = 50</code>)</li>
+                    <li><strong>Division (/):</strong> Divides numbers and returns a decimal (float).
+                        (<code>10 / 4 = 2.5</code>)</li>
+                    <li><strong>Floor Division (//):</strong> Divides and rounds down to the nearest whole number.
+                        (<code>10 // 3 = 3</code>)</li>
+                    <li><strong>Modulus (%):</strong> Returns the remainder of a division. (<code>10 % 3 = 1</code>)
+                    </li>
+                    <li><strong>Exponentiation (**):</strong> Raises a number to a power. (<code>2 ** 3 = 8</code>)</li>
+                </ul>
+            </div>
+
+            <p>Let's practice the most common ones!</p>
+
+            <!-- Practice 1: Addition -->
+            <div class="coding-practice">
+                <h3>Practice 1: Addition (+)</h3>
+                <p><strong>Explanation:</strong> Use the <code>+</code> operator to find the sum of two numbers.</p>
+                <p><strong>Task:</strong> Write a program to add <code>10</code> and <code>5</code> and print the
+                    result.</p>
+                <textarea id="coding-ans-add" placeholder="print(10 + 5)"></textarea>
+                <button class="btn-run" onclick="runSkulpt('add', '15')">Run & Check</button>
+                <div id="coding-output-add" class="live-output-box"></div>
+                <div id="coding-feedback-add" class="feedback"></div>
+            </div>
+
+            <!-- Practice 2: Multiplication -->
+            <div class="coding-practice">
+                <h3>Practice 2: Multiplication (*)</h3>
+                <p><strong>Explanation:</strong> Use the <code>*</code> operator to multiply values.</p>
+                <p><strong>Task:</strong> Calculate the total cost of <code>5</code> items that cost <code>$20</code>
+                    each and print the result.</p>
+                <textarea id="coding-ans-mul" placeholder="print(5 * 20)"></textarea>
+                <button class="btn-run" onclick="runSkulpt('mul', '100')">Run & Check</button>
+                <div id="coding-output-mul" class="live-output-box"></div>
+                <div id="coding-feedback-mul" class="feedback"></div>
+            </div>
+
+            <!-- End of Practices -->
+            <h3>Comparison operators</h3>
+            <pre>
+<span class="function">print</span>(<span class="number">10</span> > <span class="number">5</span>)
+<span class="function">print</span>(<span class="number">10</span> == <span class="number">5</span>)
+<span class="function">print</span>(<span class="number">10</span> != <span class="number">5</span>)
+</pre>
+
+            <h3>Logical operators</h3>
+            <pre>
+<span class="function">print</span>(<span class="keyword">True</span> <span class="keyword">and</span> <span class="keyword">False</span>)
+<span class="function">print</span>(<span class="keyword">True</span> <span class="keyword">or</span> <span class="keyword">False</span>)
+<span class="function">print</span>(<span class="keyword">not</span> <span class="keyword">True</span>)
+</pre>
+
+            <h3>Assignment operators</h3>
+            <pre>
+revenue = <span class="number">10000</span>
+revenue += <span class="number">2000</span>
+<span class="function">print</span>(revenue)
+</pre>
+
+            <h3>Identity operator</h3>
+            <pre>
+a = <span class="number">10</span>
+b = <span class="number">10</span>
+<span class="function">print</span>(a <span class="keyword">is</span> b)
+</pre>
+
+            <h3>Membership operator</h3>
+            <pre>
+products = [<span class="string">"Laptop"</span>, <span class="string">"Phone"</span>, <span class="string">"Tablet"</span>]
+<span class="function">print</span>(<span class="string">"Phone"</span> <span class="keyword">in</span> products)
+</pre>
+
+            <div class="section-header">
+                <h2>1.4 Operator Precedence</h2>
+            </div>
+            <pre>
+result = <span class="number">10</span> + <span class="number">5</span> * <span class="number">2</span>
+<span class="function">print</span>(result)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">20</div>
+            <p>Multiplication happens before addition.</p>
+
+            <p><strong>Using parentheses</strong></p>
+            <pre>
+<span class="function">print</span>((<span class="number">10</span> + <span class="number">5</span>) * <span class="number">2</span>)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">30</div>
+
+            <div class="section-header">
+                <h2>Final Practice Task</h2>
+            </div>
+            <p><strong>Scenario:</strong> You are analyzing a company's monthly sales using Python. Write a Python
+                program to:</p>
+            <ul>
+                <li>Create a list named <code>monthly_sales</code> with the values
+                    <code>[6500, 7200, 8800, 5400]</code>.</li>
+                <li>Add a new sales value <code>9000</code> to the list.</li>
+                <li>Sort the sales values.</li>
+                <li>Calculate the average sales.</li>
+                <li>Print the sorted sales list and the average sales.</li>
+                <li>Use an <code>if</code> condition to check if the average sales are greater than <code>6000</code>
+                    and print <code>"Business performance is strong"</code> if the condition is true.</li>
+            </ul>
+
+            <!-- Coding Practice: Final Business Task -->
+            <div class="coding-practice">
+                <h3>Final Business Task</h3>
+                <textarea id="coding-ans-final" placeholder="# Write your code here..."></textarea>
+                <button class="btn-run" onclick="runSkulpt('final', 'Business performance is strong')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('final')">Reset</button>
+                <div id="coding-output-final" class="live-output-box"></div>
+                <div id="coding-feedback-final" class="feedback"></div>
+            </div>
+
+            <!-- Quiz CTA -->
+            <div class="quiz-cta">
+                <h3>Foundation Complete.</h3>
+                <p>Verify your understanding of data types, structures, and operators.</p>
+                <a href="module_quiz.html?mod=1" class="btn-start-quiz">Start Module 1 Assessment &rarr;</a>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        © 2026 KVJ | Professional Python Certification Path
+    </footer>
+
+    <script>
+        // Welcome Logic
+        window.addEventListener('DOMContentLoaded', () => {
+            const userName = localStorage.getItem('strategist_user') || 'Student';
+            console.log(`Knowledge session active for: ${userName}`);
+        });
+
+        function triggerConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function () {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) { return clearInterval(interval); }
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        function checkPracticeAnswer(id, correctAns) {
+            const userAns = document.getElementById(`practice-ans-${id}`).value.trim().toLowerCase();
+            const feedback = document.getElementById(`feedback-${id}`);
+
+            // Clean correct answer for comparison
+            const cleanCorrect = correctAns.toLowerCase().replace(/\s/g, '');
+            const cleanUser = userAns.replace(/\s/g, '').toLowerCase();
+
+            // Special handling for str to ensure it matches correctly
+            if (cleanUser === cleanCorrect || cleanUser === cleanCorrect.replace('()', '')) {
+                feedback.innerHTML = "Correct! Great job! 🎉";
+                feedback.className = "feedback correct";
+                triggerConfetti();
+            } else {
+                feedback.innerHTML = "✗ Incorrect. Try again! Hint: Check the case and syntax.";
+                feedback.className = "feedback wrong";
+            }
+        }
+
+        function runSkulpt(id, expected) {
+            const prog = document.getElementById(`coding-ans-${id}`).value;
+            const outputDiv = document.getElementById(`coding-output-${id}`);
+            const feedback = document.getElementById(`coding-feedback-${id}`);
+            
+            outputDiv.innerHTML = "";
+            outputDiv.classList.add('active');
+            feedback.style.display = "none";
+            feedback.className = "feedback";
+
+            let outputText = "";
+            let validationText = "";
+            let userInputs = [];
+            
+            Sk.configure({
+                output: function(text) { 
+                    outputDiv.appendChild(document.createTextNode(text));
+                    outputDiv.scrollTop = outputDiv.scrollHeight;
+                    outputText += text; 
+                    validationText += text;
+                },
+                read: function(x) {
+                    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+                        throw "File not found: '" + x + "'";
+                    return Sk.builtinFiles["files"][x];
+                },
+                inputfun: function(prompt) {
+                    return new Promise((resolve) => {
+                        // Clean up double prompt if it exists in the output div
+                        if (outputDiv.lastChild && outputDiv.lastChild.nodeType === 3) {
+                            let lastText = outputDiv.lastChild.textContent;
+                            if (lastText.endsWith(prompt)) {
+                                outputDiv.lastChild.textContent = lastText.substring(0, lastText.length - prompt.length);
+                            }
+                        }
+
+                        const container = document.createElement('div');
+                        container.className = 'colab-input-container';
+                        container.innerHTML = `
+                            <span class="colab-prompt">${prompt}</span>
+                            <input type="text" class="colab-input" autocomplete="off">
+                        `;
+                        outputDiv.appendChild(container);
+                        
+                        const inputField = container.querySelector('.colab-input');
+                        inputField.focus();
+                        
+                        inputField.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter') {
+                                const val = inputField.value;
+                                userInputs.push(val);
+                                container.remove();
+                                // Add back the prompt and the answer to the output box permanently
+                                outputDiv.appendChild(document.createTextNode(prompt + val + ""));
+                                outputText += prompt + val + "";
+                                // Do NOT add prompt/input to validationText!
+                                resolve(val);
+                            }
+                        });
+                    });
+                }
+            });
+
+            const myPromise = Sk.misceval.asyncToPromise(function() {
+                return Sk.importMainWithBody("<stdin>", false, prog, true);
+            });
+
+            myPromise.then(function(mod) {
+                if (!outputDiv.innerHTML) outputDiv.innerText = outputText;
+                
+                const cleanOutput = validationText.trim().toLowerCase();
+                let cleanExpected = expected.trim().toLowerCase();
+
+                // Dynamic Validation Logic
+                if (userInputs.length > 0) {
+                    if (id === 'input') {
+                        cleanExpected = `welcome to ${userInputs[0].trim()}`.toLowerCase();
+                    } else if (id === 'int') {
+                        let num = parseInt(userInputs[0]);
+                        if (!isNaN(num)) {
+                            cleanExpected = (num * 2).toString().toLowerCase();
+                        }
+                    }
+                }
+
+                if (cleanOutput.includes(cleanExpected)) {
+                    feedback.innerHTML = "✓ Correct! Your code works perfectly. 🎉";
+                    feedback.className = "feedback correct";
+                    triggerConfetti();
+                } else {
+                    feedback.innerHTML = `✗ Wrong! Expected result not found.`;
+                    feedback.className = "feedback wrong";
+                }
+                feedback.style.display = "block";
+            }, function(err) {
+                outputDiv.innerText += "" + err.toString();
+                feedback.innerHTML = "✗ Error in your code!";
+                feedback.className = "feedback wrong";
+                feedback.style.display = "block";
+            });
+        }
+
+        function resetCodingPractice(id) {
+            const textarea = document.getElementById(`coding-ans-${id}`);
+            const output = document.getElementById(`coding-output-${id}`);
+            const feedback = document.getElementById(`coding-feedback-${id}`);
+            
+            if (textarea) textarea.value = "";
+            if (output) {
+                output.innerHTML = "";
+                output.classList.remove('active');
+            }
+            if (feedback) {
+                feedback.style.display = "none";
+                feedback.className = "feedback";
+            }
+        }
+    </script>
+    </div>
+
+</body>
+
+</html>

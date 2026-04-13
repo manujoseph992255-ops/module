@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #ffffff; color: #1e293b; display: flex; min-height: 100vh; overflow-x: hidden; }
+
+        /* Sidebar */
+        .sidebar { width: 260px; background: #1c2431; color: #94a3b8; display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar-logo { padding: 18px 24px; background: #151d28; display: flex; align-items: center; gap: 10px; }
+        .sidebar-logo img { height: 28px; border-radius: 4px; }
+        .sidebar-logo span { color: #fff; font-size: 1.2rem; font-weight: 700; letter-spacing: -0.5px; }
+        .sidebar-nav { padding: 20px 0; overflow-y: auto; flex: 1; }
+        .nav-section { padding: 10px 24px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px; margin-top: 10px; color: #64748b; }
+        .nav-item { display: flex; align-items: center; padding: 12px 24px; color: #cbd5e1; text-decoration: none; font-size: 0.95rem; font-weight: 500; transition: all 0.2s; border-left: 3px solid transparent; }
+        .nav-item:hover { color: #fff; background: #2a3441; }
+        .nav-item.active { color: #fff; background: #2a3441; border-left-color: #ef4444; }
+        .nav-item .icon { margin-right: 12px; font-size: 1.1rem; width: 20px; text-align: center; }
+
+        /* Main Content */
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; background: #f8fafc; }
+        
+        /* Topbar */
+        .topbar { background: #151d28; height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; }
+        .trial-badge { border: 1px solid rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 4px; color: #fff; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; }
+        .topbar-stats { display: flex; align-items: center; gap: 24px; color: #cbd5e1; font-size: 0.9rem; font-weight: 500; }
+        .stat-item { display: flex; align-items: center; gap: 6px; }
+        .stat-icon { color: #fbbf24; font-size: 1.1rem; }
+        .topbar-actions { display: flex; align-items: center; gap: 16px; margin-left: 20px; border-left: 1px solid #334155; padding-left: 20px; }
+        .action-icon { color: #cbd5e1; cursor: pointer; font-size: 1.1rem; }
+        .lang-btn { background: #334155; color: #fff; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; border: 2px solid #fff; cursor: pointer; background-position: center; background-size: cover; display: flex; justify-content: center; align-items: center;}
+
+        /* Main Body */
+        .content-body { padding: 40px 50px; flex: 1; overflow-y: auto; }
+        
+        /* Welcome */
+        .welcome-header { display: flex; align-items: center; gap: 20px; margin-bottom: 30px; }
+        .welcome-avatar { width: 80px; height: 80px; border-radius: 50%; background: #e2e8f0; border: 4px solid #f43f5e; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .welcome-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .welcome-badge { position: absolute; bottom: 0; right: 0; background: #fff; border-radius: 50%; padding: 2px; font-size: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .welcome-header h1 { font-size: 1.8rem; font-weight: 700; color: #0f172a; }
+
+        /* Trial Banner */
+        .trial-banner { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 30px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02); }
+        .trial-banner p { color: #334155; font-size: 0.95rem; margin-bottom: 20px; }
+        .trial-actions { display: flex; gap: 12px; }
+        .btn { padding: 10px 20px; border-radius: 20px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+        .btn-outline { border: 2px solid #de3163; color: #de3163; background: transparent; }
+        .btn-outline:hover { background: #fff1f2; }
+        .btn-solid { background: #de3163; color: #fff; border: 2px solid #de3163; }
+        .btn-solid:hover { background: #be123c; border-color: #be123c; }
+        .banner-ill { height: 90px; }
+
+        /* Courses Section */
+        .section-title { font-size: 1.5rem; font-weight: 700; color: #0f172a; margin-bottom: 10px; }
+        .section-desc { color: #475569; font-size: 0.95rem; line-height: 1.5; margin-bottom: 30px; max-width: 850px; }
+        .section-desc a { color: #2563eb; text-decoration: none; }
+        .section-desc a:hover { text-decoration: underline; }
+
+        .courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 20px; padding-bottom: 40px; }
+        
+        .course-card { background: #10b981; border-radius: 12px; min-height: 230px; display: flex; flex-direction: column; position: relative; text-decoration: none; overflow: hidden; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .course-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        
+        .card-top-icon { position: absolute; top: 15px; left: 15px; background: transparent; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; color: white; border: 1.5px solid white; border-radius: 4px; font-size: 16px; font-weight: 800; font-family: sans-serif; padding-left: 2px;}
+        
+        .card-ill { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px 20px; }
+        .card-ill img { max-width: 90px; max-height: 90px; object-fit: contain; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.3)); transform: rotateX(15deg) rotateY(-10deg); transition: transform 0.3s;}
+        .course-card:hover .card-ill img { transform: scale(1.1) rotateX(10deg) rotateY(-5deg); filter: drop-shadow(0 20px 20px rgba(0,0,0,0.4));}
+        
+        /* Alternate colored cards */
+        .bg-teal { background: #14b8a6; border-bottom: 4px solid #0d9488;}
+        .bg-blue { background: #3b82f6; border-bottom: 4px solid #2563eb;}
+        .bg-indigo { background: #6366f1; border-bottom: 4px solid #4f46e5;}
+        .bg-purple { background: #8b5cf6; border-bottom: 4px solid #7c3aed;}
+        .bg-amber { background: #f59e0b; border-bottom: 4px solid #d97706;}
+        .bg-green { background: #10b981; border-bottom: 4px solid #059669;}
+        .bg-rose { background: #f43f5e; border-bottom: 4px solid #e11d48;}
+        .bg-sky { background: #38bdf8; border-bottom: 4px solid #0ea5e9; }
+        .bg-orange { display: none; } /* Backup removal */
+
+        .card-title-bar { background: rgba(0,0,0,0.15); padding: 12px 15px; color: white; font-weight: 600; font-size: 0.9rem; text-align: center; position: relative; }
+        
+        /* New Register Button */
+        .register-btn { 
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #fff;
+            color: #0f172a;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1.5px solid transparent;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .course-card:hover .register-btn {
+            background: #0f172a;
+            color: #fff;
+            transform: scale(1.05);
+        }
+        .register-btn:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 900px) {
+            .sidebar { display: none; }
+            .content-body { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="Kvj logo.jpeg" alt="Logo">
+        </div>
+        <div class="sidebar-nav">
+            <a href="#" class="nav-item active"><span class="icon">⊞</span> Dashboard</a>
+            
+            <div class="nav-section">COURSES</div>
+            <a href="#" class="nav-item"><span class="icon">✏️</span> In progress</a>
+            <a href="#" class="nav-item"><span class="icon">📚</span> Training library</a>
+            <a href="#" class="nav-item"><span class="icon">✓</span> Completed</a>
+            
+            <div class="nav-section">MANAGE</div>
+            <a href="#" class="nav-item"><span class="icon">👤</span> Profile</a>
+            <a href="#" class="nav-item"><span class="icon">⚙️</span> Account</a>
+            <a href="#" class="nav-item"><span class="icon">💳</span> Billing</a>
+            <a href="#" class="nav-item"><span class="icon">❓</span> Help and support</a>
+        </div>
+
+        <!-- Logout Button at bottom of sidebar -->
+        <div style="padding: 20px 16px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1);">
+            <button onclick="logout()" style="
+                width: 100%;
+                padding: 12px;
+                background: rgba(239, 68, 68, 0.15);
+                color: #f87171;
+                border: 1.5px solid rgba(239, 68, 68, 0.3);
+                border-radius: 10px;
+                font-size: 0.9rem;
+                font-weight: 700;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                transition: all 0.2s;
+                font-family: inherit;
+            " onmouseover="this.style.background='rgba(239,68,68,0.3)'; this.style.borderColor='#f87171';"
+               onmouseout="this.style.background='rgba(239,68,68,0.15)'; this.style.borderColor='rgba(239,68,68,0.3)';">
+                <span>⎋</span> Log Out
+            </button>
+        </div>
+    </aside>
+
+    <main class="main-wrapper">
+        <header class="topbar">
+            <!-- Topbar free trial badge -->
+            <div style="display: flex; gap: 20px; align-items: center;">
+                <div class="trial-badge">FREE TRIAL: NOT STARTED</div>
+            </div>
+            
+            <div class="topbar-stats">
+                <div class="stat-item"><span class="stat-icon">⏱</span> 0 min</div>
+                <div class="stat-item"><span class="stat-icon">☀️</span> 0</div>
+                <div class="stat-item"><span class="stat-icon">🪙</span> 0</div>
+                
+                <div class="topbar-actions">
+                    <span class="action-icon">🔔</span>
+                    <button class="lang-btn">EN</button>
+                    <button onclick="logout()" style="background: transparent; border: 1px solid #334155; color: #cbd5e1; padding: 4px 10px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.2s;" onmouseover="this.style.color='#f87171'; this.style.borderColor='#f87171'" onmouseout="this.style.color='#cbd5e1'; this.style.borderColor='#334155'">
+                        <span>⎋</span> Logout
+                    </button>
+                    <!-- Simulated profile picture clicking to logout -->
+                    <div class="user-avatar" title="Profile" style="background-image: url('https://cdn-icons-png.flaticon.com/512/3135/3135715.png');"></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="content-body">
+            
+            <!-- Welcome Header -->
+            <div class="welcome-header">
+                <div class="welcome-avatar">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User">
+                    <div class="welcome-badge">💎</div>
+                </div>
+                <h1>Hello <span id="user-name">User</span></h1>
+            </div>
+
+            <!-- Trial Banner -->
+            <div class="trial-banner">
+                <div>
+                    <p>Activate your 7 day free trial and get unlimited access to the KVJ course library.</p>
+                    <div class="trial-actions">
+                        <a href="#" class="btn btn-outline">Activate free trial</a>
+                        <a href="#" class="btn btn-solid">Get full access</a>
+                    </div>
+                </div>
+                <!-- Hourglass/Calendar illustration -->
+                <img src="https://cdn-icons-png.flaticon.com/512/10435/10435165.png" alt="Illustration" class="banner-ill" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2886/2886665.png'"> <!-- fallback hourglass -->
+            </div>
+
+            <!-- Courses Section -->
+            <h2 class="section-title">Courses for you</h2>
+            <p class="section-desc">Here are some courses to get you started. You can also check out your <a href="#">courses you've started</a>. If you want to see more course suggestions, try out the <a href="#">course recommender</a> – it can help you find a course in seconds.</p>
+
+            <div class="courses-grid">
+                
+                <!-- 1. Marian Analytics -->
+                <a href="login.html?course=Marian%20Business%20Analytics&action=enter" class="course-card bg-teal">
+                    <div class="card-top-icon">▷</div>
+                    <div class="card-ill"><img src="Logo marian.png" alt="Marian"></div>
+                    <div class="card-title-bar">
+                        Marian Business Analytics
+                        <br>
+                        <div class="register-btn" onclick="event.preventDefault(); event.stopPropagation(); registerCourse('Marian Business Analytics')">Register Now</div>
+                    </div>
+                </a>
+
+                <!-- 2. Python -->
+                <a href="login.html?course=Python%20Mastery&action=enter" class="course-card bg-blue">
+                    <div class="card-top-icon">▷</div>
+                    <div class="card-ill"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968350.png" alt="Python"></div>
+                    <div class="card-title-bar">
+                        Python Mastery
+                        <br>
+                        <div class="register-btn" onclick="event.preventDefault(); event.stopPropagation(); registerCourse('Python Mastery')">Register Now</div>
+                    </div>
+                </a>
+
+                <!-- 3. SQL -->
+                <a href="login.html?course=SQL%20Mastery&action=enter" class="course-card bg-indigo">
+                    <div class="card-top-icon">▷</div>
+                    <div class="card-ill"><img src="https://cdn-icons-png.flaticon.com/512/2772/2772128.png" alt="SQL"></div>
+                    <div class="card-title-bar">
+                        SQL Mastery
+                        <br>
+                        <div class="register-btn" onclick="event.preventDefault(); event.stopPropagation(); registerCourse('SQL Mastery')">Register Now</div>
+                    </div>
+                </a>
+
+                <!-- 4. AI -->
+                <a href="login.html?course=Artificial%20Intelligence&action=enter" class="course-card bg-purple">
+                    <div class="card-top-icon">▷</div>
+                    <div class="card-ill"><img src="Ai.png" alt="AI"></div>
+                    <div class="card-title-bar">
+                        Artificial Intelligence
+                        <br>
+                        <div class="register-btn" onclick="event.preventDefault(); event.stopPropagation(); registerCourse('Artificial Intelligence')">Register Now</div>
+                    </div>
+                </a>
+
+                <!-- 5. Power BI -->
+                <a href="login.html?course=Power%20BI%20Mastery&action=enter" class="course-card bg-amber">
+                    <div class="card-top-icon">▷</div>
+                    <div class="card-ill"><img src="Power bi logo.png" alt="Power BI"></div>
+                    <div class="card-title-bar">
+                        Power BI Mastery
+                        <br>
+                        <div class="register-btn" onclick="event.preventDefault(); event.stopPropagation(); registerCourse('Power BI Mastery')">Register Now</div>
+                    </div>
+                </a>
+
+                <!-- 6. Data Analytics -->
+                <a href="login.html?course=Data%20Analytics&action=enter" class="course-card bg-rose">
+                    <div class="card-top-icon">▷</div>
+                    <div class="card-ill"><img src="https://cdn-icons-png.flaticon.com/512/3090/3090011.png" alt="Data Analytics"></div>
+                    <div class="card-title-bar">
+                        Data Analytics
+                        <br>
+                        <div class="register-btn" onclick="event.preventDefault(); event.stopPropagation(); registerCourse('Data Analytics')">Register Now</div>
+                    </div>
+                </a>
+
+                <!-- 7. Gaming -->
+                <a href="login.html?course=Advanced%20Gaming&action=enter" class="course-card bg-sky">
+                    <div class="card-top-icon">▷</div>
+                    <div class="card-ill"><img src="https://cdn-icons-png.flaticon.com/512/3408/3408506.png" alt="Gaming"></div>
+                    <div class="card-title-bar">
+                        Advanced Gaming
+                        <br>
+                        <div class="register-btn" onclick="event.preventDefault(); event.stopPropagation(); registerCourse('Advanced Gaming')">Register Now</div>
+                    </div>
+                </a>
+
+                <!-- 8. Excel -->
+                <a href="login.html?course=Advanced%20Excel&action=enter" class="course-card bg-green">
+                    <div class="card-top-icon">▷</div>
+                    <div class="card-ill"><img src="https://cdn-icons-png.flaticon.com/512/732/732220.png" alt="Excel"></div>
+                    <div class="card-title-bar">
+                        Advanced Excel
+                        <br>
+                        <div class="register-btn" onclick="event.preventDefault(); event.stopPropagation(); registerCourse('Advanced Excel')">Register Now</div>
+                    </div>
+                </a>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userName = sessionStorage.getItem('userName') || localStorage.getItem('strategist_user') || 'Manu';
+            const userPhone = localStorage.getItem('strategist_phone') || 'guest';
+            const nameEles = document.querySelectorAll('#user-name');
+            nameEles.forEach(el => el.textContent = userName);
+
+            // Hide register buttons for enrolled courses
+            const cards = document.querySelectorAll('.course-card');
+            cards.forEach(card => {
+                // Get course name from the title bar (removing whitespace and newlines)
+                const courseName = card.querySelector('.card-title-bar').innerText.split('\n')[0].trim();
+                const isRegistered = localStorage.getItem('registered_' + courseName) === 'true' || 
+                                     localStorage.getItem('registered_' + userPhone + '_' + courseName) === 'true';
+                
+                if (isRegistered) {
+                    const regBtn = card.querySelector('.register-btn');
+                    if (regBtn) regBtn.style.display = 'none';
+                }
+            });
+        });
+
+        function logout() {
+            sessionStorage.clear();
+            localStorage.removeItem('strategist_user');
+            localStorage.removeItem('strategist_phone');
+            localStorage.removeItem('gmail');
+            localStorage.removeItem('class_code');
+            window.location.href = 'login.html';
+        }
+
+        function registerCourse(courseName) {
+            window.location.href = 'login.html?course=' + encodeURIComponent(courseName) + '&action=register';
+        }
+    </script>
+    </div>
+</body>
+</html>

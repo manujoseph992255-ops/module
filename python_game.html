@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Quiz Game | Antigravity Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        :root {
+            --bg-deep: #050505;
+            --neon-purple: #b026ff;
+            --neon-cyan: #00f7ff;
+            --neon-pink: #ff00e5;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --kahoot-red: #eb001b;
+            --kahoot-blue: #0056b3;
+            --kahoot-yellow: #d89e00;
+            --kahoot-green: #298c00;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background: var(--bg-deep);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Animated Background Particles */
+        .bg-particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            filter: blur(2px);
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            from { transform: translateY(100vh) translateX(0); }
+            to { transform: translateY(-10vh) translateX(100px); }
+        }
+
+        /* Common Antigravity Elements */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-neon {
+            display: inline-block;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            margin: 10px;
+            color: white;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            width: 100%;
+        }
+
+        .btn-neon:hover {
+            transform: translateY(-3px) scale(1.02);
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 30px rgba(176, 38, 255, 0.4);
+            border-color: var(--neon-purple);
+        }
+
+        .btn-primary-neon {
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-pink));
+            box-shadow: 0 0 20px rgba(176, 38, 255, 0.3);
+        }
+
+        .btn-primary-neon:hover {
+            box-shadow: 0 0 40px rgba(176, 38, 255, 0.6);
+        }
+
+        /* Screen States */
+        .screen { display: none; width: 100%; max-width: 1000px; padding: 20px; position: relative; }
+        .screen.active { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+        /* Dashboard Screen */
+        .dashboard-grid {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .card-entry {
+            flex: 1;
+            padding: 40px;
+            border-radius: 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            transition: 0.3s;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .card-entry:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .card-game {
+            border: 1px solid var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(0, 247, 255, 0.15);
+        }
+
+        .card-game:hover {
+            box-shadow: 0 0 50px rgba(0, 247, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* Modes Screen */
+        .mode-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Lobby / PIN View */
+        .pin-box {
+            font-family: 'Fira Code', monospace;
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            letter-spacing: 12px;
+            margin: 30px 0;
+            text-shadow: 0 0 20px rgba(0, 247, 255, 0.5);
+        }
+
+        .player-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 40px;
+            width: 100%;
+        }
+
+        .player-tag {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 15px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        /* Quiz UI */
+        .timer-container {
+            width: 100%;
+            height: 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50px;
+            margin-bottom: 40px;
+            overflow: hidden;
+        }
+
+        .timer-bar {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+            transition: width 0.1s linear;
+        }
+
+        .question-text {
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 50px;
+            line-height: 1.3;
+        }
+
+        .answers-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .ans-btn {
+            height: 140px;
+            border-radius: 16px;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        .ans-btn.red { background: var(--kahoot-red); }
+        .ans-btn.blue { background: var(--kahoot-blue); }
+        .ans-btn.yellow { background: var(--kahoot-yellow); }
+        .ans-btn.green { background: var(--kahoot-green); }
+
+        .ans-btn:hover:not(.disabled) {
+            transform: scale(1.03);
+            filter: brightness(1.2);
+        }
+
+        .ans-btn.disabled { opacity: 0.5; cursor: default; }
+        .ans-btn.chosen { border: 5px solid white; box-shadow: 0 0 40px rgba(255,255,255,0.4); }
+
+        /* Floating Score */
+        .score-pop {
+            position: fixed;
+            color: #ffcc00;
+            font-size: 2.5rem;
+            font-weight: 900;
+            pointer-events: none;
+            animation: scoreFloat 1s ease-out forwards;
+            z-index: 1000;
+        }
+
+        @keyframes scoreFloat {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100px); opacity: 0; }
+        }
+
+        /* Leaderboard */
+        .rank-list {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .rank-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: rgba(255,255,255,0.05);
+            padding: 15px 25px;
+            border-radius: 12px;
+            animation: slideIn 0.5s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-50px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .rank-bar {
+            height: 10px;
+            background: var(--neon-cyan);
+            border-radius: 5px;
+            transition: width 1s ease;
+        }
+
+        /* Podium */
+        .podium-section {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 20px;
+            margin: 60px 0;
+            height: 300px;
+            width: 100%;
+        }
+
+        .podium-box {
+            width: 120px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            border: 1px solid var(--glass-border);
+            border-top: 4px solid var(--neon-cyan);
+            border-radius: 12px 12px 0 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 20px;
+        }
+
+        .p-gold { height: 200px; border-color: #ffd700; transform: scale(1.1); z-index: 2; }
+        .p-silver { height: 160px; border-color: #c0c0c0; }
+        .p-bronze { height: 120px; border-color: #cd7f32; }
+
+        .medal {
+            font-size: 2.5rem;
+            transform: translateY(-50%);
+        }
+
+        .p-name { font-weight: 800; font-size: 1rem; margin-top: auto; }
+        .p-score { font-size: 0.8rem; opacity: 0.7; }
+
+        /* Form Controls */
+        input {
+            width: 100%;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid var(--glass-border);
+            background: rgba(0,0,0,0.3);
+            color: white;
+            font-size: 1.2rem;
+            font-family: 'Fira Code', monospace;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--neon-cyan); box-shadow: 0 0 20px rgba(0, 247, 255, 0.2); }
+
+        .back-btn {
+            position: absolute;
+            top: 40px; left: 40px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 100;
+        }
+
+        .back-btn:hover { color: white; }
+
+        .spinner {
+            width: 40px; height: 40px; 
+            border: 4px solid var(--glass-border); 
+            border-top-color: var(--neon-cyan); 
+            border-radius: 50%; 
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-particles" id="particles"></div>
+
+    <div id="connection-status" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 20px; border-radius: 50px; font-size: 0.8rem; font-weight: 800; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: var(--text-muted); z-index: 10000; transition: 0.3s;">
+        MODE: SIMULATION
+    </div>
+
+    <div id="app" style="width: 100%; display: flex; justify-content: center; padding-top: 80px;">
+        <!-- Navbar -->
+        <div style="position: fixed; top: 0; left: 0; width: 100%; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(5,5,5,0.5); backdrop-filter: blur(10px); border-bottom: 1px solid var(--glass-border);">
+            <div style="display: flex; gap: 20px;">
+                <a href="gaming_index.html" class="btn-neon btn-primary-neon" style="padding: 10px 25px; font-size: 0.95rem; margin: 0; width: auto; font-weight: 900;">BACK</a>
+            </div>
+            <div style="font-weight: 800; color: var(--neon-cyan); letter-spacing: 2px;">KVJ</div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="screen-dashboard" class="screen active">
+            <h1 style="margin-top: 40px;">Python MasterQuest</h1>
+            <p style="opacity: 0.7; font-size: 1.2rem; margin-bottom: 40px;">Elevate your expertise in the KVJ Professional Arena.</p>
+            <div class="dashboard-grid">
+                <div class="card-entry card-game" onclick="showScreen('screen-modes')" style="max-width: 500px; margin: 0 auto;">
+                    <div style="font-size: 4rem; margin-bottom: 20px;">🎮</div>
+                    <h2 style="font-size: 2rem; margin-bottom: 15px;">Enter Arena</h2>
+                    <p style="font-size: 1.1rem; opacity: 0.8; line-height: 1.6;">High-stakes competitive learning with live KVJ leaderboard and real-time analytics.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modes Screen -->
+        <div id="screen-modes" class="screen">
+            <div class="glass-card">
+                <h1>Select Mode</h1>
+                <div class="mode-container">
+                    <button class="btn-neon btn-primary-neon" onclick="hostGame()">Host Game</button>
+                    <button class="btn-neon" onclick="showScreen('screen-join')">Join Game</button>
+                    <button class="btn-neon" onclick="showScreen('screen-dashboard')" style="margin-top: 20px; opacity: 0.8;">BACK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Join Screen -->
+        <div id="screen-join" class="screen">
+            <div class="glass-card">
+                <h1>Join Arena</h1>
+                <div style="margin-top: 30px; width: 100%;">
+                    <input type="text" id="join-pin" placeholder="Enter Game PIN" maxlength="6">
+                    <input type="text" id="join-nick" placeholder="Choose Nickname" maxlength="12">
+                    <button class="btn-neon btn-primary-neon" onclick="joinGame()">Join Game</button>
+                    <button class="btn-neon" onclick="showScreen('screen-modes')" style="margin-top: 20px; opacity: 0.8;">BACK</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Host Lobby Screen -->
+        <div id="screen-host-lobby" class="screen">
+            <div class="glass-card" style="max-width: 800px;">
+                <p style="text-transform: uppercase; letter-spacing: 2px; font-weight: 700; opacity: 0.6;">Join at kvj.edu with PIN</p>
+                <div class="pin-box" id="host-pin-display">------</div>
+                <div id="player-count" style="font-size: 1.2rem; font-weight: 800;">0 Players Joined</div>
+                <div class="player-list" id="host-player-list"></div>
+                <button class="btn-neon btn-primary-neon" style="margin-top: 50px; width: 300px;" id="start-game-btn" onclick="startGame()" disabled>Start Game</button>
+            </div>
+        </div>
+
+        <!-- Waiting Lobby (for players) -->
+        <div id="screen-waiting" class="screen">
+            <div class="glass-card">
+                <div style="font-size: 4rem; margin-bottom: 20px;">⌛</div>
+                <h1>Joined!</h1>
+                <p id="waiting-msg" style="font-size: 1.3rem; opacity: 0.7;">Waiting for host to start...</p>
+                <div style="margin-top: 40px; display: flex; justify-content: center;">
+                   <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="screen-quiz" class="screen">
+            <div class="timer-container">
+                <div class="timer-bar" id="timer-bar"></div>
+            </div>
+            <div class="question-text" id="q-text">Loading question...</div>
+            <div class="answers-grid">
+                <button class="ans-btn red" onclick="submitAnswer(0)" id="ans-0"></button>
+                <button class="ans-btn blue" onclick="submitAnswer(1)" id="ans-1"></button>
+                <button class="ans-btn yellow" onclick="submitAnswer(2)" id="ans-2"></button>
+                <button class="ans-btn green" onclick="submitAnswer(3)" id="ans-3"></button>
+            </div>
+        </div>
+
+        <!-- Leaderboard Screen -->
+        <div id="screen-leaderboard" class="screen">
+            <div class="glass-card" style="max-width: 700px;">
+                <h1>Ranking</h1>
+                <div class="rank-list" id="rank-list"></div>
+                <button class="btn-neon" style="margin-top: 40px; width: 250px;" id="lb-next-btn">Next &rarr;</button>
+            </div>
+        </div>
+
+        <!-- Final Results Screen -->
+        <div id="screen-results" class="screen">
+            <div class="glass-card" style="max-width: 850px;">
+                <h1 style="font-size: 4rem;">Victory</h1>
+                <div class="podium-section">
+                    <div class="podium-box p-silver">
+                        <div class="medal">🥈</div>
+                        <div class="p-name" id="p2-name">Player 2</div>
+                        <div class="p-score" id="p2-score">9400</div>
+                    </div>
+                    <div class="podium-box p-gold">
+                        <div class="medal">🥇</div>
+                        <div class="p-name" id="p1-name">Player 1</div>
+                        <div class="p-score" id="p1-score">10500</div>
+                    </div>
+                    <div class="podium-box p-bronze">
+                        <div class="medal">🥉</div>
+                        <div class="p-name" id="p3-name">Player 3</div>
+                        <div class="p-score" id="p3-score">8200</div>
+                    </div>
+                </div>
+                <button class="btn-neon btn-primary-neon" style="width: 300px;" onclick="location.reload()">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="quiz_data.js"></script>
+    <script>
+        // State
+        let gameState = {
+            role: null, // 'host' or 'player'
+            gamePin: null,
+            players: [],
+            nickname: null,
+            currentQuestion: 0,
+            score: 0,
+            timer: null,
+            timerVal: 10,
+            isAnswered: false,
+            joinedPlayersCount: 0,
+            isMultiplayer: false
+        };
+
+        // Socket.io Connection (Fallback to simulation if server unavailable)
+        const socket = typeof io !== 'undefined' ? io('http://localhost:3000', { autoConnect: false }) : null;
+
+        if (socket) {
+            socket.on('connect', () => {
+                console.log('Real-time server connected!');
+                gameState.isMultiplayer = true;
+                const badge = document.getElementById('connection-status');
+                if (badge) {
+                    badge.innerText = "MODE: LIVE MULTIPLAYER";
+                    badge.style.color = "var(--neon-cyan)";
+                    badge.style.borderColor = "var(--neon-cyan)";
+                    badge.style.boxShadow = "0 0 15px rgba(0, 247, 255, 0.3)";
+                }
+            });
+            
+            socket.on('player_joined', (name) => {
+                if (gameState.role === 'host') addPlayerToUI(name);
+            });
+
+            socket.on('game_started', () => {
+                if (gameState.role === 'player') startQuizMode();
+            });
+
+            socket.on('load_question', (index) => {
+                if (gameState.role === 'player') {
+                    gameState.currentQuestion = index;
+                    loadQuestion();
+                }
+            });
+
+            socket.on('update_leaderboard', (players) => {
+                gameState.players = players;
+            });
+
+            socket.on('join_success', (data) => {
+                gameState.nickname = data.nickname;
+                if (data.questions) {
+                    questions = data.questions;
+                }
+                showScreen('screen-waiting');
+            });
+
+            socket.on('join_error', (msg) => {
+                alert(msg);
+            });
+
+            socket.on('error', (msg) => {
+                alert(msg);
+                location.reload();
+            });
+
+            socket.connect();
+        }
+
+        // Initialize questions from quiz_data.js
+        // Filter and Flatten all questions from the shared library
+        function getRandomQuestions(count = 10) {
+            let allAvailable = [];
+            
+            // Collect suitable questions from all categories in quizData
+            Object.keys(quizData).forEach(key => {
+                quizData[key].forEach(q => {
+                    // For the Kahoot-style game, we need questions with a single clear answer 
+                    // and up to 4 options (to fit the 4-button UI).
+                    if ((q.type === 'MCQ' || q.type === 'TF') && q.options && q.options.length <= 4) {
+                        allAvailable.push({
+                            q: q.q,
+                            options: q.options,
+                            a: q.a // already a number (index)
+                        });
+                    } else if (q.type === 'MCQ2' && q.options && q.options.length <= 4) {
+                        // For Multiple Choice with 2 answers, we'll just take the first one or treat it carefully
+                        // In Kahoot, it's usually single choice. Let's take the first correct answer index.
+                        allAvailable.push({
+                            q: q.q + " (Select one correct answer)",
+                            options: q.options,
+                            a: Array.isArray(q.a) ? q.a[0] : q.a
+                        });
+                    }
+                });
+            });
+
+            // Shuffle
+            allAvailable.sort(() => Math.random() - 0.5);
+
+            // Return requested count (or all if less than 10)
+            return allAvailable.slice(0, Math.min(count, allAvailable.length));
+        }
+
+        let questions = getRandomQuestions(10);
+
+        // UI Core
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        // Particle System
+        function initParticles() {
+            const count = 40;
+            const container = document.getElementById('particles');
+            for(let i=0; i<count; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = Math.random() * 5 + 2;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = (Math.random() * 10 + 5) + 's';
+                p.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(p);
+            }
+        }
+
+        // --- HOST FLOW ---
+        function hostGame() {
+            gameState.role = 'host';
+            gameState.gamePin = Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('host-pin-display').innerText = gameState.gamePin;
+            showScreen('screen-host-lobby');
+            
+            if (gameState.isMultiplayer) {
+                socket.emit('host_game', { pin: gameState.gamePin, questions: questions });
+                // No simulation needed if live
+            } else {
+                simulatePlayers();
+            }
+        }
+
+        function simulatePlayers() {
+            const names = ["CodeNinja", "DataWizard", "Pythonic", "ByteSize", "AI_Master", "Ghost_User"];
+            let i = 0;
+            const adder = setInterval(() => {
+                const p = { name: names[i], score: 0 };
+                gameState.players.push(p);
+                addPlayerToUI(p.name);
+                i++;
+                if (i >= names.length) {
+                    clearInterval(adder);
+                    document.getElementById('start-game-btn').disabled = false;
+                }
+            }, 1200);
+        }
+
+        function addPlayerToUI(name) {
+            const list = document.getElementById('host-player-list');
+            const tag = document.createElement('div');
+            tag.className = 'player-tag';
+            tag.innerText = name;
+            list.appendChild(tag);
+            gameState.joinedPlayersCount++;
+            document.getElementById('player-count').innerText = `${gameState.joinedPlayersCount} Players Joined`;
+        }
+
+        // --- JOIN FLOW ---
+        function joinGame() {
+            const pinInput = document.getElementById('join-pin');
+            const nickInput = document.getElementById('join-nick');
+            const pin = pinInput.value;
+            const nick = nickInput.value;
+            
+            if (pin.length < 6 || !nick) return alert("Enter valid PIN and Nickname");
+            
+            gameState.role = 'player';
+            gameState.nickname = nick;
+            gameState.score = 0;
+
+            if (gameState.isMultiplayer) {
+                socket.emit('join_game', { pin, nickname: nick });
+            } else {
+                showScreen('screen-waiting');
+                // Simulate host starting after 4s
+                setTimeout(() => {
+                    startQuizMode();
+                }, 4000);
+            }
+        }
+
+        // --- GAME ENGINE ---
+        function startGame() {
+            if (gameState.isMultiplayer && gameState.role === 'host') {
+                socket.emit('start_game_request', gameState.gamePin);
+            }
+            startQuizMode();
+        }
+
+        function startQuizMode() {
+            showScreen('screen-quiz');
+            if (gameState.role === 'host') {
+                broadcastQuestion();
+            } else if (!gameState.isMultiplayer) {
+                loadQuestion();
+            }
+        }
+
+        function broadcastQuestion() {
+            if (gameState.isMultiplayer) {
+                socket.emit('next_question', { pin: gameState.gamePin, questionIndex: gameState.currentQuestion });
+            }
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            gameState.isAnswered = false;
+            gameState.timerVal = 10;
+            const q = questions[gameState.currentQuestion];
+            document.getElementById('q-text').innerHTML = q.q;
+            
+            const btnIds = ['ans-0', 'ans-1', 'ans-2', 'ans-3'];
+            btnIds.forEach((id, i) => {
+                const btn = document.getElementById(id);
+                btn.innerText = q.options[i];
+                btn.classList.remove('disabled', 'chosen');
+            });
+
+            startTimer();
+        }
+
+        function startTimer() {
+            const bar = document.getElementById('timer-bar');
+            bar.style.width = '100%';
+            
+            clearInterval(gameState.timer);
+            gameState.timer = setInterval(() => {
+                gameState.timerVal -= 0.1;
+                bar.style.width = (gameState.timerVal * 10) + '%';
+                
+                if (gameState.timerVal <= 0) {
+                    clearInterval(gameState.timer);
+                    if (!gameState.isAnswered) {
+                        submitAnswer(-1); // Timeout
+                    }
+                }
+            }, 100);
+        }
+
+        function submitAnswer(idx) {
+            if (gameState.isAnswered) return;
+            gameState.isAnswered = true;
+            clearInterval(gameState.timer);
+
+            const correct = questions[gameState.currentQuestion].a;
+            let earnedPoints = 0;
+            
+            if (idx !== -1) {
+                document.getElementById('ans-' + idx).classList.add('chosen');
+            }
+
+            document.querySelectorAll('.ans-btn').forEach(btn => btn.classList.add('disabled'));
+
+            if (idx === correct) {
+                earnedPoints = Math.floor(1000 - ((10 - gameState.timerVal) * 50));
+                gameState.score += earnedPoints;
+                showScorePop(earnedPoints);
+                playCorrectSound();
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            } else {
+                playWrongSound();
+                document.body.style.animation = "shake 0.3s";
+                setTimeout(() => document.body.style.animation = "", 300);
+            }
+
+            // Sync score if live
+            if (gameState.isMultiplayer && gameState.role === 'player') {
+                socket.emit('submit_answer', { pin: gameState.gamePin, nickname: gameState.nickname, points: earnedPoints });
+            }
+
+            // Move to leaderboard after 2s
+            setTimeout(() => {
+                showLeaderboard();
+            }, 2000);
+        }
+
+        function showLeaderboard() {
+            showScreen('screen-leaderboard');
+            const list = document.getElementById('rank-list');
+            list.innerHTML = "";
+
+            // Update simulated scores
+            gameState.players.forEach(p => {
+                if (Math.random() > 0.3) p.score += Math.floor(Math.random() * 800 + 200);
+            });
+
+            let all = [...gameState.players];
+            if (gameState.role === 'player') {
+                all.push({ name: gameState.nickname, score: gameState.score, isMe: true });
+            }
+            all.sort((a,b) => b.score - a.score);
+
+            all.slice(0, 5).forEach((p, i) => {
+                const item = document.createElement('div');
+                item.className = 'rank-item';
+                if (p.isMe) item.style.borderLeft = "5px solid var(--neon-cyan)";
+                
+                const scoreWidth = (p.score / (all[0].score || 1) * 100);
+                item.innerHTML = `
+                    <div style="font-weight:900; width:30px;">${i+1}</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:700;">${p.name} ${p.isMe ? '(You)' : ''}</div>
+                        <div class="rank-bar" style="width:0%" id="bar-${i}"></div>
+                    </div>
+                    <div style="font-weight:800;">${p.score}</div>
+                `;
+                list.appendChild(item);
+                setTimeout(() => {
+                    const bar = document.getElementById('bar-' + i);
+                    if(bar) bar.style.width = scoreWidth + '%';
+                }, 100);
+            });
+
+            const nextBtn = document.getElementById('lb-next-btn');
+            nextBtn.onclick = () => {
+                gameState.currentQuestion++;
+                if (gameState.currentQuestion < questions.length - 1) { // -1 to keep it short for demo
+                    startQuizMode();
+                } else if (gameState.currentQuestion == questions.length - 1) {
+                    startQuizMode();
+                } else {
+                    showFinalResults(all);
+                }
+            };
+        }
+
+        function showFinalResults(all) {
+            showScreen('screen-results');
+            document.getElementById('p1-name').innerText = all[0].name;
+            document.getElementById('p1-score').innerText = all[0].score;
+            document.getElementById('p2-name').innerText = all[1] ? all[1].name : "---";
+            document.getElementById('p2-score').innerText = all[1] ? all[1].score : "0";
+            document.getElementById('p3-name').innerText = all[2] ? all[2].name : "---";
+            document.getElementById('p3-score').innerText = all[2] ? all[2].score : "0";
+
+            confetti({
+                particleCount: 200,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+        function showScorePop(pts) {
+            const pop = document.createElement('div');
+            pop.className = 'score-pop';
+            pop.innerText = `+${pts}`;
+            pop.style.left = "50%";
+            pop.style.top = "40%";
+            document.body.appendChild(pop);
+            setTimeout(() => pop.remove(), 1000);
+        }
+
+        // Mock Sounds
+        function playCorrectSound() { console.log("🔊 Correct!"); }
+        function playWrongSound() { console.log("🔊 Wrong!"); }
+
+        initParticles();
+    </script>
+    </div>
+
+</body>
+</html>

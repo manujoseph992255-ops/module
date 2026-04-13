@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Module 5: Deep Learning | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0f172a;
+            --secondary-blue: #3b82f6;
+            --bg-light: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+            --ai-accent: #10b981;
+            --indigo: #6366f1;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex; 
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+            padding-top: 70px;
+        }
+
+        /* Top Nav */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0; width: 100%;
+            z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .exit-btn {
+            background: #ef4444;
+            color: white;
+            padding: 8px 18px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        /* Header Banner */
+        .header-banner { 
+            background: var(--primary-blue); 
+            color: white; 
+            padding: 60px 20px; 
+            text-align: center;
+        }
+
+        .header-banner h1 { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 38px; 
+            font-weight: 900; 
+            text-transform: uppercase;
+        }
+
+        /* Layout Container */
+        .layout-container {
+            max-width: 900px;
+            margin: 40px auto;
+            width: 95%;
+            padding-bottom: 60px;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 300px;
+            background: white;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 100px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            height: fit-content;
+        }
+
+        .sidebar a { 
+            display: flex; 
+            padding: 12px 15px; 
+            color: var(--text-muted); 
+            text-decoration: none; 
+            font-size: 14px; 
+            font-weight: 500;
+            margin-bottom: 5px;
+            border-radius: 8px;
+        }
+
+        .sidebar a.active { 
+            color: var(--secondary-blue); 
+            font-weight: 700; 
+            background: #eff6ff; 
+            border-left: 4px solid var(--secondary-blue); 
+        }
+
+        /* Main Content Area */
+        .main-content { 
+            
+            background: #ffffff; 
+            border: 1px solid var(--border-color);
+            padding: 60px;
+            border-radius: 12px;
+        }
+
+        .section-header { margin-bottom: 30px; border-bottom: 3px solid var(--bg-light); padding-bottom: 15px; }
+        .section-header h2 { font-family: 'Montserrat', sans-serif; color: var(--primary-blue); font-size: 28px; font-weight: 800; }
+
+        p { margin-bottom: 25px; color: #334155; font-size: 17px; }
+        ul { margin-bottom: 25px; padding-left: 20px; }
+        li { margin-bottom: 10px; }
+
+        /* AI Workspace: Neural Builder */
+        .ai-workspace {
+            background: #0f172a;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            color: #f8fafc;
+        }
+
+        .workspace-header { display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 30px; }
+        .workspace-title { color: #38bdf8; font-weight: 800; text-transform: uppercase; }
+
+        .nn-stage {
+            height: 250px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: relative;
+            margin-bottom: 30px;
+            border: 1px dashed rgba(255,255,255,0.1);
+        }
+
+        .layer {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .neuron {
+            width: 25px; height: 25px;
+            background: rgba(56, 189, 248, 0.2);
+            border: 1px solid #38bdf8;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .neuron.active {
+            background: var(--ai-accent);
+            box-shadow: 0 0 15px var(--ai-accent);
+            transform: scale(1.2);
+        }
+
+        .btn-build {
+            background: var(--indigo);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+        }
+
+        footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 13px; border-top: 1px solid var(--border-color); margin-top: 40px; }
+
+        @media (max-width: 992px) {
+            .layout-container { flex-direction: column; }
+            .sidebar { width: 100%; position: static; margin-bottom: 30px; }
+        }
+    
+        /* Dark UI for Practice (matching Python coding-practice) */
+        .practice-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            border: none;
+        }
+        .practice-badge {
+            display: none;
+        }
+        .practice-card h3 { 
+            margin-top: 0; color: #38bdf8; font-size: 22px; font-weight: 700; border: none; padding-bottom: 0; margin-bottom: 20px; font-family: 'Outfit', sans-serif;
+        }
+        .practice-card p { color: #e2e8f0; font-size: 16px; margin-bottom: 20px; }
+        .practice-card strong { color: #f8fafc; font-weight: 800; }
+        
+        .mcq-option {
+            background: #0f172a; border: 1px solid #334155;
+            padding: 15px 20px; border-radius: 8px; margin-bottom: 10px;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 15px;
+            color: #e2e8f0;
+        }
+        .mcq-option:hover { background: #1e293b; border-color: #38bdf8; }
+        .mcq-option.selected { border-width: 2px; border-color: #38bdf8; }
+        .mcq-option.correct { border-color: #10b981; background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .mcq-option.wrong { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .mcq-prefix { font-weight: 800; color: #38bdf8; }
+
+        .tf-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #334155; }
+        .tf-statement { color: #e2e8f0; font-size: 15px; }
+        .tf-btn { padding: 6px 15px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; }
+        .tf-btn.selected { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+        .tf-btn.correct { background: #10b981 !important; border-color: #10b981 !important; color: white !important; }
+        .tf-btn.wrong { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
+
+        .practice-dark-btn {
+            background: #38bdf8; color: #0f172a; border: none;
+            padding: 12px 25px; border-radius: 8px; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s; margin-top: 20px;
+            margin-right: 10px; font-family: 'Outfit', sans-serif;
+        }
+        .practice-reset-btn {
+            background: #334155; color: #f8fafc; border: none;
+            padding: 12px 25px; border-radius: 8px; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s; margin-top: 20px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .practice-dark-btn:hover, .practice-reset-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .practice-reset-btn:hover { background: #475569; }
+
+        .feedback-dark { margin-top: 15px; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; display: none; }
+        .feedback-dark.correct { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; display: block; }
+        .feedback-dark.wrong { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; display: block; }
+
+        .dd-container select { 
+            padding: 10px 15px; border-radius: 8px; background: #0f172a; 
+            color: #f8fafc; border: 1px solid #334155; font-weight: 600;
+            width: 220px; outline: none; transition: border-color 0.2s;
+        }
+        .dd-container select:focus { border-color: #38bdf8; }
+        
+        .mcq-option strong { margin-right: 10px; color: #f8fafc; }
+        .dd-container select option { background: #0f172a; color: #f8fafc; }
+
+
+        /* Quiz CTA Styling */
+        .quiz-cta {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .quiz-cta h3 { color: #ffffff !important; margin-top: 0; font-size: 24px; border: none; padding: 0; }
+        .quiz-cta p { color: #ffffff !important; opacity: 0.95; margin-bottom: 25px; }
+        .btn-start-quiz {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .btn-start-quiz:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: #f8fafc;
+        }
+
+</style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="ai_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        <a href="ai_roadmap.html" class="exit-btn">EXIT</a>
+    </nav>
+
+    <header class="header-banner">
+        <h1>MODULE 5: DEEP LEARNING & ALGORITHMS</h1>
+    </header>
+
+    <div class="layout-container">
+        
+
+        <main class="main-content">
+            <div class="section-header">
+                <h2>5.1 What is Deep Learning?</h2>
+            </div>
+            
+            <p><strong>Deep Learning</strong> is a subset of Machine Learning based on Artificial Neural Networks with representation learning. The "Deep" in deep learning refers to the number of layers through which the data is transformed.</p>
+
+            <h3>Neural Network Structure</h3>
+            <ul>
+                <li><strong>Input Layer:</strong> Receives raw data (pixels, text tokens, sensory readings).</li>
+                <li><strong>Hidden Layers:</strong> Performs mathematical transformations to identify complex features.</li>
+                <li><strong>Output Layer:</strong> Provides the final prediction or decision.</li>
+            </ul>
+
+            <div class="ai-workspace">
+                <div class="workspace-header">
+                    <div class="workspace-title">Intelligence Space: Neural Architecture</div>
+                </div>
+                
+                <div class="nn-stage" id="nn-stage">
+                    <div class="layer" id="layer-1">
+                        <div class="neuron"></div>
+                        <div class="neuron"></div>
+                        <div class="neuron"></div>
+                    </div>
+                    <div class="layer" id="layer-2">
+                        <div class="neuron"></div>
+                        <div class="neuron"></div>
+                        <div class="neuron"></div>
+                        <div class="neuron"></div>
+                    </div>
+                    <div class="layer" id="layer-3">
+                        <div class="neuron"></div>
+                    </div>
+                </div>
+
+                <div class="logic-sandbox">
+                    <div class="sandbox-title">System Status: <span id="nn-status">Idle (No weights initialized)</span></div>
+                    <p style="color: #94a3b8; font-size: 14px; margin-bottom: 20px;">Trigger the forward pass to observe how data activates different pathways in the neural network.</p>
+                    <button class="btn-build" onclick="fireNN()">Execute Forward Pass</button>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h2>5.2 Key Algorithms</h2>
+            </div>
+
+            <p>Modern AI architectures are built on several foundational algorithms and structures:</p>
+
+            <ul>
+                <li><strong>Convolutional Neural Networks (CNN):</strong> Optimized for processing grid-like data (images).</li>
+                <li><strong>Recurrent Neural Networks (RNN):</strong> Specialized for sequential data (time-series, text).</li>
+                <li><strong>Transformers:</strong> The architecture behind LLMs, utilizing "Self-Attention" mechanisms to process data in parallel.</li>
+                <li><strong>Generative Adversarial Networks (GANs):</strong> Two networks competing to create realistic synthetic data.</li>
+            </ul>
+
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2026 KVJ. All Rights Reserved.
+    </footer>
+
+    <script>
+        function fireNN() {
+            const neurons = document.querySelectorAll('.neuron');
+            const status = document.getElementById('nn-status');
+            
+            status.innerText = "Processing Data Flow...";
+            status.style.color = "#38bdf8";
+
+            neurons.forEach((n, i) => {
+                n.classList.remove('active');
+                setTimeout(() => {
+                    n.classList.add('active');
+                }, i * 100);
+            });
+
+            setTimeout(() => {
+                status.innerText = "Prediction Generated: Accuracy 99%";
+                status.style.color = "#10b981";
+            }, neurons.length * 100 + 500);
+        }
+    </script>
+    </div>
+
+</body>
+</html>

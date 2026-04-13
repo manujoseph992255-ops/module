@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Mastery | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            margin: 0; 
+            padding: 0;
+            background: #ffffff;
+            color: #1a1a1a;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .bg-pattern {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 142, 171, 0.05) 2px, transparent 2px),
+                radial-gradient(circle at 90% 30%, rgba(66, 133, 244, 0.05) 2px, transparent 2px);
+            background-size: 100px 100px;
+            z-index: -1;
+        }
+
+        .floating-shape {
+            position: absolute;
+            z-index: -1;
+            filter: blur(40px);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite alternate;
+            opacity: 0.12;
+        }
+
+        .shape-1 { width: 350px; height: 350px; background: #008eab; top: -100px; right: -100px; }
+        .shape-2 { width: 450px; height: 450px; background: #1e3a5f; bottom: 5%; left: -150px; animation-delay: -4s; }
+
+        @keyframes float {
+            0% { transform: translateY(0) scale(1); }
+            100% { transform: translateY(-40px) scale(1.05); }
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            animation: fadeInDown 0.8s ease backwards;
+        }
+        .nav-logo { max-height: 40px; width: auto; }
+        .nav-logout { font-size: 0.9rem; font-weight: 700; color: #0066ff; text-decoration: none; cursor: pointer; }
+        .nav-logout:hover { text-decoration: underline; }
+        .nav-back {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: white !important;
+            background-color: #193855;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            padding: 12px 28px;
+            border-radius: 30px;
+            box-shadow: 0 10px 20px rgba(25, 56, 85, 0.3);
+        }
+
+        .nav-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(25, 56, 85, 0.4);
+            background-color: #11283f;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 5rem 1rem 3rem;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .congrats-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1.25rem;
+            background: rgba(0, 142, 171, 0.1);
+            color: #008eab;
+            border: 1px solid rgba(0, 142, 171, 0.2);
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            animation: bounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+            animation: fadeInUp 0.8s ease backwards;
+            animation-delay: 0.4s;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.8s ease backwards;
+            animation-delay: 0.5s;
+        }
+
+        .btn-primary {
+            background-color: #0066ff;
+            color: white;
+            padding: 1.2rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 0.8s ease backwards;
+            animation-delay: 0.6s;
+            box-shadow: 0 10px 25px rgba(0, 102, 255, 0.2);
+        }
+        .btn-primary:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0, 102, 255, 0.3); }
+
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            padding: 0 2rem 4rem;
+            max-width: 1200px;
+            margin: auto auto 0 auto;
+            flex-wrap: wrap;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 2.5rem 2rem;
+            flex: 1;
+            min-width: 280px;
+            text-align: left;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05);
+            animation: fadeInUp 0.8s ease backwards;
+            transition: transform 0.3s ease;
+        }
+        .card:hover { transform: translateY(-5px); }
+        .card:nth-child(1) { animation-delay: 0.7s; border-top: 4px solid #008eab; }
+        .card:nth-child(2) { animation-delay: 0.8s; border-top: 4px solid #1e3a5f; }
+        .card:nth-child(3) { animation-delay: 0.9s; border-top: 4px solid #4285F4; }
+
+        .card h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; }
+        .card p { color: #64748b; font-size: 1rem; line-height: 1.5; margin: 0; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .cards-container { flex-direction: column; }
+        }
+    </style>
+    <script>
+        function logout() {
+            sessionStorage.clear();
+            localStorage.removeItem('strategist_user');
+            localStorage.removeItem('strategist_phone');
+            localStorage.removeItem('gmail');
+            localStorage.removeItem('class_code');
+            window.location.href = 'login.html';
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const userName = sessionStorage.getItem('userName') || localStorage.getItem('strategist_user') || 'Student';
+            const nameSpan = document.getElementById('user-name');
+            if (nameSpan) nameSpan.textContent = userName;
+        });
+    </script>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="floating-shape shape-1"></div>
+    <div class="floating-shape shape-2"></div>
+
+    <nav class="navbar">
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <a href="index.html" class="nav-back">
+                Back
+            </a>
+            <a href="index.html" class="nav-brand">
+                <img src="Kvj logo.jpeg" alt="KVJ" class="nav-logo">
+            </a>
+        </div>
+        <a onclick="logout()" class="nav-logout">Log Out</a>
+    </nav>
+
+    <div class="hero">
+        <div class="congrats-chip">
+            🎉 Congratulations <span id="user-name" style="margin-left:4px; margin-right:4px;"></span>! SQL Mastery begins here.
+        </div>
+        
+        <h1>Query the Future.</h1>
+        <p>Master the language of data architecture. From complex joins to analytical optimization, unlock the power of relational structures with KVJ.</p>
+        
+        <a href="sql_roadmap.html" class="btn-primary">
+            Begin SQL Sequence &rarr;
+        </a>
+    </div>
+
+    <div class="cards-container">
+        <div class="card">
+            <h3>Data Architecture</h3>
+            <p>Understand the foundational structures of relational databases and how to design scalable schemas.</p>
+        </div>
+        <div class="card">
+            <h3>Query Optimization</h3>
+            <p>Master complex logic to retrieve data with surgical precision. Performance-driven query crafting.</p>
+        </div>
+        <div class="card">
+            <h3>Insight Engineering</h3>
+            <p>Transform raw records into strategic business intelligence through advanced analytical SQL functions.</p>
+        </div>
+    </div>
+    </div>
+
+</body>
+</html>

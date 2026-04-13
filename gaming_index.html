@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KVJ Advanced Gaming | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #050505;
+            --neon-purple: #b026ff;
+            --neon-cyan: #00f7ff;
+            --text-main: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .bg-pattern {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(circle at 50% 50%, rgba(176, 38, 255, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-back {
+            color: var(--neon-cyan);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-back:hover {
+            opacity: 0.8;
+            transform: translateX(-5px);
+        }
+
+        .nav-logo { height: 40px; }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            animation: fadeInDown 0.8s ease backwards;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, var(--neon-purple), var(--neon-cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 350px));
+            gap: 2rem;
+            padding: 2rem;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease backwards;
+            animation-delay: 0.2s;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Logic from roadmap.html game-card */
+        .game-card {
+            background: linear-gradient(135deg, #1e1e2f 0%, #121212 100%);
+            border-radius: 28px;
+            padding: 1.25rem 1.5rem;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #b026ff, #00f7ff, #ff00e5, #b026ff);
+            background-size: 400%;
+            z-index: -1;
+            filter: blur(8px);
+            animation: neon-border 12s linear infinite;
+            border-radius: 30px;
+            opacity: 0.6;
+            transition: opacity 0.4s ease;
+        }
+
+        .game-card:hover::before {
+            opacity: 0.9;
+        }
+
+        @keyframes neon-border {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .game-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 55px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .img-container {
+            width: 100px;
+            height: 90px;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            font-size: 2.8rem;
+            transition: transform 0.4s ease;
+        }
+
+        .game-card:hover .img-container {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .game-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+            text-shadow: 0 0 10px rgba(176, 38, 255, 0.5);
+            letter-spacing: -0.5px;
+            font-weight: 800;
+            width: 100%;
+        }
+
+        .game-card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .btn-game {
+            background: #0066ff;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: background 0.3s;
+            width: 220px;
+            display: inline-block;
+            text-align: center;
+            margin-top: auto;
+            text-transform: none; /* Reset uppercase to match portal */
+            letter-spacing: normal;
+            box-shadow: none;
+        }
+        
+        .game-card:hover .btn-game {
+            background: #0052cc;
+            transform: none;
+        }
+
+        .game-card:hover .btn-game {
+            box-shadow: 0 6px 20px rgba(0, 247, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* Coming Soon style */
+        .card-locked {
+            opacity: 0.5;
+            filter: grayscale(1);
+            cursor: not-allowed;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .card-locked::before {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <nav class="navbar">
+        <a href="index.html" class="nav-back">← Back to Portal</a>
+        <img src="Kvj logo.jpeg" alt="KVJ" class="nav-logo">
+        <div style="width: 100px;"></div> <!-- Spacer -->
+    </nav>
+
+    <div class="hero">
+        <h1>KVJ Advanced Gaming Arena</h1>
+        <p>Test your speed, accuracy, and logic in our competitive learning environment. Compete for the top spot on the global leaderboard.</p>
+    </div>
+
+    <div class="game-grid">
+        <!-- Python MasterQuest -->
+        <a href="python_game.html" class="game-card">
+            <div class="img-container">🎮</div>
+            <h3>Python MasterQuest</h3>
+            <p>High-stakes competitive learning with live KVJ leaderboard and real-time analytics. Show your Python mastery against the community.</p>
+            <div class="btn-game">Launch Arena &rarr;</div>
+        </a>
+
+        <!-- Upcoming Game Placeholder -->
+        <div class="game-card card-locked">
+            <div class="img-container">🔒</div>
+            <h3>SQL Query Clash</h3>
+            <p>Coming Soon. Prepare for the ultimate database challenge and optimize your way to the top of the ranks.</p>
+            <div class="btn-game" style="background: #444; box-shadow: none;">Locked</div>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

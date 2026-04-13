@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2.4: Strategic Logic & Functions | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --secondary-blue: #008eab;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+        }
+
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0; padding: 0;
+        }
+
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 3rem; background: #ffffff; border-bottom: 1px solid var(--border-color);
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .exit-btn {
+            background: #ef4444; color: white; padding: 8px 18px;
+            text-decoration: none; font-size: 12px; font-weight: 700;
+            border-radius: 6px; text-transform: uppercase;
+        }
+
+        .header-banner { 
+            position: relative;
+            background-image: linear-gradient(rgba(30, 58, 95, 0.75), rgba(8, 145, 178, 0.85)), url('architectural_data_model.png');
+            background-size: cover;
+            background-position: center;
+            color: white; 
+            padding: 140px 20px 80px; 
+            text-align: center; 
+        }
+
+        .header-banner h1 { 
+            font-family: 'Montserrat', sans-serif; font-size: 36px; font-weight: 900; text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .layout-container { max-width: 900px; margin: 40px auto; width: 95%; padding-bottom: 60px; }
+
+        .main-content { 
+            background: #ffffff; border: 1px solid var(--border-color);
+            padding: 60px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.04);
+        }
+
+        .section-header { margin-bottom: 30px; border-bottom: 3px solid var(--bg-light); padding-bottom: 15px; }
+        .section-header h2 { color: var(--primary-blue); font-size: 24px; font-weight: 800; text-transform: uppercase; }
+
+        p { line-height: 1.8; margin-bottom: 25px; color: #334155; font-size: 17px; }
+        strong { color: var(--primary-blue); font-weight: 700; }
+
+        .interaction-box { 
+            background-color: #f7f9fc; border-left: 5px solid var(--secondary-blue); 
+            padding: 25px; margin: 30px 0; border-radius: 0 10px 10px 0; 
+        }
+
+        /* Professional diamond list marker */
+        ul { list-style: none; padding-left: 0; margin-bottom: 25px; }
+        ul li { position: relative; padding-left: 28px; margin-bottom: 12px; color: #334155; }
+        ol li { margin-bottom: 12px; color: #334155; padding-left: 8px; }
+        ul li::before {
+            content: ""; position: absolute; left: 0; top: 8px;
+            width: 8px; height: 8px; background: var(--secondary-blue);
+            transform: rotate(45deg); border-radius: 1px;
+        }
+
+        .next-btn-container { text-align: center; margin-top: 60px; padding: 40px; background: #f8fafc; border-radius: 12px; }
+        .next-btn {
+            display: inline-block; background: #10b981; color: white;
+            padding: 18px 50px; border-radius: 40px; text-decoration: none;
+            font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px;
+            transition: all 0.3s; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+        }
+        .next-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4); }
+
+        .prev-btn {
+            display: block; width: 150px; margin: 0 auto 30px; color: #64748b;
+            text-decoration: none; font-size: 14px; font-weight: 600;
+        }
+        .prev-btn:hover { text-decoration: underline; color: var(--primary-blue); }
+
+        footer { text-align: center; padding: 40px; color: #94a3b8; font-size: 13px; }
+
+        .excel-terminal {
+            background-color: #0f172a; color: #38bdf8;
+            padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace;
+            font-size: 14px; margin: 20px 0; border: 1px solid #1e293b;
+        }
+        .excel-terminal .keyword { color: #f472b6; }
+    
+        /* Quiz CTA Styling */
+        .quiz-cta {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .quiz-cta h3 { color: #ffffff !important; margin-top: 0; font-size: 24px; border: none; padding: 0; }
+        .quiz-cta p { color: #ffffff !important; opacity: 0.95; margin-bottom: 25px; }
+        .btn-start-quiz {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .btn-start-quiz:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: #f8fafc;
+        }
+
+</style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="excel_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        <a href="excel_roadmap.html" class="exit-btn">EXIT</a>
+    </nav>
+
+    <header class="header-banner">
+        <h1>MODULE 2: ADVANCED LOOKUPS & LOGIC</h1>
+    </header>
+
+    <div class="layout-container">
+        <main class="main-content">
+            
+            <div class="section-header">
+                <h2>2.4 Strategic Logic & Functions</h2>
+                <p style="font-weight: 600; color: var(--secondary-blue);">Mean, Variance, and Decision Making</p>
+            </div>
+
+            <div class="interaction-box">
+                <strong>The Strategic Logic:</strong>
+                <p style="margin-top:10px;">A manager's primary role is to maintain the "Mean" (Average) and minimize "Variance" (Risk).</p>
+            </div>
+
+            <h3>1. Statistical Functions</h3>
+            <ul>
+                <li><strong>Central Tendency:</strong> Using <code>SUM</code>, <code>AVERAGE</code>, and <code>MEDIAN</code> to identify the "Boutique Pulse."</li>
+                <li style="margin-top: 15px;"><strong>The Volatility Check:</strong> Utilizing <code>STDEV.P</code> to measure sales consistency.
+                    <ul style="margin-top: 10px; margin-bottom: 0;">
+                        <li><strong>High Std Dev:</strong> Indicates unpredictable footfall; requires higher "Safety Stock" levels.</li>
+                        <li><strong>Low Std Dev:</strong> Indicates stable demand; allows for "Just-in-Time" inventory.</li>
+                    </ul>
+                </li>
+                <li style="margin-top: 15px;"><strong>Outlier Detection:</strong> Using <code>MIN</code> and <code>MAX</code> to identify "Hero Products" versus "Dead Stock" that is consuming liquid capital.</li>
+            </ul>
+
+            <!-- Practice 1 -->
+            <div class="practice-space">
+                <h3 style="margin-top:0;">Practice: Outlier Detection</h3>
+                <p style="margin-bottom: 20px;">Which function would you use to find the single highest-performing "Hero Product" in the sales range B2:B100?</p>
+                <div class="practice-box">
+                    <input type="text" id="prac1" placeholder="Type function name here (e.g. SUM)">
+                    <button onclick="checkExcel('prac1', 'MAX', 'fb1')">Submit</button>
+                </div>
+                <div id="fb1" class="feedback"></div>
+            </div>
+
+            <hr style="border:0; border-top:1px solid var(--border-color); margin: 40px 0;">
+
+            <h3>2. Logical Functions</h3>
+            <ul>
+                <li><strong>IF:</strong> Returns one value if a condition is TRUE and another if it is FALSE.
+                    <br><span style="color:var(--text-muted); font-size:14px; display:block; margin-top:5px; margin-bottom:5px;"><em>Example: If a sale is over ₹5,000, label it "Premium"; otherwise, "Standard."</em></span>
+                </li>
+                <li><strong>AND:</strong> Returns TRUE only if all conditions are met.
+                    <br><span style="color:var(--text-muted); font-size:14px; display:block; margin-top:5px; margin-bottom:5px;"><em>Example: Trigger a bonus only if Sales > ₹1,00,000 AND Attendance > 95%.</em></span>
+                </li>
+                <li><strong>OR:</strong> Returns TRUE if at least one condition is met.
+                    <br><span style="color:var(--text-muted); font-size:14px; display:block; margin-top:5px; margin-bottom:5px;"><em>Example: Flag an invoice for review if it is Overdue OR the amount exceeds ₹50,000.</em></span>
+                </li>
+                <li><strong>NOT:</strong> Reverses the logic.
+                    <br><span style="color:var(--text-muted); font-size:14px; display:block; margin-top:5px; margin-bottom:5px;"><em>Example: Identify all boutique branches that are NOT located in the "South" region.</em></span>
+                </li>
+            </ul>
+
+            <!-- Practice 2 -->
+            <div class="practice-space">
+                <h3 style="margin-top:0;">Practice: Multi-Condition Logic</h3>
+                <p style="margin-bottom: 20px;">Which logical function should wrap around multiple conditions if a manager wants to flag an employee who meets <strong>every single one</strong> of the criteria?</p>
+                <div class="practice-box">
+                    <input type="text" id="prac2" placeholder="Type function name here (e.g. IF)">
+                    <button onclick="checkExcel('prac2', 'AND', 'fb2')">Submit</button>
+                </div>
+                <div id="fb2" class="feedback"></div>
+            </div>
+
+            <script>
+                function checkExcel(inputId, correctAns, feedbackId) {
+                    const val = document.getElementById(inputId).value.toUpperCase().replace(/\s+/g, '');
+                    const feedback = document.getElementById(feedbackId);
+                    if(val.includes(correctAns)) {
+                        feedback.className = "feedback correct";
+                        feedback.innerHTML = "✅ Correct! " + correctAns + " is the right function.";
+                    } else {
+                        feedback.className = "feedback wrong";
+                        feedback.innerHTML = "❌ Incorrect. Remember, look at the key functions listed above.";
+                    }
+                }
+            </script>
+
+            <div class="next-btn-container" style="display: flex; justify-content: space-between; flex-wrap:wrap; text-align:center;">
+                <a href="Excel-Module-2-3.html" class="prev-btn" style="flex:100%">&larr; Back to Topic 2.3</a>
+                <p style="margin: 20px 0; font-weight: 700; color: var(--primary-blue); flex:100%;">End of Module 2: Advanced Lookups & Logical Architecture</p>
+                <a href="module_quiz.html?mod=ex2" class="next-btn" style="flex:100%">Start Assessment &checkmark;</a>
+            </div>
+
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2024 KVJ. All Rights Reserved.
+    </footer>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KVJ Advanced AI Certification - KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .typing-container {
+            display: inline-block;
+            min-height: 2.2em;
+            position: relative;
+        }
+        .blinking-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: var(--blue-dark);
+            margin-left: 2px;
+            animation: blink-caret 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+        @keyframes blink-caret {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* AI Dashboard Animation */
+        .ai-mockup {
+            background-color: #0f172a;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            width: 100%;
+            max-width: 650px;
+        }
+        
+        .pulse-accuracy {
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; color: #10b981; }
+            100% { opacity: 1; }
+        }
+
+        .nn-node {
+            width: 12px;
+            height: 12px;
+            background: #4285F4;
+            border-radius: 50%;
+            position: relative;
+        }
+        .nn-line {
+            height: 2px;
+            background: rgba(66, 133, 244, 0.2);
+            position: absolute;
+            transform-origin: left center;
+        }
+        .nn-spark {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, #fff, transparent);
+            position: absolute;
+            top: 0; left: -100%;
+            animation: nn-flow 2s infinite;
+        }
+        @keyframes nn-flow {
+            0% { left: -100%; }
+            50% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .loss-path {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            transition: stroke-dashoffset 4s ease-in-out;
+        }
+        .mockup-active .loss-path {
+            stroke-dashoffset: 0;
+        }
+    </style>
+</head>
+<body class="landing-body">
+    <!-- Navbar -->
+    <nav class="kvj-navbar">
+        <div class="kvj-container nav-wrapper">
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="index.html" class="nav-back">
+                    Back
+                </a>
+                <a href="index.html" class="kvj-logo">
+                    <div class="logo-box">
+                        <img src="Kvj logo.jpeg" alt="KVJ" style="max-height: 45px; width: auto;">
+                    </div>
+                </a>
+            </div>
+            <div class="nav-links-right">
+                <a href="#" class="kvj-btn kvj-btn-primary">Coming Soon</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="kvj-hero">
+        <div class="kvj-container hero-grid">
+            
+            <!-- Left Content -->
+            <div class="hero-left fade-in-up" style="animation-delay: 0.1s;">
+                <h1 class="hero-title typing-container">
+                    <span id="typewriter"></span><span class="blinking-cursor"></span>
+                </h1>
+                
+                <h2 class="hero-subtitle">
+                    KVJ Advanced Artificial Intelligence Certification
+                </h2>
+                
+                <p class="hero-desc">
+                    Dive into machine learning and neural networks. Shape the future with intelligent systems. Master the logic that drives the next generation of technology with KVJ.
+                </p>
+                
+                <div class="hero-action">
+                    <a href="ai_roadmap.html" class="kvj-btn kvj-btn-dark">Explore AI</a>
+                </div>
+            </div>
+            
+            <!-- Right Content - AI Training Graphic -->
+            <div class="hero-right fade-in-up" style="animation-delay: 0.3s;">
+                <div class="ai-mockup" id="ai-mockup">
+                    <div class="window-controls" style="background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <div class="dot dot-r"></div>
+                        <div class="dot dot-y"></div>
+                        <div class="dot dot-g"></div>
+                        <div class="fy-text" style="color: #94a3b8; font-family: monospace;">Model_Trainer.exe</div>
+                    </div>
+                    <div class="dash-content" style="padding: 20px;">
+                        <!-- AI Stats -->
+                        <div class="kpi-row">
+                            <div class="kpi-card" style="background: #1e293b; border: 1px solid rgba(255,255,255,0.1);">
+                                <div class="kpi-title" style="color: #94a3b8;">Accuracy</div>
+                                <div class="kpi-value pulse-accuracy">98.42%</div>
+                                <div class="kpi-sub">Epoch 42/50</div>
+                            </div>
+                            <div class="kpi-card" style="background: #1e293b; border: 1px solid rgba(255,255,255,0.1);">
+                                <div class="kpi-title" style="color: #94a3b8;">Loss</div>
+                                <div class="kpi-value" style="color: #f87171;">0.041</div>
+                                <div class="kpi-sub" style="color: #f87171;">↓ 0.003</div>
+                            </div>
+                        </div>
+
+                        <!-- Neural Flow and Loss Curve -->
+                        <div class="charts-row" style="grid-template-columns: 1fr 1.5fr;">
+                            <div class="chart-box flex-center" style="background: rgba(0,0,0,0.2); height: 180px;">
+                                <div style="display: flex; gap: 20px; align-items: center; position: relative;">
+                                    <div class="flex-column" style="gap: 15px;">
+                                        <div class="nn-node"><div class="nn-line" style="width: 25px; transform: rotate(-15deg);"><div class="nn-spark"></div></div></div>
+                                        <div class="nn-node"><div class="nn-line" style="width: 25px; transform: rotate(0deg);"><div class="nn-spark" style="animation-delay: 0.5s;"></div></div></div>
+                                        <div class="nn-node"><div class="nn-line" style="width: 25px; transform: rotate(15deg);"><div class="nn-spark" style="animation-delay: 1s;"></div></div></div>
+                                    </div>
+                                    <div class="flex-column" style="gap: 25px;">
+                                        <div class="nn-node" style="background: #10b981;"></div>
+                                        <div class="nn-node" style="background: #10b981;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chart-box" style="background: rgba(0,0,0,0.2); height: 180px;">
+                                <div class="kpi-title" style="color: #94a3b8; font-size: 0.6rem;">Training Loss Curve</div>
+                                <svg viewBox="0 0 200 100" style="width: 100%; height: 130px; margin-top: 10px;">
+                                    <path class="loss-path" d="M0,80 Q50,75 80,40 T160,20 T200,15" fill="none" stroke="#4285F4" stroke-width="2" />
+                                    <line x1="0" y1="100" x2="0" y2="0" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                                    <line x1="0" y1="100" x2="200" y2="100" stroke="rgba(255,255,255,0.1)" stroke-width="1" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Terminal Output -->
+                        <div style="background: #020617; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 0.75rem; color: #10b981; margin-top: 15px; min-height: 80px;">
+                            <div id="ai-terminal"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    <script>
+        // Typing Effect logic
+        const line1 = "Experience liftoff with ";
+        const line2 = "the Intelligence-driven<br>";
+        const line3 = "Curriculum";
+        const typewriterEl = document.getElementById('typewriter');
+        let typeIndex = 0;
+        const blueStyle = "<span class='text-blue'>";
+        const tealStyle = "<span class='text-teal'>";
+        const closeSpan = "</span>";
+        let fullHTML = "";
+
+        const terminalEl = document.getElementById('ai-terminal');
+        const logs = [
+            "> Initializing neural architecture...",
+            "> Loading datasets: 1.2M parameters",
+            "> Commencing forward propagation...",
+            "> Optimizing weights via Adam[η=1e-3]",
+            "> Convergence achieved. System ready."
+        ];
+        let logIndex = 0;
+
+        function typeWriter() {
+            if (typeIndex < line1.length) {
+                fullHTML = blueStyle + line1.substring(0, typeIndex + 1) + closeSpan;
+                typewriterEl.innerHTML = fullHTML;
+                typeIndex++;
+                setTimeout(typeWriter, 40);
+            } 
+            else if (typeIndex < line1.length + line2.length) {
+                let idx2 = typeIndex - line1.length;
+                fullHTML = blueStyle + line1 + closeSpan + tealStyle + line2.substring(0, idx2 + 1) + closeSpan;
+                typewriterEl.innerHTML = fullHTML;
+                typeIndex++;
+                setTimeout(typeWriter, 40);
+            }
+            else if (typeIndex < line1.length + line2.length + line3.length) {
+                let idx3 = typeIndex - line1.length - line2.length;
+                fullHTML = blueStyle + line1 + closeSpan + tealStyle + line2 + closeSpan + blueStyle + line3.substring(0, idx3 + 1) + closeSpan;
+                typewriterEl.innerHTML = fullHTML;
+                typeIndex++;
+                setTimeout(typeWriter, 40);
+            } else {
+                // Activate AI mockup animations
+                document.getElementById('ai-mockup').classList.add('mockup-active');
+                setTimeout(typeLogs, 500);
+            }
+        }
+
+        function typeLogs() {
+            if (logIndex < logs.length) {
+                const line = document.createElement('div');
+                line.textContent = logs[logIndex];
+                terminalEl.appendChild(line);
+                logIndex++;
+                setTimeout(typeLogs, 800);
+            }
+        }
+        
+        setTimeout(typeWriter, 500);
+    </script>
+    </div>
+</body>
+</html>

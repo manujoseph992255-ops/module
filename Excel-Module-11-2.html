@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2.3: Logical Functions | KVJ</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --secondary-blue: #008eab;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+        }
+
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0; padding: 0;
+        }
+
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 3rem; background: #ffffff; border-bottom: 1px solid var(--border-color);
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .exit-btn {
+            background: #ef4444; color: white; padding: 8px 18px;
+            text-decoration: none; font-size: 12px; font-weight: 700;
+            border-radius: 6px; text-transform: uppercase;
+        }
+
+        .header-banner { 
+            position: relative;
+            background-image: linear-gradient(rgba(30, 58, 95, 0.75), rgba(8, 145, 178, 0.85)), url('architectural_data_model.png');
+            background-size: cover;
+            background-position: center;
+            color: white; 
+            padding: 140px 20px 80px; 
+            text-align: center; 
+        }
+
+        .header-banner h1 { 
+            font-family: 'Montserrat', sans-serif; font-size: 36px; font-weight: 900; text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .layout-container { max-width: 900px; margin: 40px auto; width: 95%; padding-bottom: 60px; }
+
+        .main-content { 
+            flex: 1;
+            background: #ffffff; border: 1px solid var(--border-color);
+            padding: 50px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.04);
+            min-width: 0;
+        }
+
+        .section-header { margin-bottom: 30px; border-bottom: 3px solid var(--bg-light); padding-bottom: 15px; }
+        .section-header h2 { color: var(--primary-blue); font-size: 24px; font-weight: 800; text-transform: uppercase; }
+
+        p { line-height: 1.8; margin-bottom: 25px; color: #334155; font-size: 17px; }
+        strong { color: var(--primary-blue); font-weight: 700; }
+
+        .interaction-box { 
+            background-color: #f7f9fc; border-left: 5px solid var(--secondary-blue); 
+            padding: 25px; margin: 30px 0; border-radius: 0 10px 10px 0; 
+        }
+
+        /* Professional diamond list marker */
+        ul { list-style: none; padding-left: 0; margin-bottom: 25px; }
+        ul li { position: relative; padding-left: 28px; margin-bottom: 12px; color: #334155; }
+        ol li { margin-bottom: 12px; color: #334155; padding-left: 8px; }
+        ul li::before {
+            content: ""; position: absolute; left: 0; top: 8px;
+            width: 8px; height: 8px; background: var(--secondary-blue);
+            transform: rotate(45deg); border-radius: 1px;
+        }
+
+        .next-btn-container { text-align: right; margin-top: 40px; }
+        .next-btn {
+            display: inline-block; background: var(--primary-blue); color: white;
+            padding: 15px 40px; border-radius: 30px; text-decoration: none;
+            font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            transition: transform 0.3s;
+        }
+        .next-btn:hover { transform: translateX(5px); background: var(--secondary-blue); }
+
+        footer { text-align: center; padding: 40px; color: #94a3b8; font-size: 13px; }
+
+        /* ===== Layout: Sidebar + Content ===== */
+        .layout-container {
+            display: flex;
+            max-width: 1320px;
+            margin: 40px auto;
+            gap: 30px;
+            width: 96%;
+            padding-bottom: 60px;
+            align-items: flex-start;
+        }
+
+        /* ===== Module Sidebar ===== */
+        .module-sidebar {
+            width: 300px;
+            flex-shrink: 0;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 90px;
+            height: fit-content;
+        }
+
+        .module-sidebar h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--secondary-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .module-sidebar a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+        }
+
+        .module-sidebar a:hover {
+            background: #f8fafc;
+            color: var(--primary-blue);
+        }
+
+        .module-sidebar a.active {
+            background: #eff6ff;
+            color: var(--primary-blue);
+            font-weight: 500;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        @media (max-width: 1024px) { .module-sidebar { display: none; } }
+    
+        /* Quiz CTA Styling */
+        .quiz-cta {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .quiz-cta h3 { color: #ffffff !important; margin-top: 0; font-size: 24px; border: none; padding: 0; }
+        .quiz-cta p { color: #ffffff !important; opacity: 0.95; margin-bottom: 25px; }
+        .btn-start-quiz {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .btn-start-quiz:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: #f8fafc;
+        }
+
+</style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="excel_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        <a href="excel_roadmap.html" class="exit-btn">EXIT</a>
+    </nav>
+
+    <header class="header-banner">
+        <h1>MASTER CAPSTONE SIMULATION</h1>
+    </header>
+
+    <div class="layout-container">
+
+        <!-- ===== MODULE SIDEBAR ===== -->
+        <aside class="module-sidebar">
+            <h3>Module Path</h3>
+            <a href="Excel-Module-1-1.html">01 Data Foundations & Business Variance</a>
+            <a href="Excel-Module-2.html">02 Logical Functions</a>
+            <a href="Excel-Module-3.html">03 The Power of Referencing</a>
+            <a href="Excel-Module-4.html">04 Structured Data</a>
+            <a href="Excel-Module-5-1.html">05 Conditional Formatting</a>
+            <a href="Excel-Module-6-1.html">06 Advanced Conditional Analysis</a>
+            <a href="Excel-Module-7-1.html">07 Data Relationship & Retrieval</a>
+            <a href="Excel-Module-8-1.html">08 Business Intelligence</a>
+            <a href="Excel-Module-9-1.html">09 Statistical Analysis & Forecasting</a>
+            <a href="Excel-Module-10-1.html">10 Visual Storytelling & Advanced Charts</a>
+            <a href="Excel-Module-11.html" class="active">11 Practicals</a>
+
+            <h3 style="margin-top: 35px;">Navigation</h3>
+            <a href="excel_roadmap.html" style="background: #f8fafc;">&larr; Return to Roadmap</a>
+        </aside>
+
+                <main class="main-content">
+            <div class="section-header">
+                <h2>11. Master Practicals</h2>
+                <p style="font-weight: 600; color: var(--secondary-blue);">Real-World Business Execution</p>
+            </div>
+
+            <div class="interaction-box" style="background-color: #f0fdf4; border-left-color: #10b981; margin-bottom: 40px;">
+                <strong>Simulation Dataset</strong>
+                <p style="margin-top:10px; margin-bottom: 20px;">Download the raw dataset below to begin your practical assignment. You will execute the following logic directly within the worksheet.</p>
+                
+                <a href="#" onclick="alert('Downloading Simulation Dataset: Sales_Data_Q3_Final.xlsx'); return false;" style="display: inline-flex; align-items: center; gap: 10px; background: #10b981; color: white; padding: 12px 25px; border-radius: 8px; font-weight: 700; text-decoration: none; transition: transform 0.2s;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download Data
+                </a>
+            </div>
+
+                        <div id="questions-container">
+                <h3>Practical 2: Advanced Data Logic</h3>
+                <p>Perform the following calculations within the <strong>HR</strong> worksheet of your downloaded file. Use multi-criteria functions (SUMIFS, COUNTIFS) where appropriate.</p>
+                
+                <ol id="practicals-list" style="margin-left: 35px; color: #334155; font-size: 16px; line-height: 1.8;">
+                    <li id="li-q1" style="margin-bottom: 25px;">In the HR worksheet, calculate the Total Attendance Bonus. (5% of Monthly Salary if Attendance % > 0.95, otherwise return 0).
+                        <div class="practice-box" style="margin-top: 10px;">
+                            <input type="text" id="ans1" placeholder="">
+                        </div>
+                    </li>
+                    <li id="li-q2" style="margin-bottom: 25px;">In the HR worksheet, find the number of employees with Monthly Salary greater than ₹50,000.
+                        <div class="practice-box" style="margin-top: 10px;">
+                            <input type="text" id="ans2" placeholder="">
+                        </div>
+                    </li>
+                    <li id="li-q3" style="margin-bottom: 25px;">In the HR worksheet, find the number of employees who have Monthly Salary > ₹50,000 and Attendance % > 0.90.
+                        <div class="practice-box" style="margin-top: 10px;">
+                            <input type="text" id="ans3" placeholder="">
+                        </div>
+                    </li>
+                    <li id="li-q4" style="margin-bottom: 25px;">In the HR worksheet, calculate the Total Monthly Salary of employees in the Sales department.
+                        <div class="practice-box" style="margin-top: 10px;">
+                            <input type="text" id="ans4" placeholder="">
+                        </div>
+                    </li>
+                    <li id="li-q5" style="margin-bottom: 25px;">In the HR worksheet, calculate the Average Monthly Salary of employees whose salary is > ₹50,000.
+                        <div class="practice-box" style="margin-top: 10px;">
+                            <input type="text" id="ans5" placeholder="">
+                        </div>
+                    </li>
+                    <li id="li-q6" style="margin-bottom: 25px;">In the HR worksheet, calculate the Total Monthly Salary spent on Sales department employees with Attendance % > 0.90.
+                        <div class="practice-box" style="margin-top: 10px;">
+                            <input type="text" id="ans6" placeholder="">
+                        </div>
+                    </li>
+                    <li id="li-q7" style="margin-bottom: 25px;">In the HR worksheet, find the Total Salary of Sales Department in Kochi.
+                        <div class="practice-box" style="margin-top: 10px;">
+                            <input type="text" id="ans7" placeholder="">
+                        </div>
+                    </li>
+                    <li id="li-q8" style="margin-bottom: 25px;">In the HR worksheet, find the Total Salary of HR Department in Mumbai.
+                        <div class="practice-box" style="margin-top: 10px;">
+                            <input type="text" id="ans8" placeholder="">
+                        </div>
+                    </li>
+                </ol>
+
+                <div id="fix-navigation" style="display: none; justify-content: center; gap: 20px; margin-top: 40px; margin-bottom: 20px;">
+                    <a href="Excel-Module-11-2.html" style="background: #64748b; color: white; border: none; padding: 18px 50px; border-radius: 40px; font-weight: 700; font-size: 16px; cursor: pointer; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: all 0.3s; opacity: 0.9;">
+                        Skip to Practical 2 &rarr;
+                    </a>
+                </div>
+
+                <!-- Combined Submit Area -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 40px;">
+                    <button id="btn-submit-main" onclick="submitPracticals()" class="btn-roadmap btn-quiz" style="background: var(--primary-blue); color: white; border: none; padding: 16px 60px; border-radius: 40px; font-weight: 700; font-size: 17px; cursor: pointer; transition: all 0.3s; box-shadow: 0 10px 20px rgba(30, 58, 95, 0.2); min-width: 300px;">
+                        Submit All Answers
+                    </button>
+                </div>
+            </div>
+
+            <div id="review-view" style="display: none;">
+                <h3 style="color: var(--primary-blue); font-family: 'Montserrat', sans-serif;">Performance Scoreboard</h3>
+                <div style="background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 30px; margin: 20px 0;">
+                    <div id="score-display" style="font-size: 32px; font-weight: 800; color: var(--secondary-blue); margin-bottom: 10px;"></div>
+                    <p id="review-msg" style="color: #64748b; font-size: 16px; margin-bottom: 0;"></p>
+                </div>
+
+                <div id="wrong-questions-section" style="display: none;">
+                    <h4 style="color: #ef4444; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">Incorrect Metrics for Review:</h4>
+                    <ol id="wrong-list" style="margin-left: 35px; color: #334155; font-size: 16px; line-height: 1.8;"></ol>
+                </div>
+
+                <div style="display: flex; flex-direction: row; justify-content: center; gap: 20px; margin-top: 40px; flex-wrap: wrap;">
+                    <button id="btn-fix" onclick="goBackToFix()" style="display: none; background: #64748b; color: white; border: none; padding: 16px 50px; border-radius: 40px; font-weight: 700; font-size: 16px; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 10px rgba(100, 116, 139, 0.2); min-width: 280px;">
+                        Retake
+                    </button>
+                </div>
+            </div>
+            <hr style="border:0; border-top: 2px solid #f1f5f9; margin: 50px 0;">
+
+            <div class="module-navigation">
+                <a href="excel_index.html" class="nav-btn nav-home">Home</a>
+                <a href="Excel-Module-11.html" class="nav-btn nav-next">&larr; Previous Part</a>
+            </div>
+
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2024 KVJ. All Rights Reserved.
+    </footer>
+
+                        <script>
+                const answerKey = [178233, 84, 52, 7203188, 128803, 4412905, 2308647, 203562]; // for HR Analytics
+                let wrongIndices = [];
+
+                function submitPracticals() {
+                    wrongIndices = [];
+                    let score = 0;
+                    
+                    // 1. Validate
+                    for (let i = 1; i <= 8; i++) {
+                        const input = document.getElementById('ans' + i);
+                        const userVal = parseInt(input.value.replace(/[^0-9]/g, '')) || 0;
+                        const correctVal = answerKey[i-1];
+                        const li = document.getElementById('li-q' + i);
+                        
+                        // Reset style first
+                        li.style.color = "#334155";
+                        li.style.background = "transparent";
+                        li.style.padding = "0";
+                        li.style.marginLeft = "35px";
+
+                        if (userVal === correctVal) {
+                            score++;
+                        } else {
+                            wrongIndices.push(i);
+                            li.style.color = "#ef4444";
+                            li.style.background = "#fef2f2";
+                            li.style.borderRadius = "8px";
+                            li.style.padding = "10px";
+                            li.style.marginLeft = "25px";
+                        }
+                    }
+
+                    // 2. Hide Fix Nav if it was showing
+                    document.getElementById('fix-navigation').style.display = "none";
+
+                    // 3. Switch View
+                    document.getElementById('questions-container').style.display = "none";
+                    document.getElementById('review-view').style.display = "block";
+
+                    // 4. Populate Score & Review
+                    document.getElementById('score-display').innerHTML = "Score: " + score + " / 8";
+                    const msg = document.getElementById('review-msg');
+                    const wrongSection = document.getElementById('wrong-questions-section');
+                    const wrongList = document.getElementById('wrong-list');
+                    const btnFix = document.getElementById('btn-fix');
+
+                    wrongList.innerHTML = ""; // Clear
+                    
+                    if (score === 8) {
+                        msg.innerHTML = "Perfect! Excellent work on the Sales Strategic Matrix.";
+                        wrongSection.style.display = "none";
+                        btnFix.style.display = "none";
+                        if (typeof confetti !== "undefined") {
+                            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                        }
+                    } else {
+                        msg.innerHTML = "Assessment complete. Review the incorrect metrics below.";
+                        wrongSection.style.display = "block";
+                        btnFix.style.display = "inline-block";
+                        
+                        // Show only wrong questions in the review list
+                        wrongIndices.forEach(idx => {
+                            const originalLi = document.getElementById('li-q' + idx);
+                            const clone = originalLi.cloneNode(true);
+                            // Remove input from clone to just show the question text
+                            const inputDiv = clone.querySelector('.practice-box');
+                            if (inputDiv) inputDiv.remove();
+                            wrongList.appendChild(clone);
+                        });
+                    }
+                    
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+
+                function goBackToFix() {
+                    document.getElementById('questions-container').style.display = "block";
+                    document.getElementById('review-view').style.display = "none";
+                    document.getElementById('fix-navigation').style.display = "flex";
+                    
+                    // Show only the wrong ones in the questions-container
+                    for (let i = 1; i <= 8; i++) {
+                        const li = document.getElementById('li-q' + i);
+                        if (wrongIndices.includes(i)) {
+                            li.style.display = "list-item";
+                        } else {
+                            li.style.display = "none";
+                        }
+                    }
+
+                    // Scroll to first wrong answer
+                    if (wrongIndices.length > 0) {
+                        document.getElementById('li-q' + wrongIndices[0]).scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+
+                function retakeWrong() {
+                    for (let i = 1; i <= 8; i++) {
+                        if (wrongIndices.includes(i)) {
+                            const input = document.getElementById('ans' + i);
+                            input.value = "";
+                            const li = document.getElementById('li-q' + i);
+                            li.style.color = "#334155";
+                            li.style.background = "transparent";
+                            li.style.padding = "0";
+                            li.style.marginLeft = "35px";
+                        }
+                    }
+                    goBackToFix();
+                }
+
+                // Initial state ensures all are visible
+                window.onload = function() {
+                    document.getElementById('fix-navigation').style.display = "none";
+                    for (let i = 1; i <= 8; i++) {
+                        document.getElementById('li-q' + i).style.display = "list-item";
+                    }
+                };
+            </script>
+    </div>
+
+</body>
+
+</html>

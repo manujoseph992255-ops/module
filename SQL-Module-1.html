@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 1: Introduction to SQL | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --secondary-blue: #008eab;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex; 
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Top Nav */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0; width: 100%;
+            z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            padding: 8px 18px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 6px;
+            transition: opacity 0.3s;
+            text-transform: uppercase;
+        }
+
+        /* Header Banner */
+        .header-banner { 
+            background: var(--primary-blue); 
+            color: white; 
+            padding: 120px 20px 60px; 
+            text-align: center; 
+        }
+        .header-banner h1 { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 38px; 
+            font-weight: 900; 
+            letter-spacing: -1px; 
+            text-transform: uppercase;
+        }
+
+        /* Layout Container */
+        .layout-container {
+            max-width: 900px;
+            margin: 40px auto;
+            width: 95%;
+            padding-bottom: 60px;
+        }
+
+        
+
+        /* Main Content Area */
+        .main-content { 
+            
+            background: #ffffff; 
+            border: 1px solid var(--border-color);
+            padding: 60px;
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.04);
+        }
+
+        .section-header { 
+            margin-bottom: 30px; 
+            border-bottom: 3px solid var(--bg-light); 
+            padding-bottom: 15px; 
+        }
+        .section-header h2 { 
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-blue); 
+            font-size: 28px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: -0.5px;
+        }
+
+        /* Content Styles */
+        p { line-height: 1.8; margin-bottom: 25px; color: #334155; font-size: 17px; }
+        strong { color: var(--primary-blue); font-weight: 700; }
+        h3 { 
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-blue); 
+            margin: 40px 0 20px; 
+            font-size: 22px; 
+            font-weight: 700; 
+        }
+        ul { margin-bottom: 25px; padding-left: 20px; color: #334155; }
+        li { margin-bottom: 10px; }
+
+        .interaction-box { 
+            background-color: #f7f9fc; 
+            border-left: 5px solid var(--secondary-blue); 
+            padding: 25px; 
+            margin: 30px 0; 
+            border-radius: 0 10px 10px 0;
+            font-size: 16px;
+        }
+        .interaction-box strong { color: var(--secondary-blue); }
+
+        /* Dark themed interaction box */
+        .dark-box {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #38bdf8;
+            color: #e2e8f0;
+        }
+        .dark-box ul, .dark-box ol { margin-bottom: 0; color: #e2e8f0; }
+        .dark-box li { margin-bottom: 8px; }
+        .dark-box strong { color: #7dd3fc; }
+        .dark-box code { color: #f472b6; background: rgba(244, 114, 182, 0.1); }
+
+        .purpose-box {
+            background: #f0f9ff;
+            border-left: 5px solid #0ea5e9;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .purpose-box h4 { color: #0369a1; margin-bottom: 10px; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; font-weight: 800; }
+
+        /* Code Block Styling */
+        pre { 
+            background: #1e293b; 
+            color: #f8fafc; 
+            padding: 25px; 
+            border-radius: 8px; 
+            overflow-x: auto; 
+            font-family: 'Consolas', 'Monaco', monospace; 
+            font-size: 15px; 
+            margin: 25px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+            line-height: 1.5;
+        }
+        .keyword { color: #f472b6; }
+        .type { color: #7dd3fc; }
+        .string { color: #fbbf24; }
+        .comment { color: #94a3b8; }
+
+        /* Table Styling */
+        .table-visual {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-size: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .table-visual th {
+            background: var(--primary-blue);
+            color: white;
+            text-align: left;
+            padding: 15px;
+            font-weight: 600;
+        }
+        .table-visual td {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .table-visual tr:nth-child(even) { background: #f8fafc; }
+
+        /* Quiz CTA */
+        .quiz-cta {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #008eab 100%);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+        }
+        .quiz-cta h3 { color: white; margin-top: 0; font-size: 24px; border: none; padding: 0; }
+        .btn-start-quiz {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        .btn-start-quiz:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+
+        .coding-practice {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        .coding-practice h3 { margin-top: 0; color: #7dd3fc; font-size: 22px; font-weight: 700; border: none; padding: 0; }
+        .coding-practice p { color: #e2e8f0; font-size: 16px; margin-bottom: 20px; }
+        .coding-practice strong { color: #fbbf24; }
+        .coding-practice ul, .coding-practice ol { color: #e2e8f0; margin-bottom: 20px; }
+        .coding-practice li { margin-bottom: 8px; }
+        .coding-practice code, .quest-box code { 
+            color: #7dd3fc; 
+            background: rgba(125, 211, 252, 0.1); 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            font-family: 'Consolas', monospace; 
+            font-size: 14px; 
+            font-weight: 600;
+        }
+        .coding-practice textarea, .quest-box textarea {
+            width: 100%;
+            height: 120px;
+            background: #0f172a;
+            color: #38bdf8;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 15px;
+            resize: vertical;
+            margin-bottom: 20px;
+            outline: none;
+            display: block;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .coding-practice textarea:focus, .quest-box textarea:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+        }
+        .coding-practice .btn-run, .quest-box .btn-run {
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .coding-practice .btn-run:hover, .quest-box .btn-run:hover { background: #7dd3fc; transform: translateY(-2px); }
+        .feedback {
+            margin-top: 15px;
+            font-weight: 700;
+            display: none;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        .feedback.correct { color: #065f46; background: #ecfdf5; display: block; border: 1px solid #a7f3d0; }
+        .feedback.wrong { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid #ef4444; }
+        
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        .success-pulse {
+            animation: successPulse 0.5s ease;
+        }
+
+        /* Responsive */
+        footer { text-align: center; padding: 40px; color: #94a3b8; font-size: 13px; border-top: 1px solid var(--border-color); margin-top: 40px; }
+
+        @media (max-width: 992px) {
+            .layout-container { flex-direction: column; }
+            .sidebar { width: 100%; position: static; }
+            .main-content { padding: 30px; }
+        }
+
+        /* Visual Illustrations (Floating Animations) */
+        .illustration-container {
+            position: fixed;
+            right: 20px;
+            top: 200px;
+            width: 250px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            pointer-events: none;
+            opacity: 0.9;
+        }
+        .illustration-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            animation: float 6s ease-in-out infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .illustration-card img { width: 60px; height: 60px; margin-bottom: 8px; }
+        .illustration-card span { display: block; font-weight: 800; color: var(--primary-blue); font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Quest Styling - DARK THEME */
+        .quest-box {
+            background: #0f172a;
+            border: 1px solid #1e293b;
+            border-radius: 16px;
+            padding: 35px;
+            margin: 40px 0;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .quest-box::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: #38bdf8;
+        }
+        .quest-box h3 { color: #7dd3fc; margin-top: 0; display: flex; align-items: center; gap: 10px; font-size: 20px; border: none; padding: 0; }
+        .quest-box p { color: #cbd5e1; }
+        .quest-box strong { color: #f472b6; }
+        .quest-progress { color: #94a3b8; font-size: 13px; margin-bottom: 15px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+        .quest-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
+        .quest-btn {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 15px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: left;
+            font-weight: 600;
+            transition: all 0.25s;
+            color: #e2e8f0;
+            font-size: 15px;
+        }
+        .quest-btn:hover { background: #334155; transform: translateX(5px); border-color: #38bdf8; }
+        .quest-btn.correct { background: #064e3b; border-color: #34d399; color: #a7f3d0; }
+        .quest-btn.wrong { background: #450a0a; border-color: #f87171; color: #fca5a5; }
+        .quest-btn:disabled { cursor: not-allowed; opacity: 0.6; }
+        .quest-complete {
+            text-align: center;
+            padding: 20px;
+            color: #34d399;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* Terminal Card - Typewriter Animation */
+        .terminal-card {
+            background: #0f172a;
+            border-radius: 14px;
+            padding: 0;
+            margin: 40px 0;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border: 1px solid #1e293b;
+        }
+        .terminal-header {
+            background: #1e293b;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .terminal-dot.red { background: #f87171; }
+        .terminal-dot.yellow { background: #fbbf24; }
+        .terminal-dot.green { background: #34d399; }
+        .terminal-title { color: #94a3b8; font-size: 13px; margin-left: 10px; font-weight: 600; }
+        .terminal-body {
+            padding: 25px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 15px;
+            color: #38bdf8;
+            min-height: 120px;
+            line-height: 1.8;
+        }
+        .terminal-body .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background: #38bdf8;
+            animation: blink 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        .terminal-body .kw { color: #f472b6; }
+        .terminal-body .str { color: #fbbf24; }
+        .terminal-body .comment { color: #64748b; }
+
+        /* Entry Animations */
+        .main-content > * {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 1600px) {
+            .illustration-container { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="sql_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        <a href="sql_roadmap.html" class="logout-btn">EXIT</a>
+    </nav>
+
+    <header class="header-banner">
+        <h1>MODULE 1: INTRODUCTION TO SQL</h1>
+    </header>
+
+    <!-- Floating Illustrations -->
+    <div class="illustration-container">
+        <div class="illustration-card" style="animation-delay: 0s;">
+            <img src="https://img.icons8.com/isometric/100/database.png" alt="DB">
+            <span>SQL Foundations</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 2s;">
+            <img src="https://img.icons8.com/isometric/100/key.png" alt="Key">
+            <span>Core Keys</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 4s;">
+            <img src="https://img.icons8.com/isometric/100/logic.png" alt="Logic">
+            <span>Normalization</span>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        
+
+        <main class="main-content">
+            <div class="section-header">
+                <h2>Module 1 – Foundations of Databases and SQL</h2>
+                <p style="font-weight: 600; color: var(--secondary-blue);">SQL Certification Course – Module 1</p>
+            </div>
+            
+            <h3>What is DBMS?</h3>
+            <p><strong>DBMS</strong> stands for Database Management Systems.</p>
+            <p>These are systems to store, retrieve or, sometimes, manipulate data.</p>
+            <p>Developed to handle large amounts of data.</p>
+
+            <div class="purpose-box">
+                <h4>Why DBMS?</h4>
+                <p>Consider a bank that maintains customer’s account details, employee details, bank device details, etc.</p>
+                <p>These details need to be stored in such a way that it can be added, deleted, updated and retrieved from one place.</p>
+                <p>DBMS is a software designed for these types of operations.</p>
+            </div>
+
+            <h3>RDBMS</h3>
+            <p><strong>What is RDBMS?</strong></p>
+            <p>RDBMS stands for Relational Database Management Systems.</p>
+            <p>RDBMS allows to store, retrieve or manipulate data, but in a more efficient way than DBMS.</p>
+            <p>Apart from rows and columns the RDBMS table has following components:</p>
+            <ul>
+                <li><strong>Domain</strong></li>
+                <li><strong>Instance</strong></li>
+                <li><strong>Schema</strong></li>
+                <li><strong>Keys</strong></li>
+            </ul>
+
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>Working with SQL Server</h2>
+            </div>
+            
+            <h3>Import a Table to SQL</h3>
+            <p>Let's create a sample database first.</p>
+            <p>In SSMS, open a new query window and run: <br></p>
+            <pre><span class="keyword">CREATE DATABASE</span> CartoonCharacters;</pre>
+            <p>Now your database exists and is ready to hold the table.</p>
+            <div class="interaction-box">
+                <ol style="margin-left: 20px;">
+                    <li>In SSMS, expand <strong>Databases</strong> &rarr; <strong>CartoonCharacters</strong>.</li>
+                    <li>Right-click the database &rarr; <strong>Tasks</strong> &rarr; <strong>Import Flat File</strong>.</li>
+                    <li>File Location: <span class="string">C:\Data\Character_Address_Table.csv</span></li>
+                    <li>Check <span class="comment">“Column names in the first data row”</span>.</li>
+                    <li>Click <strong>Next &rarr; Next &rarr; Finish</strong>.</li>
+                </ol>
+            </div>
+            <p>The wizard will create a table automatically.</p>
+            <p>Run:</p>
+            <pre><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> Character_Address_Table;</pre>
+
+            <h3>A Database Table</h3>
+            <p>A database consists of one or more tables.</p>
+            <p>A table is the most significant component in an RDBMS.</p>
+            <p>A table is where all data is stored.</p>
+            <p>A table constitutes of rows & columns.</p>
+            <p>Each column represents attributes of the entity.</p>
+
+            <h3>A Record in a Table</h3>
+            <p>Each row in a table is known as a <strong>record</strong> or a <strong>tuple</strong>.</p>
+            <p>A record contains all the information for one specific object, like a person or a product.</p>
+            <table class="table-visual">
+                <thead><tr><th>ID</th><th>Name</th><th>Role</th></tr></thead>
+                <tbody>
+                    <tr style="background: rgba(88, 166, 255, 0.2); outline: 2px solid var(--primary-blue);">
+                        <td>1</td><td>Mickey Mouse</td><td>Main Character</td>
+                    </tr>
+                    <tr><td>2</td><td>Minnie Mouse</td><td>Lead Female</td></tr>
+                    <tr><td>3</td><td>Donald Duck</td><td>Supporting Character</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 14px; color: var(--text-muted); text-align: center;">(Highlighted row represents a Record/Tuple)</p>
+
+            <!-- Terminal Animation Card -->
+            <div class="terminal-card">
+                <div class="terminal-header">
+                    <div class="terminal-dot red"></div>
+                    <div class="terminal-dot yellow"></div>
+                    <div class="terminal-dot green"></div>
+                    <span class="terminal-title">SQL Server Management Studio</span>
+                </div>
+                <div class="terminal-body" id="terminal-output"><span class="cursor"></span></div>
+            </div>
+
+            <h3>A Column in a Table</h3>
+            <p>Each column in a table is an <strong>attribute</strong>.</p>
+            <p>An attribute provides one specific piece of information, such as a customer's last name.</p>
+            <table class="table-visual">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th style="background: var(--secondary-blue); color: white;">Name</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td style="background: rgba(0, 142, 171, 0.1);">Mickey Mouse</td><td>Main Character</td></tr>
+                    <tr><td>2</td><td style="background: rgba(0, 142, 171, 0.1);">Minnie Mouse</td><td>Lead Female</td></tr>
+                    <tr><td>3</td><td style="background: rgba(0, 142, 171, 0.1);">Donald Duck</td><td>Supporting Character</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size: 14px; color: var(--text-muted); text-align: center;">(The "Name" column is highlighted as the Attribute)</p>
+
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>Database Keys</h2>
+            </div>
+            
+            <h3>Keys</h3>
+            <p>A <strong>key</strong> is a data item (one or more columns) that allows you to uniquely identify a record.</p>
+            <p>Keys are used to fetch a specific record and provide useful constraints such as <strong>"Unique value"</strong> which ensures no two rows have the same value.</p>
+            
+            <h3>Types of Keys</h3>
+            <p>Database supports many types of keys:</p>
+            <ul style="list-style-type: square;">
+                <li>Candidate key</li>
+                <li>Primary key</li>
+                <li>Foreign key</li>
+                <li>Unique key</li>
+                <li>Alternate key</li>
+            </ul>
+
+            <h3>Candidate Key vs Primary Key</h3>
+            <p><strong>Candidate Key:</strong> An attribute (column) or a set of attributes that uniquely identifies a record.</p>
+            <p><em>Example:</em> Customer ID + Store ID + Location ID in a customer transaction table.</p>
+            <p><strong>Primary Key:</strong> Identifies each record in a table and must never be the same for two records in that table.</p>
+            <p><em>Example:</em> Customer ID identifying a customer uniquely in a customer table.</p>
+            
+            <h3>Key Differences:</h3>
+            <table class="table-visual">
+                <thead><tr><th>Candidate Key</th><th>Primary Key</th></tr></thead>
+                <tbody>
+                    <tr><td>Any column or combination that can qualify as a unique key.</td><td>A column or combination that uniquely identifies a record.</td></tr>
+                    <tr><td>There can be multiple Candidate Keys in one table.</td><td>There is only one Primary Key in a table.</td></tr>
+                    <tr><td>Each Candidate Key can qualify as a Primary Key.</td><td>(The chosen identifier)</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Primary Key Rules</h3>
+            <div class="purpose-box">
+                <ul>
+                    <li>Must uniquely identify each row.</li>
+                    <li>Cannot contain NULL values.</li>
+                    <li>Only one primary key per table.</li>
+                    <li>Can be a single column or multiple columns (known as a composite key).</li>
+                </ul>
+            </div>
+
+            <h3>Foreign Key</h3>
+            <p>Foreign keys are the columns of a table that point to the primary key of another table.</p>
+            <p><em>Example:</em> CustomerID in a customer transaction table points to the CustomerID in the main customer table.</p>
+
+            <h3>Alternate and Unique Keys</h3>
+            <p><strong>Alternate Key:</strong> A candidate key that is not chosen as the primary key.</p>
+            <p><em>Example:</em> Store Name + Store Location in a store information table.</p>
+            <p><strong>Unique Key:</strong> An attribute or set of attributes to uniquely identify a record.</p>
+            <p>This is similar to a primary key but can contain a <strong>null</strong> value.</p>
+            <p><em>Example:</em> Store Name in a store information table.</p>
+
+            <h3>Unique Key vs Primary Key</h3>
+            <table class="table-visual">
+                <thead><tr><th>Unique Key</th><th>Primary Key</th></tr></thead>
+                <tbody>
+                    <tr><td>Must be unique.</td><td>Must be unique.</td></tr>
+                    <tr><td>Can contain NULL values.</td><td>Cannot be NULL.</td></tr>
+                    <tr><td>Multiple unique keys allowed per table.</td><td>Only one primary key allowed per table.</td></tr>
+                </tbody>
+            </table>
+
+            <!-- Practical SQL Typing Activity -->
+            <div class="coding-practice" id="coding-practice-box">
+                <h3>Interactive Practice: Creating a Table</h3>
+                <p><strong>Challenge:</strong> Write a SQL query to create a table named <code>Students</code>. It should have an <code>ID</code> column of type <code>INT</code> that acts as the <strong>PRIMARY KEY</strong>, and a <code>Name</code> column of type <code>VARCHAR(50)</code>.</p>
+                <textarea id="sql-practice-input" placeholder="CREATE TABLE Students (
+    ID INT PRIMARY KEY,
+    Name VARCHAR(50)
+);"></textarea>
+                <button class="btn-run" onclick="checkSQL()">Run & Check Answer</button>
+                <div id="sql-feedback" class="feedback"></div>
+                <div id="sql-output" style="display:none; margin-top:20px;"></div>
+            </div>
+
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>Identify the Purpose Quest</h2>
+                <p style="font-weight: 600; color: var(--secondary-blue);">Mission: Test your SQL knowledge across multiple challenges</p>
+            </div>
+
+            <div class="quest-box" id="quest-container">
+                <div class="quest-progress" id="quest-progress">MISSION 1 OF 3</div>
+                <h3 id="quest-title">Identify the Purpose Quest</h3>
+                <p id="quest-question">Loading...</p>
+                <div class="quest-options" id="quest-options"></div>
+                <div id="quest-feedback" class="feedback"></div>
+            </div>
+
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>Database Normalization</h2>
+            </div>
+            
+            <h3>What is Normalization?</h3>
+            <p>Normalization is the process of organizing data in a database.</p>
+            <div class="interaction-box">
+                <p><strong>Goals:</strong></p>
+                <ul>
+                    <li>Reduce data redundancy (duplicate data).</li>
+                    <li>Improve data consistency.</li>
+                    <li>Prevent update, insert, and delete errors (anomalies).</li>
+                    <li>Ensures the database is efficient, logical, and easy to maintain.</li>
+                </ul>
+            </div>
+
+            <h3>What Problems Does Normalization Solve?</h3>
+            <p>Normalization avoids common data issues known as <strong>anomalies</strong>:</p>
+            <ul>
+                <li><strong>Update Anomaly:</strong> If you store DeptName in an Employee table and change it in one row, other rows might still have the old value.</li>
+                <li><strong>Insert Anomaly:</strong> You cannot add a new department because no employee exists for it yet.</li>
+                <li><strong>Delete Anomaly:</strong> If the only employee in a department leaves, the information about the department itself is lost.</li>
+            </ul>
+
+            <h3>What is a Normal Form?</h3>
+            <p>A Normal Form is a set of rules a table must follow to reduce redundancy.</p>
+            <p>Each level increases the quality of the table design.</p>
+            <p>Most real-world databases follow 1NF, 2NF, and 3NF.</p>
+            <p><strong>Definition:</strong> A table is in a particular Normal Form if it satisfies all the rules of that form.</p>
+
+            <h3>First Normal Form (1NF)</h3>
+            <p>A table is in 1NF if:</p>
+            <ul>
+                <li>All values are <strong>atomic</strong> (no multiple values in one cell).</li>
+                <li>There are no repeating groups or columns.</li>
+                <li>Each row is unique.</li>
+            </ul>
+
+            <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 300px;">
+                    <p><strong>Example of NOT 1NF (Non-Atomic):</strong></p>
+                    <table class="table-visual">
+                        <thead><tr><th>StudentID</th><th>Name</th><th>PhoneNumbers</th></tr></thead>
+                        <tbody>
+                            <tr><td>101</td><td>John</td><td style="color: #dc2626; font-weight: 600;">98765, 98450</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="flex: 1; min-width: 300px;">
+                    <p><strong>Example of 1NF (Atomic):</strong></p>
+                    <table class="table-visual">
+                        <thead><tr><th>StudentID</th><th>Name</th><th>PhoneNumber</th></tr></thead>
+                        <tbody>
+                            <tr><td>101</td><td>John</td><td>98765</td></tr>
+                            <tr><td>101</td><td>John</td><td>98450</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3>Second Normal Form (2NF)</h3>
+            <p>A table is in 2NF if:</p>
+            <ul>
+                <li>It is already in 1NF.</li>
+                <li><strong>No Partial Dependency:</strong> No non-key column should depend on only part of a composite primary key.</li>
+            </ul>
+
+            <!-- 1NF Continued - Converted Table -->
+            <div class="purpose-box">
+                <h4>Convert to 1NF (Make values atomic)</h4>
+            </div>
+            <table class="table-visual">
+                <thead><tr><th>StudentID</th><th>Name</th><th>PhoneNumber</th></tr></thead>
+                <tbody>
+                    <tr><td>101</td><td>John</td><td>98765</td></tr>
+                    <tr><td>101</td><td>John</td><td>98450</td></tr>
+                    <tr><td>102</td><td>Maya</td><td>91234</td></tr>
+                </tbody>
+            </table>
+
+            <!-- 2NF Detailed Example -->
+            <h3>Example of a Table NOT in 2NF</h3>
+            <p><strong>Orders Table:</strong></p>
+            <table class="table-visual">
+                <thead><tr><th>OrderID</th><th>ProductID</th><th>ProductName</th><th>Quantity</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>P1</td><td>Keyboard</td><td>2</td></tr>
+                    <tr><td>1</td><td>P2</td><td>Mouse</td><td>1</td></tr>
+                    <tr><td>2</td><td>P1</td><td>Keyboard</td><td>3</td></tr>
+                </tbody>
+            </table>
+            <div class="interaction-box">
+                <p>ProductName does <strong>NOT</strong> depend on OrderID.</p>
+                <p>It depends <strong>ONLY</strong> on ProductID &rarr; partial dependency.</p>
+                <p style="color: #dc2626; font-weight: 700;">&cross; Therefore, table is NOT in 2NF.</p>
+            </div>
+
+            <!-- Convert to 2NF -->
+            <h3>Convert to 2NF</h3>
+            <p>We split the table into 2 tables:</p>
+
+            <p><strong>Orders Table</strong> (only order-related data):</p>
+            <table class="table-visual">
+                <thead><tr><th>OrderID</th><th>ProductID</th><th>Quantity</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>P1</td><td>2</td></tr>
+                    <tr><td>1</td><td>P2</td><td>1</td></tr>
+                    <tr><td>2</td><td>P1</td><td>3</td></tr>
+                </tbody>
+            </table>
+
+            <p><strong>Product Table</strong> (product-related data):</p>
+            <table class="table-visual">
+                <thead><tr><th>ProductID</th><th>ProductName</th></tr></thead>
+                <tbody>
+                    <tr><td>P1</td><td>Keyboard</td></tr>
+                    <tr><td>P2</td><td>Mouse</td></tr>
+                </tbody>
+            </table>
+
+            <div class="purpose-box">
+                <h4>After Splitting</h4>
+                <ul>
+                    <li>&check; No repetition of product names</li>
+                    <li>&check; ProductName now depends ONLY on ProductID</li>
+                    <li>&check; Orders table only stores order data</li>
+                    <li>&check; No partial dependency</li>
+                </ul>
+                <p style="margin-top: 10px; font-weight: 700; color: #0369a1;">BOTH tables are now in 2NF.</p>
+            </div>
+
+            <!-- 3NF -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>Third Normal Form (3NF)</h2>
+            </div>
+
+            <p>A table is in 3NF if:</p>
+            <ul>
+                <li>It is already in 2NF.</li>
+                <li><strong>No Transitive Dependency:</strong> Non-key columns must not depend on another non-key column.</li>
+            </ul>
+
+            <h3>Example of NOT 3NF (Employee Table)</h3>
+            <table class="table-visual">
+                <thead><tr><th>EmpID</th><th>EmpName</th><th>DeptID</th><th>DeptName</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Riya</td><td>D1</td><td>HR</td></tr>
+                    <tr><td>2</td><td>John</td><td>D2</td><td>Finance</td></tr>
+                    <tr><td>3</td><td>Meera</td><td>D1</td><td>HR</td></tr>
+                </tbody>
+            </table>
+            <div class="interaction-box">
+                <p><strong>Problem:</strong> DeptName depends on DeptID, a non-key column.</p>
+                <p>This is <strong>transitive dependency</strong> &rarr; breaks 3NF.</p>
+            </div>
+
+            <!-- Convert to 3NF -->
+            <h3>Convert to 3NF</h3>
+
+            <p><strong>Employee Table:</strong></p>
+            <table class="table-visual">
+                <thead><tr><th>EmpID</th><th>EmpName</th><th>DeptID</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>Riya</td><td>D1</td></tr>
+                    <tr><td>2</td><td>John</td><td>D2</td></tr>
+                    <tr><td>3</td><td>Meera</td><td>D1</td></tr>
+                </tbody>
+            </table>
+
+            <p><strong>Department Table:</strong></p>
+            <table class="table-visual">
+                <thead><tr><th>DeptID</th><th>DeptName</th></tr></thead>
+                <tbody>
+                    <tr><td>D1</td><td>HR</td></tr>
+                    <tr><td>D2</td><td>Finance</td></tr>
+                </tbody>
+            </table>
+            <div class="purpose-box">
+                <p>No transitive dependency. Table is in <strong>3NF</strong>.</p>
+            </div>
+
+            <!-- Practice 4: MCQ - Normalization -->
+            <div class="quest-box" id="practice-4-box">
+                <div class="quest-progress">SELECT THE CORRECT ANSWER</div>
+                <h3>Challenge: Normalization Knowledge</h3>
+                <p>A table has a <strong>transitive dependency</strong>. Which Normal Form does it violate?</p>
+                <div class="quest-options">
+                    <button class="quest-btn" onclick="checkPractice4(this, false)">1NF</button>
+                    <button class="quest-btn" onclick="checkPractice4(this, false)">2NF</button>
+                    <button class="quest-btn" onclick="checkPractice4(this, true)">3NF</button>
+                    <button class="quest-btn" onclick="checkPractice4(this, false)">BCNF</button>
+                </div>
+                <div id="practice-4-feedback" class="feedback"></div>
+            </div>
+
+            <!-- SQL Basics -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>Structured Query Language (SQL) Basics</h2>
+            </div>
+
+            <p>The commands available in SQL can be broadly categorised as follows:</p>
+            <ul>
+                <li><strong>Data Definition Language (DDL)</strong></li>
+                <li><strong>Data Manipulation Language (DML)</strong></li>
+                <li><strong>Data Query Language (DQL)</strong></li>
+                <li><strong>Data Control Language (DCL)</strong></li>
+                <li><strong>Transactional Control Language (TCL)</strong></li>
+            </ul>
+
+            <h3>Types of SQL Commands</h3>
+            <div class="interaction-box">
+                <ul>
+                    <li><strong>TCL:</strong> Set Transaction, Save point, Roll Back, Commit</li>
+                    <li><strong>DQL:</strong> Select</li>
+                    <li><strong>DML:</strong> Delete, Update, Insert</li>
+                    <li><strong>DDL:</strong> Drop, Alter, Create, Truncate</li>
+                    <li><strong>DCL:</strong> Revoke, Grant</li>
+                </ul>
+            </div>
+
+            <!-- Practice 3: SQL Writing Challenge 2 -->
+            <div class="coding-practice" id="practice-3-box">
+                <h3>Challenge: Select All Records</h3>
+                <p><strong>Write a SQL query</strong> to retrieve all records from a table called <code>Employees</code>.</p>
+                <textarea id="practice-3-input" placeholder="-- Write your SELECT query here..."></textarea>
+                <button class="btn-run" onclick="checkPractice3()">Run & Check</button>
+                <div id="practice-3-feedback" class="feedback"></div>
+                <div id="practice-3-output" style="display:none; margin-top:20px;"></div>
+            </div>
+
+            <!-- Practice 2: MCQ - Pick the Right Command -->
+            <div class="quest-box" id="practice-2-box">
+                <div class="quest-progress">SELECT THE CORRECT ANSWER</div>
+                <h3>Challenge: Identify the DDL Command</h3>
+                <p>Which SQL command is used to <strong>permanently remove</strong> a table from a database?</p>
+                <div class="quest-options">
+                    <button class="quest-btn" onclick="checkPractice2(this, false)">DELETE TABLE</button>
+                    <button class="quest-btn" onclick="checkPractice2(this, true)">DROP TABLE</button>
+                    <button class="quest-btn" onclick="checkPractice2(this, false)">REMOVE TABLE</button>
+                    <button class="quest-btn" onclick="checkPractice2(this, false)">TRUNCATE TABLE</button>
+                </div>
+                <div id="practice-2-feedback" class="feedback"></div>
+            </div>
+
+            <!-- DDL Section -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>Data Definition Language (DDL)</h2>
+            </div>
+
+            <p>A database is a collection of many tables, and a database server can hold many of these databases.</p>
+            <div class="purpose-box">
+                <h4>Hierarchy</h4>
+                <p><strong>Database Server</strong> &rarr; <strong>Databases</strong> &rarr; <strong>Tables</strong> (defined by columns) &rarr; <strong>Rows</strong></p>
+            </div>
+            <p>Databases and tables are referred to as <strong>database objects</strong>.</p>
+            <p>Any operation, such as creating, modifying, or deleting database objects, is called <strong>Data Definition Language (DDL)</strong>.</p>
+            <p>DDL is used to create a new schema as well as to modify an existing schema.</p>
+            <p>The typical commands available in DDL are: <strong>CREATE, ALTER, DROP, TRUNCATE</strong>.</p>
+
+            <!-- CREATE DATABASE -->
+            <h3>Create Database (DDL - CREATE DATABASE)</h3>
+            <p>The CREATE DATABASE statement is used to create a new SQL database.</p>
+            <p><strong>Syntax:</strong></p>
+            <pre><span class="keyword">CREATE DATABASE</span> databasename;</pre>
+            <p>The semicolon character (<code>;</code>) is a SQL statement terminator.</p>
+            <p>To create tables in the database you need to first select the database.</p>
+            <p><strong>Syntax to select the database:</strong></p>
+            <pre><span class="keyword">USE</span> databasename;</pre>
+
+            <h3>DDL - CREATE DATABASE - Example</h3>
+            <p>We will create a database called <strong>company</strong>:</p>
+            <pre><span class="keyword">CREATE DATABASE</span> company;</pre>
+            <p>Use <code>SHOW DATABASES;</code> to check if the database "company" has been CREATED.</p>
+            <p>The database company is now created.</p>
+
+            <!-- Practice 1: SQL Writing Challenge -->
+            <div class="coding-practice" id="practice-1-box">
+                <h3>Challenge: Create & Use a Database</h3>
+                <p><strong>Write SQL queries</strong> to create a new database named <code>StudentManagement</code> and then select (use) that database. Write both queries together.</p>
+                <textarea id="practice-1-input" placeholder="-- Write your SQL here..."></textarea>
+                <button class="btn-run" onclick="checkPractice1()">Run & Check</button>
+                <div id="practice-1-feedback" class="feedback"></div>
+                <div id="practice-1-output" style="display:none; margin-top:20px;"></div>
+            </div>
+
+            <h3>Drop Database (DDL - DROP DATABASE)</h3>
+            <p>The DROP DATABASE statement is used to drop an existing SQL database.</p>
+            <p><strong>Syntax:</strong></p>
+            <pre><span class="keyword">DROP DATABASE</span> databasename;</pre>
+
+            <h3>DDL - DROP DATABASE - Example</h3>
+            <p>The following SQL statement drops the existing database <strong>"company"</strong>:</p>
+            <pre><span class="keyword">DROP DATABASE</span> company;</pre>
+            <p>Use <code>SHOW DATABASES;</code> to check if the database company has been DROPPED.</p>
+            <p>The database "company" is now dropped.</p>
+
+            <!-- Practice 5: Mini Challenge (Updated to StudentManagement) -->
+            <div class="coding-practice" id="practice-5-box">
+                <h3>Challenge: Drop a Database</h3>
+                <p><strong>Write a SQL query</strong> to delete (drop) the database named <code>StudentManagement</code>.</p>
+                <textarea id="practice-5-input" placeholder="-- Write your command here..." style="height: 60px;"></textarea>
+                <button class="btn-run" onclick="checkPractice5()">Run & Check</button>
+                <div id="practice-5-feedback" class="feedback"></div>
+            </div>
+
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>Creating Tables & Data Types</h2>
+            </div>
+
+            <h3>Prerequisites for Creating Tables</h3>
+            <p>To create and maintain a table, you need a database.</p>
+            <p>While defining columns in a table, you should mention:</p>
+            <ul>
+                <li>The name of the columns</li>
+                <li>The datatype (integer, floating point, string, and so on)</li>
+                <li>Default value (if any)</li>
+            </ul>
+            <p>Let’s take a look at data types before we create a table.</p>
+
+            <h3>Data Types - Built-in</h3>
+            <p>Every relational database has its own maximum and minimum size limits for different data types; you don’t need to remember the limits. The main categories are:</p>
+            <div class="interaction-box">
+                <ul style="grid-template-columns: 1fr 1fr; display: grid;">
+                    <li><strong>Numeric:</strong> INT, BIGINT, BIT, etc.</li>
+                    <li><strong>Floating:</strong> DECIMAL, FLOAT, DOUBLE</li>
+                    <li><strong>Strings:</strong> CHAR, VARCHAR, TEXT</li>
+                    <li><strong>Date/Time:</strong> DATE, TIMESTAMP, YEAR</li>
+                </ul>
+            </div>
+
+            <h3>Numeric Data Types</h3>
+            <p>Choosing the right numeric type ensures database efficiency.</p>
+            <table class="table-visual">
+                <thead><tr><th>Datatype</th><th>From</th><th>To</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Bit</strong></td><td>0</td><td>1</td></tr>
+                    <tr><td><strong>Tinyint</strong></td><td>0</td><td>255</td></tr>
+                    <tr><td><strong>Smallint</strong></td><td>-32,768</td><td>32,767</td></tr>
+                    <tr><td><strong>Int</strong></td><td>-2,147,483,648</td><td>2,147,483,647</td></tr>
+                    <tr><td><strong>Bigint</strong></td><td>-2^63</td><td>2^63-1</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Floating Numbers</h3>
+            <table class="table-visual">
+                <thead><tr><th>Datatype</th><th>Specification</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Decimal</strong></td><td>Max digits is 65. Used for <strong>exact</strong> values.</td></tr>
+                    <tr><td><strong>Float</strong></td><td>4-byte single-precision.</td></tr>
+                    <tr><td><strong>Double</strong></td><td>8-byte double-precision.</td></tr>
+            </table>
+
+            <div class="purpose-box">
+                <p><strong>Pro Tip:</strong> <code>DECIMAL</code> is preferred for financial and monetary data because it stores exact values and avoids rounding errors that occur with FLOAT or DOUBLE.</p>
+            </div>
+
+            <!-- New MCQ: Data Type Choice -->
+            <div class="quest-box" id="practice-datatypes-1">
+                <div class="quest-progress">DATATYPE CHALLENGE</div>
+                <h3>Best Choice for Money?</h3>
+                <p>Which data type is preferred for storing <strong>financial and monetary data</strong> to avoid rounding errors?</p>
+                <div class="quest-options">
+                    <button class="quest-btn" onclick="checkDataTypes(this, false, 1)">FLOAT</button>
+                    <button class="quest-btn" onclick="checkDataTypes(this, true, 1)">DECIMAL</button>
+                    <button class="quest-btn" onclick="checkDataTypes(this, false, 1)">DOUBLE</button>
+                    <button class="quest-btn" onclick="checkDataTypes(this, false, 1)">INT</button>
+                </div>
+                <div id="datatypes-feedback-1" class="feedback"></div>
+            </div>
+
+            <h3>String Data Types</h3>
+            <table class="table-visual">
+                <thead><tr><th>Datatype</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>CHAR</strong></td><td>Length from 0 to 255 (Fixed length).</td></tr>
+                    <tr><td><strong>VARCHAR</strong></td><td>Length from 0 to 65,535 (Variable length).</td></tr>
+                    <tr><td><strong>TEXT</strong></td><td>Variable length storage with maximum size of <strong>1GB</strong>.</td></tr>
+                    <tr><td><strong>BLOB</strong></td><td>For binary large objects (Images, etc).</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Date and Time Data Types</h3>
+            <table class="table-visual">
+                <thead><tr><th>Datatype</th><th>Description</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>DATE</strong></td><td>YYYY-MM-DD</td></tr>
+                    <tr><td><strong>TIME</strong></td><td>HH:MI:SS</td></tr>
+                    <tr><td><strong>DATETIME</strong></td><td>YYYY-MM-DD HH:MI:SS</td></tr>
+                    <tr><td><strong>TIMESTAMP</strong></td><td>Seconds passed since Unix epoch.</td></tr>
+                    <tr><td><strong>YEAR</strong></td><td>2-digit or 4-digit format.</td></tr>
+                </tbody>
+            </table>
+
+            <!-- CREATE TABLE SECTION -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>Creating Tables (CREATE TABLE)</h2>
+            </div>
+            <p>The <code>CREATE TABLE</code> statement is used to create a new table in a database.</p>
+            <p><strong>Syntax:</strong></p>
+            <pre><span class="keyword">CREATE TABLE</span> table_name (
+    column1 datatype,
+    column2 datatype,
+    column3 datatype,
+    ....
+);</pre>
+            <div class="interaction-box">
+                <ul>
+                    <li>The <strong>column parameters</strong> specify the names of the table's columns.</li>
+                    <li>The <strong>datatype parameter</strong> specifies the type of data the column can hold (e.g., varchar, integer, date, etc.).</li>
+                </ul>
+            </div>
+
+            <h3>CREATE TABLE - Example</h3>
+            <p>We will create a <strong>customers</strong> table to hold information like First Name, Last Name, and Country.</p>
+            <div class="purpose-box">
+                <h4>Implementation Steps:</h4>
+                <ol>
+                    <li>Select the database: <code>USE company;</code></li>
+                    <li>Execute the CREATE TABLE command:</li>
+                </ol>
+                <pre><span class="keyword">CREATE TABLE</span> customers (
+    CustomerId <span class="keyword">int</span>,
+    first_name <span class="keyword">varchar</span>(20),
+    last_name <span class="keyword">varchar</span>(20),
+    country <span class="keyword">varchar</span>(20)
+);</pre>
+            </div>
+            <p>Check the table definition using: <code>describe customers;</code></p>
+
+            <!-- Practice 6: SQL Writing Challenge (Slide 48) -->
+            <div class="coding-practice" id="practice-6-box">
+                <div class="quest-progress">ADVANCED MISSION</div>
+                <h3>Challenge: Create Database & Table</h3>
+                <div class="dark-box">
+                    <p style="margin-bottom: 15px; color: #7dd3fc; font-weight: 700;">Schema Requirements:</p>
+                    <ol style="margin-left: 20px;">
+                        <li>Create a database named <code>CompanyDB</code>.</li>
+                        <li>Inside it, create a table named <code>Employees</code> with:
+                            <ul style="margin-left: 20px; margin-top: 10px;">
+                                <li><code>EmployeeID</code> (INT)</li>
+                                <li><code>FirstName</code>, <code>LastName</code>, <code>Department</code> (NVARCHAR(50))</li>
+                                <li><code>Salary</code> (INT)</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                <textarea id="practice-6-input" placeholder="-- Write Step 1, Step 2, and Step 3 here..." style="height: 150px;"></textarea>
+                <button class="btn-run" onclick="checkPractice6()">Run & Check</button>
+                <div id="practice-6-feedback" class="feedback"></div>
+            </div>
+
+            <!-- ALTER TABLE SECTION -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>Modifying Tables (ALTER TABLE)</h2>
+            </div>
+            <p>The <code>ALTER TABLE</code> statement is used to add, delete, or modify columns in an existing table. It is also used to add and drop various constraints.</p>
+            
+            <h3>ADD Column</h3>
+            <p>To add a column in a table, use the following syntax:</p>
+            <pre><span class="keyword">ALTER TABLE</span> table_name <span class="keyword">ADD</span> column_name datatype;</pre>
+            <p><strong>Example:</strong> Add an <code>email</code> column to the <code>customers</code> table.</p>
+            <pre><span class="keyword">ALTER TABLE</span> customers <span class="keyword">ADD</span> email <span class="keyword">varchar</span>(255);</pre>
+
+            <h3>DROP Column</h3>
+            <p>To delete a column in a table, use the following syntax:</p>
+            <pre><span class="keyword">ALTER TABLE</span> table_name <span class="keyword">DROP COLUMN</span> column_name;</pre>
+            <p><strong>Example:</strong> Remove the <code>email</code> column from the <code>customers</code> table.</p>
+            <pre><span class="keyword">ALTER TABLE</span> customers <span class="keyword">DROP COLUMN</span> email;</pre>
+
+            <!-- Practice 8: ALTER Challenge -->
+            <div class="coding-practice" id="practice-8-box">
+                <div class="quest-progress">DDL MISSION</div>
+                <h3>Challenge: Modify Table Structure</h3>
+                <p>Add a new column named <code>PhoneNumber</code> of type <code>VARCHAR(15)</code> to the existing <code>Employees</code> table.</p>
+                <textarea id="practice-8-input" placeholder="-- Write ALTER command here..." style="height: 60px;"></textarea>
+                <button class="btn-run" onclick="checkPractice8()">Modify Table</button>
+                <div id="practice-8-feedback" class="feedback"></div>
+            </div>
+
+            <!-- DML SECTION -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>Data Manipulation Language (DML)</h2>
+            </div>
+            <p><strong>DML</strong> is used to retrieve, store, modify, delete, insert, and update data in a database.</p>
+            <div class="interaction-box">
+                <p>The typical commands available in DML are:</p>
+                <ul>
+                    <li><strong>INSERT:</strong> Add new records.</li>
+                    <li><strong>UPDATE:</strong> Modify existing records.</li>
+                    <li><strong>DELETE:</strong> Remove records.</li>
+                </ul>
+            </div>
+
+            <h3>INSERT INTO Syntax</h3>
+            <p>The <code>INSERT INTO</code> statement is used to insert new records in a table.</p>
+            
+            <p><strong>Option 1: Specifying Columns (Recommended)</strong></p>
+            <pre><span class="keyword">INSERT INTO</span> table_name (column1, column2, ...) <span class="keyword">VALUES</span> (value1, value2, ...);</pre>
+
+            <p><strong>Option 2: All Columns (Order must match)</strong></p>
+            <pre><span class="keyword">INSERT INTO</span> table_name <span class="keyword">VALUES</span> (value1, value2, value3, ...);</pre>
+
+            <h3>INSERT - Example</h3>
+            <p>Insert a record into the <code>customers</code> table:</p>
+            <pre><span class="keyword">INSERT INTO</span> customers (CustomerId, first_name, last_name, country)
+<span class="keyword">VALUES</span> (1, 'John', 'Doe', 'USA');</pre>
+
+            <!-- Practice 9: INSERT Challenge -->
+            <div class="coding-practice" id="practice-9-box">
+                <div class="quest-progress">DML MISSION</div>
+                <h3>Challenge: Insert Employee Record</h3>
+                <p>Use the <strong>all columns</strong> syntax to insert a record into the <code>Employees</code> table with these values:</p>
+                <div class="dark-box">
+                    <p style="font-family: 'Consolas', monospace; font-size: 14px; margin: 0; color: #7dd3fc;">(101, 'Alice', 'Johnson', 'HR', 55000)</p>
+                </div>
+                <textarea id="practice-9-input" placeholder="-- Write INSERT command here..." style="height: 60px;"></textarea>
+                <button class="btn-run" onclick="checkPractice9()">Add Record</button>
+                <div id="practice-9-feedback" class="feedback"></div>
+            </div>
+
+            <!-- DROP & TRUNCATE SECTION -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>DROP vs TRUNCATE TABLE</h2>
+            </div>
+            <h3>DROP TABLE</h3>
+            <p>The <code>DROP TABLE</code> statement is used to <strong>permanently remove</strong> an existing table and all its data from a database.</p>
+            <p><strong>Syntax:</strong> <code>DROP TABLE table_name;</code></p>
+            <div class="warning-box" style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 15px; margin: 15px 0; border-radius: 4px;">
+                <p style="color: #f87171; margin: 0;"><strong>WARNING:</strong> Be careful! Deleting a table results in the loss of <strong>all information</strong> stored in it!</p>
+            </div>
+
+            <h3>TRUNCATE TABLE</h3>
+            <p>The <code>TRUNCATE TABLE</code> statement is used to delete the <strong>data inside</strong> a table, but the table structure (columns) remains.</p>
+            <p><strong>Syntax:</strong> <code>TRUNCATE TABLE table_name;</code></p>
+
+            <!-- Practice 7: Scenario-based Challenge (Slide 52) -->
+            <div class="quest-box" id="practice-7-box">
+                <div class="quest-progress">SCENARIO CHALLENGE</div>
+                <h3>Clean up the Employees Table</h3>
+                <p>You have a table named <code>Employees</code> inside <code>CompanyDB</code>. Write the queries to first <strong>TRUNCATE</strong> all records, then <strong>DROP</strong> the table entirely.</p>
+                <textarea id="practice-7-input" placeholder="-- Step 1 (Use), Step 2 (Truncate), Step 3 (Drop)..." style="height: 120px;"></textarea>
+                <button class="btn-run" onclick="checkPractice7()">Execute Sequence</button>
+                <div id="practice-7-feedback" class="feedback"></div>
+            </div>
+
+            <!-- CASE STUDY SECTION -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>Case Study: Database and Table Management</h2>
+            </div>
+            <div class="purpose-box">
+                <p>In this case study, you will practice the full lifecycle: creating a database, creating a table, and eventually managing its data.</p>
+            </div>
+
+            <!-- Case Study Challenge 1 -->
+            <div class="coding-practice" id="casestudy-1-box" style="border: 1px solid #334155; background: #0f172a;">
+                <div class="quest-progress" style="background: #334155; color: #94a3b8; padding: 5px 15px; border-radius: 4px; display: inline-block;">CASE STUDY: PHASE 1</div>
+                <h3 style="margin-top: 20px;">Build the Sales System</h3>
+                <p>1. Create a database named <code>SalesDB_CaseStudy</code> and select it.</p>
+                <p>2. Create a table named <code>Orders</code> with these columns:</p>
+                <div class="dark-box">
+                    <ul style="padding-left: 20px;">
+                        <li><code>OrderID</code> (INT PRIMARY KEY)</li>
+                        <li><code>CustomerName</code>, <code>Product</code> (NVARCHAR(100))</li>
+                        <li><code>Quantity</code> (INT), <code>OrderDate</code> (DATE)</li>
+                        <li><code>TotalAmount</code> (DECIMAL(10,2))</li>
+                    </ul>
+                </div>
+                <textarea id="casestudy-1-input" placeholder="-- Phase 1: DB & Table Creation..." style="height: 120px;"></textarea>
+                <button class="btn-run" onclick="checkCaseStudy1()">Initialize System</button>
+                <div id="casestudy-1-feedback" class="feedback"></div>
+            </div>
+
+            <!-- Case Study Challenge 2 -->
+            <div class="coding-practice" id="casestudy-2-box" style="border: 1px solid #334155; background: #0f172a; margin-top: 30px;">
+                <div class="quest-progress" style="background: #334155; color: #94a3b8; padding: 5px 15px; border-radius: 4px; display: inline-block;">CASE STUDY: PHASE 2</div>
+                <h3 style="margin-top: 20px;">Populate Sales Records</h3>
+                <p>Insert the following <strong>5 specific records</strong> into your <code>Orders</code> table:</p>
+                <div class="dark-box">
+                    <ol style="margin-left: 20px; font-family: 'Consolas', monospace; font-size: 14px;">
+                        <li>(1, 'John Smith', 'Laptop', 1, '2024-01-10', 75000.00)</li>
+                        <li>(2, 'Mary Johnson', 'Mobile Phone', 3, '2024-02-15', 75000.00)</li>
+                        <li>(3, 'David Williams', 'Headphones', 3, '2024-03-05', 15000.00)</li>
+                        <li>(4, 'Linda Brown', 'Tablet', 1, '2024-04-22', 30000.00)</li>
+                        <li>(5, 'Robert Davis', 'Fitness Tracker', 4, '2024-05-18', 40000.00)</li>
+                    </ol>
+                </div>
+                <textarea id="casestudy-2-input" placeholder="-- Phase 2: Insert 5 Records..." style="height: 150px;"></textarea>
+                <button class="btn-run" onclick="checkCaseStudy2()">Insert All Records</button>
+                <div id="casestudy-2-feedback" class="feedback"></div>
+            </div>
+
+            <!-- Case Study Challenge 3 -->
+            <div class="coding-practice" id="casestudy-3-box" style="border: 1px solid #334155; background: #0f172a; margin-top: 30px;">
+                <div class="quest-progress" style="background: #334155; color: #94a3b8; padding: 5px 15px; border-radius: 4px; display: inline-block;">CASE STUDY: PHASE 3</div>
+                <h3 style="margin-top: 20px;">Data Maintenance</h3>
+                <p>1. <strong>Update:</strong> Change the <code>TotalAmount</code> for OrderID 3 to <code>18000.00</code>.</p>
+                <p>2. <strong>Update:</strong> Change the <code>Product</code> for OrderID 5 to 'Smartwatch'.</p>
+                <p>3. <strong>Delete:</strong> Remove the record for OrderID 4 entirely.</p>
+                <textarea id="casestudy-3-input" placeholder="-- Phase 3: Multiple Updates & Deletion..." style="height: 140px;"></textarea>
+                <button class="btn-run" onclick="checkCaseStudy3()">Execute Maintenance</button>
+                <div id="casestudy-3-feedback" class="feedback"></div>
+            </div>
+
+            <!-- Case Study Challenge 4 -->
+            <div class="coding-practice" id="casestudy-4-box" style="border: 1px solid #334155; background: #0f172a; margin-top: 30px;">
+                <div class="quest-progress" style="background: #334155; color: #94a3b8; padding: 5px 15px; border-radius: 4px; display: inline-block;">CASE STUDY: PHASE 4</div>
+                <h3 style="margin-top: 20px;">Analytical Queries</h3>
+                <p>Write a query to display <strong>all columns</strong> from <code>Orders</code> where the <code>TotalAmount</code> is <strong>greater than or equal to</strong> 40000.</p>
+                <textarea id="casestudy-4-input" placeholder="-- Phase 4: DQL Query..." style="height: 80px;"></textarea>
+                <button class="btn-run" onclick="checkCaseStudy4()">Analyze Data</button>
+                <div id="casestudy-4-feedback" class="feedback"></div>
+            </div>
+
+            <!-- Case Study Challenge 5 -->
+            <div class="coding-practice" id="casestudy-5-box" style="border: 1px solid #334155; background: #0f172a; margin-top: 30px;">
+                <div class="quest-progress" style="background: #334155; color: #94a3b8; padding: 5px 15px; border-radius: 4px; display: inline-block;">CASE STUDY: FINAL CLEANUP</div>
+                <h3 style="margin-top: 20px;">System Decommissioning</h3>
+                <p>Finish the lifecycle by executing these cleanup commands in order:</p>
+                <div class="dark-box">
+                    <ol style="margin-left: 20px;">
+                        <li><strong>TRUNCATE</strong> all records from <code>Orders</code>.</li>
+                        <li><strong>DROP</strong> the <code>Orders</code> table completely.</li>
+                        <li><strong>DROP</strong> the <code>SalesDB_CaseStudy</code> database.</li>
+                    </ol>
+                </div>
+                <textarea id="casestudy-5-input" placeholder="-- Phase 5: Truncate, Drop Table, Drop DB..." style="height: 120px;"></textarea>
+                <button class="btn-run" onclick="checkCaseStudy5()">Close Case Study</button>
+                <div id="casestudy-5-feedback" class="feedback"></div>
+            </div>
+
+            <div class="quiz-cta">
+                <h3>Congratulations! You've finished Module 1.</h3>
+                <p>Ready to test your knowledge of SQL foundations and database keys?</p>
+                <a href="module_quiz.html?course=sql&mod=1" class="btn-start-quiz">Start Module 1 Quiz</a>
+            </div>
+
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2024 KVJ. All rights reserved. | Empowering Data Professionals.
+    </footer>
+
+    <script>
+        // ===== SQL PRACTICE CHECKER =====
+        function checkSQL() {
+            const inputElement = document.getElementById('sql-practice-input');
+            const feedback = document.getElementById('sql-feedback');
+            const outputDiv = document.getElementById('sql-output');
+            if(!inputElement || !feedback) return;
+            const input = inputElement.value.toLowerCase().trim();
+
+            // Always reset feedback
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+            outputDiv.style.display = 'none';
+            outputDiv.innerHTML = '';
+
+            if (!input) {
+                feedback.innerHTML = 'Please type your SQL query first!';
+                feedback.className = 'feedback wrong';
+                return;
+            }
+
+            const hasCreateTable = input.includes('create table students');
+            const hasPrimaryKey = input.includes('primary key');
+            const hasInt = input.includes('int');
+            const hasVarchar = input.includes('varchar');
+            const hasOpenParen = input.includes('(');
+            const hasCloseParen = input.includes(')');
+            const hasComma = input.includes(',');
+            const hasSemicolon = input.includes(';');
+
+            const allCorrect = hasCreateTable && hasPrimaryKey && (hasInt || input.includes('integer')) && hasVarchar && hasOpenParen && hasCloseParen && hasComma && hasSemicolon;
+
+            if (allCorrect) {
+                feedback.innerHTML = 'Excellent! You\'ve correctly defined a table with a Primary Key.';
+                feedback.className = 'feedback correct';
+                // Show expected output
+                outputDiv.style.display = 'block';
+                outputDiv.innerHTML = '<p style="color:#34d399;font-weight:700;margin-bottom:10px;">Expected Output: Table created successfully</p>' +
+                    '<table style="width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;">' +
+                    '<thead><tr style="background:#334155;"><th style="padding:10px 15px;text-align:left;color:#7dd3fc;font-size:14px;">Column</th><th style="padding:10px 15px;text-align:left;color:#7dd3fc;font-size:14px;">Type</th><th style="padding:10px 15px;text-align:left;color:#7dd3fc;font-size:14px;">Constraint</th></tr></thead>' +
+                    '<tbody>' +
+                    '<tr style="border-bottom:1px solid #334155;"><td style="padding:10px 15px;color:#e2e8f0;">ID</td><td style="padding:10px 15px;color:#38bdf8;">INT</td><td style="padding:10px 15px;color:#fbbf24;">PRIMARY KEY</td></tr>' +
+                    '<tr><td style="padding:10px 15px;color:#e2e8f0;">Name</td><td style="padding:10px 15px;color:#38bdf8;">VARCHAR(50)</td><td style="padding:10px 15px;color:#94a3b8;">-</td></tr>' +
+                    '</tbody></table>';
+                launchConfetti();
+            } else {
+                let missing = [];
+                if (!hasCreateTable) missing.push('CREATE TABLE Students');
+                if (!hasOpenParen || !hasCloseParen) missing.push('Parentheses ( )');
+                if (!hasPrimaryKey) missing.push('PRIMARY KEY');
+                if (!hasInt && !input.includes('integer')) missing.push('ID INT');
+                if (!hasVarchar) missing.push('Name VARCHAR');
+                if (!hasComma) missing.push('Comma between columns');
+                if (!hasSemicolon) missing.push('Semicolons at end ;');
+                feedback.innerHTML = 'Not quite! Your query is missing: ' + missing.join(', ');
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        // ===== CONFETTI / CRACKER ANIMATION =====
+        function launchConfetti() {
+            // Create a full-page overlay canvas
+            let canvas = document.getElementById('confetti-overlay');
+            if (!canvas) {
+                canvas = document.createElement('canvas');
+                canvas.id = 'confetti-overlay';
+                canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:99999;';
+                document.body.appendChild(canvas);
+            }
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const ctx = canvas.getContext('2d');
+            const colors = ['#f472b6','#38bdf8','#fbbf24','#34d399','#a78bfa','#fb923c','#f87171','#22d3ee'];
+            const particles = [];
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            for (let i = 0; i < 150; i++) {
+                particles.push({
+                    x: cx,
+                    y: cy,
+                    vx: (Math.random() - 0.5) * 20,
+                    vy: (Math.random() - 0.5) * 20 - 6,
+                    size: Math.random() * 10 + 3,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    alpha: 1,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: (Math.random() - 0.5) * 15,
+                    shape: Math.random() > 0.5 ? 'rect' : 'circle'
+                });
+            }
+            let frame = 0;
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let alive = false;
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.25;
+                    p.alpha -= 0.008;
+                    p.rotation += p.rotationSpeed;
+                    if (p.alpha <= 0) return;
+                    alive = true;
+                    ctx.save();
+                    ctx.globalAlpha = p.alpha;
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation * Math.PI / 180);
+                    ctx.fillStyle = p.color;
+                    if (p.shape === 'rect') {
+                        ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size * 0.6);
+                    } else {
+                        ctx.beginPath();
+                        ctx.arc(0, 0, p.size/2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    ctx.restore();
+                });
+                frame++;
+                if (alive && frame < 180) {
+                    requestAnimationFrame(animate);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    canvas.remove();
+                }
+            }
+            animate();
+        }
+
+        // ===== PRACTICE FIELD VALIDATORS =====
+        function checkPractice1() {
+            const input = document.getElementById('practice-1-input').value.toLowerCase().trim();
+            const feedback = document.getElementById('practice-1-feedback');
+            const output = document.getElementById('practice-1-output');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+            output.style.display = 'none';
+
+            const hasCreate = input.includes('create database studentmanagement');
+            const hasUse = input.includes('use studentmanagement');
+            const hasSemicolon = (input.match(/;/g) || []).length >= 2;
+
+            if (hasCreate && hasUse && hasSemicolon) {
+                feedback.innerHTML = 'Perfect! You have created and selected the database correctly.';
+                feedback.className = 'feedback correct';
+                output.style.display = 'block';
+                output.innerHTML = '<p style="color:#34d399;font-weight:700;">Success: Database "StudentManagement" is now active.</p>';
+                launchConfetti();
+            } else {
+                let missing = [];
+                if (!hasCreate) missing.push("CREATE DATABASE StudentManagement");
+                if (!hasUse) missing.push("USE StudentManagement");
+                if (!hasSemicolon) missing.push("Semicolons (;) after each command");
+                feedback.innerHTML = 'Not quite! Missing: ' + missing.join(', ');
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        function checkPractice2(btn, isCorrect) {
+            const feedback = document.getElementById('practice-2-feedback');
+            const btns = document.querySelectorAll('#practice-2-box .quest-btn');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+            
+            btns.forEach(b => { b.disabled = true; b.classList.remove('correct', 'wrong'); });
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedback.innerHTML = 'Correct! DROP TABLE permanently removes the table and all its data.';
+                feedback.className = 'feedback correct';
+                launchConfetti();
+            } else {
+                btn.classList.add('wrong');
+                feedback.innerHTML = 'Not quite. Remember, DDL commands like DROP change the structure.';
+                feedback.className = 'feedback wrong';
+                setTimeout(() => {
+                    btns.forEach(b => { b.disabled = false; b.classList.remove('wrong'); });
+                    feedback.style.display = 'none';
+                }, 1500);
+            }
+        }
+
+        function checkPractice3() {
+            const input = document.getElementById('practice-3-input').value.toLowerCase().trim();
+            const feedback = document.getElementById('practice-3-feedback');
+            const output = document.getElementById('practice-3-output');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+            output.style.display = 'none';
+
+            const hasSelect = input.startsWith('select *');
+            const hasFrom = input.includes('from employees');
+            const hasSemicolon = input.endsWith(';');
+
+            if (hasSelect && hasFrom && hasSemicolon) {
+                feedback.innerHTML = 'Excellent! That query retrieves all columns and all rows.';
+                feedback.className = 'feedback correct';
+                output.style.display = 'block';
+                output.innerHTML = '<p style="color:#34d399;font-weight:700;margin-bottom:10px;">Result Set Preview:</p>' +
+                    '<table style="width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;">' +
+                    '<thead style="background:#334155;"><tr><th style="padding:10px;text-align:left;color:#7dd3fc;">EmpID</th><th style="padding:10px;text-align:left;color:#7dd3fc;">EmpName</th><th style="padding:10px;text-align:left;color:#7dd3fc;">DeptID</th></tr></thead>' +
+                    '<tbody><tr style="border-bottom:1px solid #334155;"><td style="padding:10px;color:#e2e8f0;">1</td><td style="padding:10px;color:#e2e8f0;">Riya</td><td style="padding:10px;color:#e2e8f0;">D1</td></tr>' +
+                    '<tr><td style="padding:10px;color:#e2e8f0;">2</td><td style="padding:10px;color:#e2e8f0;">John</td><td style="padding:10px;color:#e2e8f0;">D2</td></tr></tbody></table>';
+                launchConfetti();
+            } else {
+                let msg = "Check your syntax! Did you use SELECT *, FROM Employees, and a terminating semicolon?";
+                feedback.innerHTML = msg;
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        function checkPractice4(btn, isCorrect) {
+            const feedback = document.getElementById('practice-4-feedback');
+            const btns = document.querySelectorAll('#practice-4-box .quest-btn');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+            
+            btns.forEach(b => { b.disabled = true; b.classList.remove('correct', 'wrong'); });
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedback.innerHTML = 'Spot on! Transitive dependency is resolved in 3rd Normal Form (3NF).';
+                feedback.className = 'feedback correct';
+                launchConfetti();
+            } else {
+                btn.classList.add('wrong');
+                feedback.innerHTML = 'Not quite. 3NF deals specifically with dependencies between non-key attributes.';
+                feedback.className = 'feedback wrong';
+                setTimeout(() => {
+                    btns.forEach(b => { b.disabled = false; b.classList.remove('wrong'); });
+                    feedback.style.display = 'none';
+                }, 1500);
+            }
+        }
+
+        function checkPractice5() {
+            const input = document.getElementById('practice-5-input').value.toLowerCase().trim();
+            const feedback = document.getElementById('practice-5-feedback');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+
+            const isCorrect = input === 'drop database studentmanagement;' || input === 'drop database studentmanagement';
+
+            if (isCorrect) {
+                feedback.innerHTML = 'Correct! The StudentManagement database and all its objects are now gone.';
+                feedback.className = 'feedback correct';
+                launchConfetti();
+            } else {
+                feedback.innerHTML = 'Incorrect. Syntax: DROP DATABASE StudentManagement;';
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        function checkDataTypes(btn, isCorrect, qNo) {
+            const feedback = document.getElementById('datatypes-feedback-' + qNo);
+            const container = btn.closest('.quest-box');
+            const btns = container.querySelectorAll('.quest-btn');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+            
+            btns.forEach(b => { b.disabled = true; b.classList.remove('correct', 'wrong'); });
+
+            if (isCorrect) {
+                btn.classList.add('correct', 'success-pulse');
+                feedback.innerHTML = qNo === 1 ? 'Correct! DECIMAL is exact and prevents rounding errors in money calculations.' : 'Correct! VARCHAR adjusts its size to match the length of the string, saving space.';
+                feedback.className = 'feedback correct';
+                launchConfetti();
+            } else {
+                btn.classList.add('wrong');
+                feedback.innerHTML = 'Not quite. Review the data type tables above!';
+                feedback.className = 'feedback wrong';
+                setTimeout(() => {
+                    btns.forEach(b => { b.disabled = false; b.classList.remove('wrong', 'success-pulse'); });
+                    feedback.style.display = 'none';
+                }, 1500);
+            }
+        }
+
+        function checkPractice6() {
+            const input = document.getElementById('practice-6-input').value.toLowerCase().trim();
+            const feedback = document.getElementById('practice-6-feedback');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+
+            const hasCreateDB = input.includes('create database companydb');
+            const hasUseDB = input.includes('use companydb');
+            const hasCreateTable = input.includes('create table employees');
+            const hasEmpID = input.includes('employeeid int');
+            const hasFirstName = input.includes('firstname nvarchar(50)');
+            const hasSalary = input.includes('salary int');
+            const semicolons = (input.match(/;/g) || []).length;
+
+            if (hasCreateDB && hasUseDB && hasCreateTable && hasEmpID && hasFirstName && hasSalary && semicolons >= 3) {
+                feedback.innerHTML = 'Outstanding! You\'ve successfully created a database and a detailed table.';
+                feedback.className = 'feedback correct success-pulse';
+                launchConfetti();
+            } else {
+                let missing = [];
+                if (!hasCreateDB) missing.push("CREATE DATABASE CompanyDB");
+                if (!hasUseDB) missing.push("USE CompanyDB");
+                if (!hasCreateTable) missing.push("CREATE TABLE Employees");
+                if (!hasFirstName) missing.push("NVARCHAR(50) for names");
+                if (semicolons < 3) missing.push("Semicolons (;) after each command");
+                feedback.innerHTML = 'Still missing: ' + missing.join(', ');
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        function checkPractice7() {
+            const input = document.getElementById('practice-7-input').value.toLowerCase().trim();
+            const feedback = document.getElementById('practice-7-feedback');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+
+            const hasTruncate = input.includes('truncate table employees');
+            const hasDrop = input.includes('drop table employees');
+            const hasUse = input.includes('use companydb');
+
+            if (hasUse && hasTruncate && hasDrop && input.indexOf('truncate') < input.indexOf('drop')) {
+                feedback.innerHTML = 'Perfect Execution! You cleared the data first, then deleted the structure.';
+                feedback.className = 'feedback correct success-pulse';
+                launchConfetti();
+            } else {
+                feedback.innerHTML = 'Order matters! Use the DB, then TRUNCATE, then DROP.';
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        function checkPractice8() {
+            const input = document.getElementById('practice-8-input').value.toLowerCase().trim();
+            const feedback = document.getElementById('practice-8-feedback');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+
+            const hasAlter = input.includes('alter table employees');
+            const hasAdd = input.includes('add phonenumber');
+            const hasType = input.includes('varchar');
+
+            if (hasAlter && hasAdd && hasType) {
+                feedback.innerHTML = 'Successfully Modified! New column PhoneNumber added to Employees.';
+                feedback.className = 'feedback correct success-pulse';
+                launchConfetti();
+            } else {
+                feedback.innerHTML = 'Use: ALTER TABLE Employees ADD PhoneNumber VARCHAR(15);';
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        function checkCaseStudy1() {
+            const input = document.getElementById('casestudy-1-input').value.toLowerCase().trim();
+            const feedback = document.getElementById('casestudy-1-feedback');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+
+            const hasCreateDB = input.includes('create database salesdb_casestudy');
+            const hasUse = input.includes('use salesdb_casestudy');
+            const hasTable = input.includes('create table orders');
+            const hasPK = input.includes('primary key');
+
+            if (hasCreateDB && hasUse && hasTable && hasPK) {
+                feedback.innerHTML = 'Phase 1 Complete! The system is initialized.';
+                feedback.className = 'feedback correct success-pulse';
+                launchConfetti();
+            } else {
+                feedback.innerHTML = 'Ensure you CREATE the database, USE it, and define the table with a PRIMARY KEY.';
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        function checkCaseStudy2() {
+            const input = document.getElementById('casestudy-2-input').value.toLowerCase().trim();
+            const feedback = document.getElementById('casestudy-2-feedback');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+
+            const hasInsert = input.includes('insert into orders');
+            const hasVal1 = input.includes('john smith') && input.includes('75000');
+            const hasVal2 = input.includes('mary johnson') && input.includes('mobile phone');
+            const hasVal3 = input.includes('david williams') && input.includes('headphones') && input.includes('15000');
+            const hasVal4 = input.includes('linda brown') && input.includes('tablet') && input.includes('30000');
+            const hasVal5 = input.includes('robert davis') && input.includes('fitness tracker') && input.includes('40000');
+
+            if (hasInsert && hasVal1 && hasVal2 && hasVal3 && hasVal4 && hasVal5) {
+                feedback.innerHTML = 'Phase 2 Complete! All 5 records inserted successfully.';
+                feedback.className = 'feedback correct success-pulse';
+                launchConfetti();
+            } else {
+                feedback.innerHTML = 'Check your INSERT syntax! Ensure all 5 records (John, Mary, David, Linda, Robert) are included with correct values.';
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        function checkCaseStudy3() {
+            const input = document.getElementById('casestudy-3-input').value.toLowerCase().trim();
+            const feedback = document.getElementById('casestudy-3-feedback');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+
+            const hasUpdate1 = input.includes('update orders') && input.includes('totalamount = 18000') && input.includes('where orderid = 3');
+            const hasUpdate2 = input.includes('update orders') && input.includes('smartwatch') && input.includes('where orderid = 5');
+            const hasDelete = input.includes('delete from orders') && input.includes('where orderid = 4');
+
+            if (hasUpdate1 && hasUpdate2 && hasDelete) {
+                feedback.innerHTML = 'Phase 3 Complete! Records maintained, updated, and removed.';
+                feedback.className = 'feedback correct success-pulse';
+                launchConfetti();
+            } else {
+                feedback.innerHTML = 'Check your syntax! Ensure updates for ID 3 and ID 5, and deletion for ID 4 are correct.';
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        function checkCaseStudy4() {
+            const input = document.getElementById('casestudy-4-input').value.toLowerCase().trim();
+            const feedback = document.getElementById('casestudy-4-feedback');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+
+            const hasSelect = input.includes('select * from orders');
+            const hasOp = input.includes('totalamount >= 40000');
+
+            if (hasSelect && hasOp) {
+                feedback.innerHTML = 'Phase 4 Complete! Analytical query successful.';
+                feedback.className = 'feedback correct success-pulse';
+                launchConfetti();
+            } else {
+                feedback.innerHTML = 'Use SELECT * with the correct >= operator.';
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        function checkCaseStudy5() {
+            const input = document.getElementById('casestudy-5-input').value.toLowerCase().trim();
+            const feedback = document.getElementById('casestudy-5-feedback');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+
+            const hasTruncate = input.includes('truncate table orders');
+            const hasDropTable = input.includes('drop table orders');
+            const hasDropDB = input.includes('drop database salesdb_casestudy');
+
+            if (hasTruncate && hasDropTable && hasDropDB) {
+                feedback.innerHTML = 'FINAL CAPSTONE COMPLETE! You have mastered the full SQL Data Lifecycle.';
+                feedback.className = 'feedback correct success-pulse';
+                // Triple confetti for the final win
+                launchConfetti(); setTimeout(launchConfetti, 500); setTimeout(launchConfetti, 1000);
+            } else {
+                feedback.innerHTML = 'Sequence check: TRUNCATE, then DROP TABLE, then DROP DATABASE.';
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        function checkPractice9() {
+            const input = document.getElementById('practice-9-input').value.toLowerCase().trim();
+            const feedback = document.getElementById('practice-9-feedback');
+            feedback.style.display = 'block';
+            feedback.className = 'feedback';
+
+            const hasInsert = input.includes('insert into employees');
+            const hasValues = input.includes('values') && input.includes('101') && input.includes('alice') && input.includes('55000');
+
+            if (hasInsert && hasValues) {
+                feedback.innerHTML = 'Record Added! Alice Johnson is now in the HR department.';
+                feedback.className = 'feedback correct success-pulse';
+                launchConfetti();
+            } else {
+                feedback.innerHTML = 'Use: INSERT INTO Employees VALUES (101, \'Alice\', \'Johnson\', \'HR\', 55000);';
+                feedback.className = 'feedback wrong';
+            }
+        }
+
+        // ===== MULTI-QUESTION QUEST =====
+        const questData = [
+            {
+                question: 'Which anomaly occurs when you <strong>lose important information</strong> by deleting a single row?',
+                options: ['Update Anomaly', 'Insert Anomaly', 'Delete Anomaly', 'Partial Dependency'],
+                correctIndex: 2,
+                explanation: 'Spot on! The Delete Anomaly causes accidental loss of data that wasn\'t intended to be deleted.'
+            },
+            {
+                question: 'What uniquely identifies each record in a table and <strong>cannot be NULL</strong>?',
+                options: ['Foreign Key', 'Candidate Key', 'Unique Key', 'Primary Key'],
+                correctIndex: 3,
+                explanation: 'Correct! A Primary Key uniquely identifies each record and cannot contain NULL values.'
+            },
+            {
+                question: 'What does <strong>DBMS</strong> stand for?',
+                options: ['Data Block Management System', 'Database Management Systems', 'Digital Base Mapping Software', 'Data Backup Module System'],
+                correctIndex: 1,
+                explanation: 'Perfect! DBMS stands for Database Management Systems.'
+            }
+        ];
+        let currentQuest = 0;
+
+        function renderQuest() {
+            const container = document.getElementById('quest-container');
+            if (currentQuest >= questData.length) {
+                document.getElementById('quest-progress').textContent = 'ALL MISSIONS COMPLETE';
+                document.getElementById('quest-title').innerHTML = 'Quest Complete!';
+                document.getElementById('quest-question').innerHTML = 'Outstanding! You have mastered all 3 missions.';
+                document.getElementById('quest-options').innerHTML = '';
+                document.getElementById('quest-feedback').style.display = 'none';
+                return;
+            }
+            const q = questData[currentQuest];
+            document.getElementById('quest-progress').textContent = 'MISSION ' + (currentQuest + 1) + ' OF ' + questData.length;
+            document.getElementById('quest-question').innerHTML = q.question;
+            const optionsDiv = document.getElementById('quest-options');
+            optionsDiv.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'quest-btn';
+                btn.textContent = opt;
+                btn.onclick = () => handleQuestAnswer(btn, i);
+                optionsDiv.appendChild(btn);
+            });
+            const fb = document.getElementById('quest-feedback');
+            fb.style.display = 'none';
+            fb.className = 'feedback';
+        }
+
+        function handleQuestAnswer(btn, selectedIndex) {
+            const q = questData[currentQuest];
+            const feedback = document.getElementById('quest-feedback');
+            const btns = document.querySelectorAll('.quest-btn');
+            feedback.style.display = 'block';
+            btns.forEach(b => { b.disabled = true; b.classList.remove('correct', 'wrong'); });
+
+            if (selectedIndex === q.correctIndex) {
+                btn.classList.add('correct');
+                feedback.innerHTML = q.explanation;
+                feedback.className = 'feedback correct';
+                currentQuest++;
+                setTimeout(() => { renderQuest(); }, 2000);
+            } else {
+                btn.classList.add('wrong');
+                feedback.innerHTML = 'Not quite. Try again!';
+                feedback.className = 'feedback wrong';
+                setTimeout(() => {
+                    btns.forEach(b => { b.disabled = false; b.classList.remove('wrong'); });
+                    feedback.style.display = 'none';
+                }, 1200);
+            }
+        }
+
+        // ===== TERMINAL TYPEWRITER ANIMATION =====
+        const sqlSnippets = [
+            '<span class="comment">-- Creating a database</span><span class="kw">CREATE DATABASE</span> CartoonCharacters;',
+            '<span class="comment">-- Creating a table</span><span class="kw">CREATE TABLE</span> Students (  ID <span class="kw">INT PRIMARY KEY</span>,  Name <span class="kw">VARCHAR</span>(<span class="str">50</span>));',
+            '<span class="comment">-- Querying all records</span><span class="kw">SELECT</span> * <span class="kw">FROM</span> Character_Address_Table;'
+        ];
+        let snippetIdx = 0;
+
+        function typeWriter(element, html, i, callback) {
+            if (i < html.length) {
+                if (html[i] === '<') {
+                    const closeTag = html.indexOf('>', i);
+                    element.innerHTML = html.substring(0, closeTag + 1) + '<span class="cursor"></span>';
+                    setTimeout(() => typeWriter(element, html, closeTag + 1, callback), 0);
+                } else if (html[i] === '') {
+                    element.innerHTML = html.substring(0, i + 1) + '<span class="cursor"></span>';
+                    setTimeout(() => typeWriter(element, html, i + 1, callback), 100);
+                } else {
+                    element.innerHTML = html.substring(0, i + 1) + '<span class="cursor"></span>';
+                    setTimeout(() => typeWriter(element, html, i + 1, callback), 40);
+                }
+            } else {
+                element.innerHTML = html + '<span class="cursor"></span>';
+                if (callback) setTimeout(callback, 3000);
+            }
+        }
+
+        function runTerminalAnimation() {
+            const terminal = document.getElementById('terminal-output');
+            if (!terminal) return;
+            terminal.innerHTML = '<span class="cursor"></span>';
+            const snippet = sqlSnippets[snippetIdx];
+            snippetIdx = (snippetIdx + 1) % sqlSnippets.length;
+            typeWriter(terminal, snippet, 0, runTerminalAnimation);
+        }
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.main-content > *');
+            sections.forEach((section, index) => {
+                section.style.animationDelay = (index * 0.1) + 's';
+            });
+            renderQuest();
+            runTerminalAnimation();
+        });
+    </script>
+    </div>
+
+</body>
+</html>

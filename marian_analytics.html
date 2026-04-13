@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marian Business Analytics | Professional Certification Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        :root {
+            --primary-navy: #1e3a8a;
+            --secondary-navy: #1e3a5f;
+            --accent-cyan: #0ea5e9;
+            --pure-white: #ffffff;
+            --bg-body: #fdfdfd;
+            --text-dark: #0f172a;
+            --text-medium: #475569;
+            --shadow-sm: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 40px -10px rgba(30, 58, 138, 0.1);
+            --border-light: #f1f5f9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-dark);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Modern Navbar */
+        nav {
+            padding: 1.5rem 0;
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-back {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff !important;
+            background-color: #1e3a8a;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            padding: 10px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(30, 58, 138, 0.15);
+        }
+
+        .nav-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(30, 58, 138, 0.25);
+            background-color: #1a367c;
+        }
+
+        .logo-img { height: 50px; width: auto; }
+
+        /* HERO SECTION (Google Cert Style) */
+        .kvj-hero {
+            padding: 60px 0;
+            background: linear-gradient(135deg, #170f36 0%, #2f195f 100%);
+            min-height: auto;
+            position: relative;
+        }
+
+        .cert-card {
+            background: var(--pure-white);
+            border-radius: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cert-left {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .cert-logo {
+            height: 35px;
+            width: auto;
+            margin-bottom: 25px;
+            align-self: flex-start;
+        }
+
+        .cert-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: #202124;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .cert-pills {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .pill-purple {
+            background-color: #f3e8ff;
+            color: #6b21a8;
+        }
+
+        .pill-teal {
+            background-color: #ccfbf1;
+            color: #0f766e;
+        }
+
+        .cert-desc {
+            color: #5f6368;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            max-width: 95%;
+        }
+
+        .cert-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+            border-top: 1px solid #f1f3f4;
+            padding-top: 25px;
+        }
+
+        .stat-col {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-val {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #202124;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .stat-val.rating {
+            color: #e67c00;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: #5f6368;
+            line-height: 1.3;
+        }
+
+        .cert-creator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: auto;
+            font-size: 0.9rem;
+            color: #5f6368;
+        }
+
+        .cert-creator img {
+            height: 20px;
+            width: auto;
+        }
+
+        .cert-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-img-container {
+            width: 100%;
+            height: 380px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: #f8f9fa;
+            position: relative;
+            margin-bottom: 30px;
+            border: 1px solid #e8eaed;
+        }
+
+        .pbi-embed {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .cert-action {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn-get-started {
+            background-color: #6328e0;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 14px 0;
+            width: 100%;
+            border-radius: 8px;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .btn-get-started:hover {
+            background-color: #501bbf;
+        }
+
+        .cert-note {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #5f6368;
+            line-height: 1.5;
+        }
+
+        .cert-note a {
+            color: #6328e0;
+            text-decoration: none;
+        }
+
+        .cert-note a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 1024px) {
+            .cert-card {
+                grid-template-columns: 1fr;
+            }
+            .cert-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            .hero-img-container {
+                height: 300px;
+            }
+        }
+/* COURSE GRID */
+        .content-section {
+            padding: 8rem 0;
+        }
+
+        .section-header {
+            margin-bottom: 5rem;
+            text-align: center;
+        }
+
+        .section-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-navy);
+            margin-bottom: 1rem;
+        }
+
+        .section-header div {
+            width: 80px;
+            height: 5px;
+            background: var(--accent-cyan);
+            margin: 0 auto;
+            border-radius: 10px;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 3rem;
+        }
+
+        .course-card {
+            background: var(--pure-white);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .course-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-cyan);
+        }
+
+        .course-card .img-wrapper {
+            width: 160px;
+            height: 160px;
+            margin-bottom: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.4s ease;
+        }
+
+        .course-card:hover .img-wrapper {
+            transform: scale(1.15) rotate(2deg);
+        }
+
+        .course-card .course-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .course-card h3 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--secondary-navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .course-card .badge {
+            background: #f0f9ff;
+            color: var(--accent-cyan);
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--pure-white);
+            padding: 4rem 0;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--text-medium);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-grid { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+            .hero-left { max-width: 100%; margin: 0 auto; }
+            .hero-title { font-size: 3rem; }
+            .hero-img-container { max-width: 700px; margin: 0 auto; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <div class="nav-inner">
+                <a href="index.html" class="nav-back">Back</a>
+                <img src="Kvj logo.jpeg" alt="KVJ Logo" class="logo-img" style="max-height: 45px; width: auto;">
+            </div>
+        </div>
+    </nav>
+
+    <header class="kvj-hero">
+        <div class="container">
+            <div class="cert-card">
+                <div class="cert-left">
+                    <img src="Logo marian.png" alt="Marian Logo" class="cert-logo">
+                    <h1 class="cert-title">KVJ Advanced Business Analytics Certification</h1>
+                    
+                    <div class="cert-pills">
+                        <span class="pill pill-purple">
+                            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg> 
+                            Learn Analytics with KVJ
+                        </span>
+                        <span class="pill pill-teal">
+                            <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg> 
+                            Certificate issued on completion
+                        </span>
+                    </div>
+                    
+                    <p class="cert-desc">
+                        Get the Business Analytics skills employers are looking for, and build 20+ interactive dashboards and models you can use at work, right away.
+                    </p>
+                    
+                    <div class="cert-stats">
+                        <div class="stat-col">
+                            <div class="stat-val rating">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="#e67c00" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                                4.8
+                            </div>
+                            <div class="stat-label">average rating</div>
+                        </div>
+                        <div class="stat-col">
+                            <div class="stat-val">10</div>
+                            <div class="stat-label">course modules</div>
+                        </div>
+                        <div class="stat-col">
+                            <div class="stat-val">20+</div>
+                            <div class="stat-label">practice activities <svg style="opacity:0.5; margin-left:2px" viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></div>
+                        </div>
+                        <div class="stat-col">
+                            <div class="stat-val">40</div>
+                            <div class="stat-label">hours of content</div>
+                        </div>
+                    </div>
+                    
+                    <div class="cert-creator">
+                        <img src="Logo marian.png" alt="Marian Logo">
+                        <span>Created by <a href="#" style="color:#6328e0; text-decoration:none;">Marian College</a></span>
+                    </div>
+                </div>
+                
+                <div class="cert-right">
+                    <div class="hero-img-container">
+                        <iframe title="Power BI Report" class="pbi-embed" src="https://app.powerbi.com/view?r=eyJrIjoiNDJlYTk0ZTctODc2Ni00ZGJiLTlkMDctZWNiZmZmYjY4NjUzIiwidCI6Ijg5YTM5YWRmLWUwNjYtNGJkNC1hMGE1LWEwYzcwYWNiZDczOSJ9" allowFullScreen="true"></iframe>
+                    </div>
+                    
+                    <div class="cert-action">
+                        <a href="#courses" class="btn-get-started">
+                            Get started &rarr;
+                        </a>
+                        <p class="cert-note">
+                            Part of the KVJ professional learning path.<br>
+                            Flexible tracking starting at full access. <a href="#">Learn more</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="content-section" id="courses">
+        <div class="container">
+            <div class="section-header">
+                <h2>Certification Modules</h2>
+                <div></div>
+            </div>
+            
+            <div class="course-grid">
+                <!-- Python -->
+                <a href="#" class="course-card">
+                    <div class="img-wrapper">
+                        <img src="https://cdn-icons-png.flaticon.com/512/5968/5968350.png" alt="Python" class="course-img">
+                    </div>
+                    <h3>Python</h3>
+                    <span class="badge">Mastery</span>
+                </a>
+
+                <!-- SQL -->
+                <a href="#" class="course-card">
+                    <div class="img-wrapper">
+                        <img src="https://cdn-icons-png.flaticon.com/512/2772/2772128.png" alt="SQL" class="course-img">
+                    </div>
+                    <h3>SQL</h3>
+                    <span class="badge">Advanced</span>
+                </a>
+
+                <!-- Power BI -->
+                <a href="#" class="course-card">
+                    <div class="img-wrapper">
+                        <img src="Power bi logo.png" alt="Power BI" class="course-img">
+                    </div>
+                    <h3>Power BI</h3>
+                    <span class="badge">Expert</span>
+                </a>
+
+                <!-- Excel 365 -->
+                <a href="#" class="course-card">
+                    <div class="img-wrapper">
+                        <img src="https://cdn-icons-png.flaticon.com/512/732/732220.png" alt="Excel" class="course-img">
+                    </div>
+                    <h3>Excel 365</h3>
+                    <span class="badge">Business</span>
+                </a>
+
+                <!-- R Language -->
+                <a href="#" class="course-card">
+                    <div class="img-wrapper">
+                        <img src="R studio.png" alt="R Language" class="course-img">
+                    </div>
+                    <h3>R Mastery</h3>
+                    <span class="badge">Analysis</span>
+                </a>
+
+                <!-- AI -->
+                <a href="ai_index.html" class="course-card">
+                    <div class="img-wrapper">
+                        <img src="Ai.png" alt="AI" class="course-img">
+                    </div>
+                    <h3>Artificial Intelligence</h3>
+                    <span class="badge">Neural</span>
+                </a>
+
+                <!-- Azure -->
+                <a href="#" class="course-card">
+                    <div class="img-wrapper">
+                        <img src="Azure.webp" alt="Azure" class="course-img">
+                    </div>
+                    <h3>Azure Cloud</h3>
+                    <span class="badge">Infrastructure</span>
+                </a>
+
+                <!-- Power Pivot -->
+                <a href="#" class="course-card">
+                    <div class="img-wrapper">
+                        <img src="power-pivot.png" alt="Power Pivot" class="course-img">
+                    </div>
+                    <h3>Power Pivot</h3>
+                    <span class="badge">Modeling</span>
+                </a>
+
+                <!-- Management -->
+                <a href="#" class="course-card">
+                    <div class="img-wrapper">
+                        <img src="Ms project.jpg" alt="Project Management" class="course-img">
+                    </div>
+                    <h3>Project Management</h3>
+                    <span class="badge">Professional</span>
+                </a>
+
+                <!-- Accounting -->
+                <a href="#" class="course-card">
+                    <div class="img-wrapper">
+                        <img src="Excel for accounting.png" alt="Accounting" class="course-img">
+                    </div>
+                    <h3>Accounting</h3>
+                    <span class="badge">Finance</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Marian Business Analytics & KVJ Collaboration. Empowering Global Minds.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Access Guard
+        window.addEventListener('DOMContentLoaded', () => {
+            const userName = sessionStorage.getItem('userName') || localStorage.getItem('strategist_user');
+            const userPhone = localStorage.getItem('strategist_phone') || 'guest';
+            
+            // 1. Must be logged in
+            if (!userName) {
+                sessionStorage.setItem('redirectAfterLogin', window.location.href);
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // 2. Must have purchased the course
+            const courseName = "Marian Business Analytics";
+            const isRegistered = localStorage.getItem('registered_' + courseName) === 'true' || 
+                                 localStorage.getItem('registered_' + userPhone + '_' + courseName) === 'true';
+            
+            if (!isRegistered) {
+                alert("Access Denied: You must register and purchase this course to view its content.");
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+
+</body>
+</html>

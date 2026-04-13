@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 6: Built-in Modules | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --secondary-blue: #008eab;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex; 
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0; width: 100%;
+            z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            padding: 8px 18px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 6px;
+            transition: opacity 0.3s;
+            text-transform: uppercase;
+        }
+
+        .header-banner { 
+            background: var(--primary-blue); 
+            color: white; 
+            padding: 120px 20px 60px; 
+            text-align: center; 
+        }
+        .header-banner h1 { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 38px; 
+            font-weight: 900; 
+            text-transform: uppercase;
+        }
+
+        .layout-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 40px auto;
+            gap: 40px;
+            width: 95%;
+            padding-bottom: 60px;
+        }
+
+        .sidebar {
+            width: 300px;
+            flex-shrink: 0;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--secondary-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #f8fafc;
+            color: var(--primary-blue);
+        }
+
+        .sidebar a.active {
+            background: #eff6ff;
+            color: var(--primary-blue);
+            font-weight: 700;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .main-content li {
+            list-style: none;
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 12px;
+        }
+
+        .main-content li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, var(--secondary-blue), var(--primary-blue));
+            border-radius: 2px;
+            transform: rotate(45deg);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 40px 60px;
+            border-radius: 12px;
+        }
+
+        .section-header { 
+            margin-bottom: 30px; 
+            border-bottom: 3px solid var(--bg-light); 
+            padding-bottom: 15px; 
+        }
+        .section-header h2 { 
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-blue); 
+            font-size: 28px; 
+            font-weight: 800; 
+        }
+
+        pre { 
+            background: #1e293b; 
+            color: #f8fafc; 
+            padding: 20px; 
+            border-radius: 8px; 
+            font-family: monospace; 
+            font-size: 14px; 
+            margin: 20px 0;
+        }
+        .output-box { 
+            background-color: #ecfeff; 
+            border: 1px solid #cffafe; 
+            padding: 15px; 
+            border-radius: 6px; 
+            color: var(--secondary-blue); 
+            font-weight: 700;
+        }
+        .static-output::before { content: "> Result: "; margin-right: 10px; opacity: 0.6; }
+
+        .live-output-box {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+            min-height: 40px;
+            white-space: pre-wrap;
+            display: none;
+        }
+        .live-output-box.active { display: block; }
+
+        .quiz-cta {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #008eab 100%);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+        }
+
+        .quiz-cta h3 { color: #ffffff !important; margin-top: 0; }
+        .quiz-cta p { color: #ffffff !important; opacity: 0.95; }
+        .btn-start-quiz {
+            display: inline-block;
+            background: white;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: 800;
+        }
+        /* Content Styles */
+        p { line-height: 1.8; margin-bottom: 25px; color: #334155; font-size: 17px; }
+        strong { color: var(--primary-blue); font-weight: 700; }
+        h1, h2, h3 { color: var(--primary-blue); font-weight: 700; }
+        
+        .interaction-box strong { color: var(--secondary-blue); }
+
+        /* Practice Space Styling */
+        .practice-space {
+            background: #ffffff;
+            border: 2px solid var(--secondary-blue);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 4px 15px rgba(0, 142, 171, 0.1);
+        }
+        .practice-space h3 { margin-top: 0; color: var(--secondary-blue); font-size: 20px; }
+        .practice-box {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .practice-box input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .practice-box button {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background 0.3s;
+        }
+        .practice-box button:hover { background: var(--secondary-blue); }
+        .feedback {
+            margin-top: 15px;
+            font-weight: 700;
+            display: none;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .feedback.correct { color: #065f46; background: #ecfdf5; display: block; border: 1px solid #a7f3d0; }
+        .feedback.wrong { color: #991b1b; background: #fef2f2; display: block; border: 1px solid #fecaca; }
+
+        .feedback.correct { color: #065f46; background: #ecfdf5; display: block; border: 1px solid #a7f3d0; }
+        .feedback.wrong { color: #991b1b; background: #fef2f2; display: block; border: 1px solid #fecaca; }
+
+        /* Coding Practice Styling */
+        .coding-practice {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        .coding-practice h3 { margin-top: 0; color: #7dd3fc; font-size: 22px; font-weight: 700; }
+        .coding-practice p { color: #e2e8f0; font-size: 16px; margin-bottom: 20px; }
+        .coding-practice strong { color: #f8fafc; font-weight: 800; }
+        .coding-practice textarea {
+            width: 100%;
+            height: 120px;
+            background: #0f172a;
+            color: #38bdf8;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            resize: vertical;
+            margin-bottom: 20px;
+            outline: none;
+        }
+        .coding-practice textarea:focus { border-color: #38bdf8; }
+        .coding-practice .btn-run {
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .coding-practice .btn-reset {
+            background: #334155;
+            color: #f8fafc;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .coding-practice .btn-run:hover, .coding-practice .btn-reset:hover {
+            background: #7dd3fc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .coding-practice .btn-reset:hover { background: #475569; }
+
+        /* Visual Illustrations */
+        .illustration-container {
+            position: fixed;
+            right: 20px;
+            top: 200px;
+            width: 280px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        .illustration-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        .illustration-card img { width: 80px; margin-bottom: 10px; }
+        .illustration-card span { display: block; font-weight: 800; color: var(--primary-blue); font-size: 14px; text-transform: uppercase; }
+
+        @media (max-width: 1600px) {
+            .illustration-container { display: none; }
+        }
+
+
+
+        @media (max-width: 1024px) {
+            .sidebar { display: none; }
+            .layout-container { flex-direction: column; max-width: 900px; }
+        }
+
+        @media (max-width: 900px) {
+            .module-intro-flex { flex-direction: column; }
+            .module-intro-animation { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .layout-container { flex-direction: column; }
+            .main-content { padding: 30px; }
+            .practice-box { flex-direction: column; }
+        }
+
+        footer { text-align: center; padding: 40px; color: #94a3b8; font-size: 13px; border-top: 1px solid var(--border-color); margin-top: 40px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="python_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        <a href="roadmap.html" class="logout-btn">EXIT</a>
+    </nav>
+    <header class="header-banner"><h1>MODULE 6: BUILT-IN MODULES</h1></header>
+
+    <div class="illustration-container">
+        <div class="illustration-card" style="animation-delay: 0s;">
+            <img src="https://img.icons8.com/isometric/100/package.png" alt="Modules">
+            <span>Libraries</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 2s;">
+            <img src="https://img.icons8.com/isometric/100/calendar.png" alt="Time">
+            <span>DateTime</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 4s;">
+            <img src="https://img.icons8.com/isometric/100/dice.png" alt="Random">
+            <span>Randomizer</span>
+        </div>
+    </div>
+    <div class="layout-container">
+        <aside class="sidebar">
+            <h3>Module Path</h3>
+            <a href="Module-1.html">01 Foundation</a>
+            <a href="Module-2.html">02 Flow Control</a>
+            <a href="Module-3.html">03 I/O Operations</a>
+            <a href="Module-4.html">04 Documentation</a>
+            <a href="Module-5.html">05 Error Handling</a>
+            <a href="Module-6.html" class="active">06 Built-in Modules</a>
+
+            <h3 style="margin-top:35px;">Navigation</h3>
+            <a href="roadmap.html" style="background: #f8fafc;">&larr; Return to Roadmap</a>
+        </aside>
+
+        <main class="main-content">
+            <div class="section-header">
+                <h2>MODULE 6 – BUILT-IN MODULES</h2>
+                <p style="font-weight: 600; color: var(--secondary-blue);">Python Certification Course – Module 6</p>
+            </div>
+            
+                    <h3>Introduction to Python Modules</h3>
+                    <p>As programs grow larger, writing all code inside a single file becomes difficult to manage. Python solves this problem using modules.</p>
+                    <p>A module is a file that contains reusable Python code such as:</p>
+                    <ul>
+                        <li>Functions</li>
+                        <li>Variables</li>
+                        <li>Classes</li>
+                    </ul>
+                    <p>Instead of writing everything manually, Python provides built-in modules that help solve common computing problems.</p>
+                    <p><strong>Examples of built-in modules:</strong></p>
+                    <ul>
+                        <li><strong>math</strong> – mathematical calculations</li>
+                        <li><strong>random</strong> – random number generation</li>
+                        <li><strong>datetime</strong> – working with dates and time</li>
+                        <li><strong>os</strong> – operating system interaction</li>
+                        <li><strong>sys</strong> – system-level operations</li>
+                    </ul>
+                    <p>Using modules makes programs: Faster to develop, More reliable, and Easier to maintain.</p>
+
+
+            <h3>Importing Modules</h3>
+            <p>To use a module, we must import it.</p>
+            <p><strong>Example</strong></p>
+<pre>
+<span class="keyword">import</span> math
+<span class="function">print</span>(math.pi)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">3.141592653589793</div>
+            <div class="interaction-box">
+                math.pi retrieves the value of π.
+            </div>
+            <!-- Coding Practice: import keyword -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Import Keyword</h3>
+                <p><strong>Challenge:</strong> Write the code to <code>import math</code> and print <code>"Imported"</code>.</p>
+                <textarea id="coding-ans-import" placeholder="... math
+print('...')"></textarea>
+                <button class="btn-run" onclick="runSkulpt('import', 'Imported')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('import')">Reset</button>
+                <div id="coding-output-import" class="live-output-box"></div>
+                <div id="coding-feedback-import" class="feedback"></div>
+            </div>
+
+            <!-- Coding Practice 1 -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Modules</h3>
+                <p><strong>Challenge:</strong> Import the <code>math</code> module and print the square root of 16 using <code>math.sqrt()</code>.</p>
+                <textarea id="coding-ans-1" placeholder="import ...
+print(...)"></textarea>
+                <button class="btn-run" onclick="runSkulpt(1, '4.0')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice(1)">Reset</button>
+                <div id="coding-output-1" class="live-output-box"></div>
+                <div id="coding-feedback-1" class="feedback"></div>
+            </div>
+
+            <h3>Importing Specific Functions</h3>
+            <p>Sometimes we only need a specific function from a module.</p>
+            <p><strong>Example</strong></p>
+<pre>
+<span class="keyword">from</span> math <span class="keyword">import</span> sqrt
+<span class="function">print</span>(sqrt(<span class="number">16</span>))
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">4.0</div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                Instead of importing the entire module, we import only the required function.
+            </div>
+
+            <div class="section-header">
+                <h2>6.1 File System and Command-Line Operations</h2>
+            </div>
+            <p>Some modules allow Python to interact with the computer system. These are useful when building real applications.</p>
+
+            <h3>The os Module</h3>
+            <p>The os module provides functions to interact with the operating system.</p>
+            <p><strong>Get Current Working Directory Example:</strong></p>
+<pre>
+<span class="keyword">import</span> os
+<span class="function">print</span>(os.getcwd())
+</pre>
+            <p><strong>Output (example)</strong></p>
+            <div class="output-box">C:\Users\Student</div>
+            <div class="interaction-box">
+                getcwd() returns the current working directory where the program is running.
+            </div>
+            <!-- Coding Practice: os module -->
+            <div class="coding-practice">
+                <h3>Coding Practice: OS Interaction</h3>
+                <p><strong>Challenge:</strong> Import <code>os</code> and print <code>"Checking"</code>.</p>
+                <textarea id="coding-ans-os" placeholder="import ...
+print('...')"></textarea>
+                <button class="btn-run" onclick="runSkulpt('os', 'Checking')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('os')">Reset</button>
+                <div id="coding-output-os" class="live-output-box"></div>
+                <div id="coding-feedback-os" class="feedback"></div>
+            </div>
+
+            <p><strong>List Files in a Directory Example:</strong></p>
+<pre>
+<span class="keyword">import</span> os
+<span class="function">print</span>(os.listdir())
+</pre>
+            <p><strong>Output (example)</strong></p>
+            <div class="output-box">['report.txt', 'sales.py']</div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                listdir() displays files and folders in the current directory. This is useful for programs that process multiple data files.
+            </div>
+
+            <p><strong>Checking File Existence Example:</strong></p>
+<pre>
+<span class="keyword">import</span> os
+<span class="function">print</span>(os.path.exists(<span class="string">"data.txt"</span>))
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">True</div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                This prevents FileNotFoundError before attempting to open a file.
+            </div>
+
+            <h3>The io Module</h3>
+            <p>The io module provides advanced file input and output operations.</p>
+            <p><strong>Example</strong></p>
+<pre>
+<span class="keyword">import</span> io
+file = io.open(<span class="string">"sample.txt"</span>, <span class="string">"w"</span>)
+file.write(<span class="string">"Financial Report"</span>)
+file.close()
+</pre>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                io.open() behaves similarly to Python's built-in open() function. It is commonly used in advanced file handling systems.
+            </div>
+
+            <h3>The sys Module</h3>
+            <p>The sys module provides access to system-level information.</p>
+            <p><strong>Command-Line Arguments Example:</strong></p>
+<pre>
+<span class="keyword">import</span> sys
+<span class="function">print</span>(sys.argv)
+</pre>
+            <p><strong>If the script is executed as:</strong> python script.py Rahul 30</p>
+            <p><strong>Output</strong></p>
+            <div class="output-box">['script.py', 'Rahul', '30']</div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                sys.argv stores command-line arguments in a list. First element → script name. Remaining elements → user inputs.
+            </div>
+
+            <p><strong>Python Version Information Example:</strong></p>
+<pre>
+<span class="keyword">import</span> sys
+<span class="function">print</span>(sys.version)
+</pre>
+            <p><strong>Output (example)</strong></p>
+            <div class="output-box">3.12.0 (main, ...)</div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                This shows the Python version currently running the program.
+            </div>
+
+            <div class="section-header">
+                <h2>6.2 Solving Computing Problems Using Built-in Modules</h2>
+            </div>
+            <p>Python modules provide many built-in tools for solving problems efficiently.</p>
+
+            <h3>The math Module</h3>
+            <p>The math module provides mathematical functions.</p>
+            <ul>
+                <li><strong>math.fabs(-10)</strong> → returns 10.0 (Absolute Value)</li>
+                <li><strong>math.ceil(4.3)</strong> → returns 5 (Round Up)</li>
+                <li><strong>math.floor(4.7)</strong> → returns 4 (Round Down)</li>
+                <li><strong>math.trunc(4.9)</strong> → returns 4 (Truncation)</li>
+                <li><strong>math.fmod(10, 3)</strong> → returns 1.0 (Modulus)</li>
+                <li><strong>math.sqrt(16)</strong> → returns 4.0 (Square Root)</li>
+                <li><strong>math.pow(2, 3)</strong> → returns 8.0 (Power)</li>
+                <li><strong>math.isnan(math.nan)</strong> → returns True (Checking NaN-Not a Number)</li>
+            </ul>
+            <!-- Coding Practice: math function -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Math Functions</h3>
+                <p><strong>Challenge:</strong> What is the math function for square root? Print just the name (e.g., <code>sqrt</code>).</p>
+                <textarea id="coding-ans-mathfunc" placeholder="print('...')"></textarea>
+                <button class="btn-run" onclick="runSkulpt('mathfunc', 'sqrt')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('mathfunc')">Reset</button>
+                <div id="coding-output-mathfunc" class="live-output-box"></div>
+                <div id="coding-feedback-mathfunc" class="feedback"></div>
+            </div>
+
+            <h3>The datetime Module</h3>
+            <p>The datetime module is used to work with dates and time.</p>
+            <p><strong>Current Date and Time Example:</strong></p>
+<pre>
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+now = datetime.now()
+<span class="function">print</span>(now)
+</pre>
+            <p><strong>Output (example)</strong></p>
+            <div class="output-box">2026-03-02 14:30:45.123456</div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                datetime.now() returns the current system date and time.
+            </div>
+
+            <!-- Coding Practice: datetime -->
+            <div class="coding-practice">
+                <h3>Coding Practice: DateTime</h3>
+                <p><strong>Challenge:</strong> Import <code>datetime</code> and print <code>"Time Check"</code>.</p>
+                <textarea id="coding-ans-datetime" placeholder="from ... import ...
+print('...')"></textarea>
+                <button class="btn-run" onclick="runSkulpt('datetime', 'Time Check')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('datetime')">Reset</button>
+                <div id="coding-output-datetime" class="live-output-box"></div>
+                <div id="coding-feedback-datetime" class="feedback"></div>
+            </div>
+
+            <p><strong>Formatting Dates Example:</strong></p>
+<pre>
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+now = datetime.now()
+<span class="function">print</span>(now.strftime(<span class="string">"%Y-%m-%d"</span>))
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">2026-03-02</div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                strftime() converts the date into a formatted string.
+            </div>
+
+            <p><strong>Finding the Day of the Week Example:</strong></p>
+<pre>
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+<span class="function">print</span>(datetime.now().weekday())
+</pre>
+            <p><strong>Output (example)</strong></p>
+            <div class="output-box">0</div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                Days are numbered: 0 → Monday, 6 → Sunday.
+            </div>
+
+            <h3>The random Module</h3>
+            <p>The random module generates random values. This is useful for simulations, testing, and sampling.</p>
+            <ul>
+                <li><strong>random.randint(1, 5)</strong> → Random integer between 1-5</li>
+                <li><strong>random.random()</strong> → Random decimal between 0 and 1</li>
+                <li><strong>random.choice(["A", "B", "C"])</strong> → Random selection from a list</li>
+                <li><strong>random.shuffle(numbers)</strong> → Randomly rearranges list elements</li>
+                <li><strong>random.sample(list, 2)</strong> → Selects random elements without repetition</li>
+            </ul>
+
+            <div class="section-header">
+                <h2>Integrated Business Example</h2>
+            </div>
+            <p>Example: Financial data simulation.</p>
+<pre>
+<span class="keyword">import</span> math
+<span class="keyword">import</span> random
+<span class="keyword">from</span> datetime <span class="keyword">import</span> datetime
+
+revenue = random.randint(<span class="number">10000</span>, <span class="number">50000</span>)
+growth = math.sqrt(revenue)
+today = datetime.now().strftime(<span class="string">"%Y-%m-%d"</span>)
+
+<span class="function">print</span>(<span class="string">"Revenue:"</span>, revenue)
+<span class="function">print</span>(<span class="string">"Growth Indicator:"</span>, growth)
+<span class="function">print</span>(<span class="string">"Report Date:"</span>, today)
+</pre>
+            <p><strong>Sample Output</strong></p>
+            <div class="output-box">Revenue: 25000<br>Growth Indicator: 158.11<br>Report Date: 2026-03-05</div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                This example demonstrates: Random revenue generation, Mathematical analysis, and Date stamping for reports.
+            </div>
+            <!-- Quiz CTA -->
+            <div class="quiz-cta">
+                <h3>Final Module Complete!</h3>
+                <p>Verify your understanding of Python libraries and the modular ecosystem.</p>
+                <a href="module_quiz.html?mod=6" class="btn-start-quiz">Start Module 6 Assessment &rarr;</a>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        © 2026 KVJ | Professional Python Certification Path
+    </footer>
+    <script>
+        function triggerConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) { return clearInterval(interval); }
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        function checkPracticeAnswer(id, correctAns) {
+            const userAns = document.getElementById(`practice-ans-${id}`).value.trim().toLowerCase();
+            const feedback = document.getElementById(`feedback-${id}`);
+            
+            if (userAns === correctAns.toLowerCase()) {
+                feedback.innerHTML = "Correct! Great job! 🎉";
+                feedback.className = "feedback correct";
+                triggerConfetti();
+            } else {
+                feedback.innerHTML = "✗ Incorrect. Try again!";
+                feedback.className = "feedback wrong";
+            }
+        }
+
+        function runSkulpt(id, expected) {
+            const prog = document.getElementById(`coding-ans-${id}`).value;
+            const outputDiv = document.getElementById(`coding-output-${id}`);
+            const feedback = document.getElementById(`coding-feedback-${id}`);
+            
+            outputDiv.innerHTML = "";
+            outputDiv.classList.add('active');
+            feedback.style.display = "none";
+            feedback.className = "feedback";
+
+            // BYPASS FOR UNSUPPORTED SKULPT MODULES
+            if (id === 'os' || id === 'datetime') {
+                let isValid = false;
+                let simulatedOutput = "";
+                
+                if (id === 'os' && prog.includes('import os') && (prog.includes('print("Checking")') || prog.includes("print('Checking')"))) {
+                    isValid = true;
+                    simulatedOutput = "Checking";
+                } else if (id === 'datetime' && prog.includes('datetime') && (prog.includes('print("Time Check")') || prog.includes("print('Time Check')"))) {
+                    isValid = true;
+                    simulatedOutput = "Time Check";
+                }
+
+                if (isValid) {
+                    outputDiv.innerText = simulatedOutput;
+                    feedback.innerHTML = "✓ Correct! Your code works perfectly. 🎉";
+                    feedback.className = "feedback correct";
+                    triggerConfetti();
+                } else {
+                    outputDiv.innerText = "Error: Did you import the module correctly and print the exact string requested?";
+                    feedback.innerHTML = `✗ Wrong! Expected result not found.`;
+                    feedback.className = "feedback wrong";
+                }
+                feedback.style.display = "block";
+                return; // Exit early to bypass Skulpt
+            }
+
+            let outputText = "";
+            let validationText = "";
+            let userInputs = [];
+            
+            Sk.configure({
+                output: function(text) { 
+                    outputDiv.appendChild(document.createTextNode(text));
+                    outputDiv.scrollTop = outputDiv.scrollHeight;
+                    outputText += text; 
+                    validationText += text;
+                },
+                read: function(x) {
+                    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+                        throw "File not found: '" + x + "'";
+                    return Sk.builtinFiles["files"][x];
+                },
+                inputfun: function(prompt) {
+                    return new Promise((resolve) => {
+                        // Clean up double prompt if it exists in the output div
+                        if (outputDiv.lastChild && outputDiv.lastChild.nodeType === 3) {
+                            let lastText = outputDiv.lastChild.textContent;
+                            if (lastText.endsWith(prompt)) {
+                                outputDiv.lastChild.textContent = lastText.substring(0, lastText.length - prompt.length);
+                            }
+                        }
+
+                        const container = document.createElement('div');
+                        container.className = 'colab-input-container';
+                        container.innerHTML = `
+                            <span class="colab-prompt">${prompt}</span>
+                            <input type="text" class="colab-input" autocomplete="off">
+                        `;
+                        outputDiv.appendChild(container);
+                        
+                        const inputField = container.querySelector('.colab-input');
+                        inputField.focus();
+                        
+                        inputField.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter') {
+                                const val = inputField.value;
+                                userInputs.push(val);
+                                container.remove();
+                                // Add back the prompt and the answer to the output box permanently
+                                outputDiv.appendChild(document.createTextNode(prompt + val + ""));
+                                outputText += prompt + val + "";
+                                // Do NOT add prompt/input to validationText!
+                                resolve(val);
+                            }
+                        });
+                    });
+                }
+            });
+
+            const myPromise = Sk.misceval.asyncToPromise(function() {
+                return Sk.importMainWithBody("<stdin>", false, prog, true);
+            });
+
+            myPromise.then(function(mod) {
+                if (!outputDiv.innerHTML) outputDiv.innerText = outputText;
+                
+                const cleanOutput = validationText.trim().toLowerCase();
+                let cleanExpected = expected.toString().trim().toLowerCase();
+
+                // Dynamic Validation Logic
+                if (userInputs.length > 0) {
+                    if (id === 'input') {
+                        cleanExpected = `welcome to ${userInputs[0].trim()}`.toLowerCase();
+                    } else if (id === 'int') {
+                        let num = parseInt(userInputs[0]);
+                        if (!isNaN(num)) {
+                            cleanExpected = (num * 2).toString().toLowerCase();
+                        }
+                    }
+                }
+
+                if (cleanOutput.includes(cleanExpected)) {
+                    feedback.innerHTML = "✓ Correct! Your code works perfectly. 🎉";
+                    feedback.className = "feedback correct";
+                    triggerConfetti();
+                } else {
+                    feedback.innerHTML = `✗ Wrong! Expected result not found.`;
+                    feedback.className = "feedback wrong";
+                }
+                feedback.style.display = "block";
+            }, function(err) {
+                outputDiv.innerText += "" + err.toString();
+                feedback.innerHTML = "✗ Error in your code!";
+                feedback.className = "feedback wrong";
+                feedback.style.display = "block";
+            });
+        }
+
+        function resetCodingPractice(id) {
+            const textarea = document.getElementById(`coding-ans-${id}`);
+            const output = document.getElementById(`coding-output-${id}`);
+            const feedback = document.getElementById(`coding-feedback-${id}`);
+            
+            if (textarea) textarea.value = "";
+            if (output) {
+                output.innerHTML = "";
+                output.classList.remove('active');
+            }
+            if (feedback) {
+                feedback.style.display = "none";
+                feedback.className = "feedback";
+            }
+        }
+    </script>
+    </div>
+
+</body>
+</html>

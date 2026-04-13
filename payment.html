@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing & Plans | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #ffffff; 
+            color: #1e293b; 
+            line-height: 1.5;
+            padding: 80px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .close-btn { 
+            position: fixed; 
+            top: 20px; 
+            right: 40px; 
+            text-decoration: none; 
+            color: #1e293b; 
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            z-index: 100;
+        }
+        .close-btn div { font-size: 1.2rem; margin-bottom: -5px; }
+
+        .header {
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+
+        .testimonial-item {
+            max-width: 280px;
+        }
+
+        .stars {
+            color: #fbbf24;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .quote {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #0f172a;
+            margin-bottom: 5px;
+        }
+
+        .author {
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .price-card {
+            background: #ffffff;
+            border: 1.5px solid #f1f5f9;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .price-card.featured {
+            border-color: #f43f5e;
+            box-shadow: 0 10px 30px -10px rgba(244, 63, 94, 0.2);
+        }
+
+        .badge {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            background: #fdf2f8;
+            color: #be123c;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 15px;
+            margin-top: 10px;
+        }
+
+        .plan-desc {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 40px;
+            min-height: 80px;
+        }
+
+        .price-row {
+            margin-top: auto;
+            margin-bottom: 30px;
+        }
+
+        .currency {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .amount {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #0f172a;
+        }
+
+        .period {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        .plan-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            text-align: center;
+            border-radius: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-outline {
+            background: #ffffff;
+            color: #0f172a;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-outline:hover {
+            border-color: #0f172a;
+            background: #f8fafc;
+        }
+
+        .btn-solid {
+            background: #0f172a;
+            color: #ffffff;
+        }
+
+        .btn-solid:hover {
+            background: #334155;
+            transform: translateY(-2px);
+        }
+
+        .btn-accent {
+            background: #f43f5e;
+            color: #ffffff;
+        }
+
+        .btn-accent:hover {
+            background: #be123c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+        }
+
+        @media (max-width: 900px) {
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 40px auto; }
+            .header h1 { font-size: 2.5rem; }
+            .testimonials { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="close-btn">
+        <div>✕</div>
+        Close
+    </a>
+
+    <div class="container">
+        <div class="header">
+            <img src="Kvj logo.jpeg" alt="KVJ Logo" style="height: 60px; margin-bottom: 20px;">
+            <h1>Start building your skills today</h1>
+            <p>Build skills fast with bite-sized courses</p>
+        </div>
+
+        <div class="testimonials">
+            <div class="testimonial-item">
+                <div class="stars">★★★★★</div>
+                <div class="quote">“Excellent”</div>
+                <div class="author">Lexi P.</div>
+            </div>
+            <div class="testimonial-item">
+                <div class="stars">★★★★★</div>
+                <div class="quote">“Amazing learning experience, the best ever.”</div>
+                <div class="author">Renato D.</div>
+            </div>
+            <div class="testimonial-item">
+                <div class="stars">★★★★★</div>
+                <div class="quote">“Very thorough!”</div>
+                <div class="author">Shane G.</div>
+            </div>
+        </div>
+
+        <div class="pricing-grid">
+            <!-- 7-day free trial -->
+            <div class="price-card" style="border-top-left-radius: 20px; border-bottom-left-radius: 20px;">
+                <h2 class="plan-name">7-day free trial</h2>
+                <p class="plan-desc">Enjoy a week of unlimited access to the KVJ Analytics course library — no strings attached</p>
+                <div class="price-row">
+                    <span class="currency">INR</span>
+                    <span class="amount">0</span>
+                    <span class="period">INR for 7 days</span>
+                </div>
+                <button class="plan-btn btn-outline" onclick="selectPlan('Trial')">Start trial</button>
+            </div>
+
+            <!-- Monthly plan -->
+            <div class="price-card" style="border-color: #fce7f3; border-left: none; border-right: none;">
+                <h2 class="plan-name">Monthly plan</h2>
+                <p class="plan-desc">Get a month of unlimited access to the KVJ Analytics course library and earn industry-recognized certificates along the way</p>
+                <div class="price-row">
+                    <span class="currency">INR</span>
+                    <span class="amount">1,400</span>
+                    <span class="period">INR/month</span>
+                </div>
+                <button class="plan-btn btn-solid" onclick="selectPlan('Monthly')">Select plan</button>
+            </div>
+
+            <!-- Yearly plan -->
+            <div class="price-card featured" style="border-top-right-radius: 20px; border-bottom-right-radius: 20px;">
+                <div class="badge">Most popular</div>
+                <h2 class="plan-name">Yearly plan</h2>
+                <p class="plan-desc">Unlock a whole year of unlimited access to the KVJ Analytics course library and earn industry-recognized certificates along the way</p>
+                <div class="price-row">
+                    <span class="currency">INR</span>
+                    <span class="amount">833.33</span>
+                    <span class="period">INR/month</span>
+                </div>
+                <button class="plan-btn btn-accent" onclick="selectPlan('Yearly')">Select plan</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectPlan(plan) {
+            const params = new URLSearchParams(window.location.search);
+            const course = params.get('course') || 'General Enrollment';
+            
+            let price = '1,400';
+            if (plan === 'Trial') price = '0';
+            if (plan === 'Yearly') price = '833.33';
+            
+            window.location.href = 'checkout.html?plan=' + encodeURIComponent(plan + ' plan') + 
+                                   '&price=' + price + 
+                                   '&course=' + encodeURIComponent(course);
+        }
+    </script>
+</body>
+</html>

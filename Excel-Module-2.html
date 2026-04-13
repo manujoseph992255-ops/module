@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2.3: Logical Functions | KVJ</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --secondary-blue: #008eab;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+        }
+
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0; padding: 0;
+        }
+
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 3rem; background: #ffffff; border-bottom: 1px solid var(--border-color);
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .exit-btn {
+            background: #ef4444; color: white; padding: 8px 18px;
+            text-decoration: none; font-size: 12px; font-weight: 700;
+            border-radius: 6px; text-transform: uppercase;
+        }
+
+        .header-banner { 
+            position: relative;
+            background-image: linear-gradient(rgba(30, 58, 95, 0.75), rgba(8, 145, 178, 0.85)), url('architectural_data_model.png');
+            background-size: cover;
+            background-position: center;
+            color: white; 
+            padding: 140px 20px 80px; 
+            text-align: center; 
+        }
+
+        .header-banner h1 { 
+            font-family: 'Montserrat', sans-serif; font-size: 36px; font-weight: 900; text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        .layout-container { max-width: 900px; margin: 40px auto; width: 95%; padding-bottom: 60px; }
+
+        .main-content { 
+            flex: 1;
+            background: #ffffff; border: 1px solid var(--border-color);
+            padding: 50px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.04);
+            min-width: 0;
+        }
+
+        .section-header { margin-bottom: 30px; border-bottom: 3px solid var(--bg-light); padding-bottom: 15px; }
+        .section-header h2 { color: var(--primary-blue); font-size: 24px; font-weight: 800; text-transform: uppercase; }
+
+        p { line-height: 1.8; margin-bottom: 25px; color: #334155; font-size: 17px; }
+        strong { color: var(--primary-blue); font-weight: 700; }
+
+        .interaction-box { 
+            background-color: #f7f9fc; border-left: 5px solid var(--secondary-blue); 
+            padding: 25px; margin: 30px 0; border-radius: 0 10px 10px 0; 
+        }
+
+        /* Professional diamond list marker */
+        ul { list-style: none; padding-left: 0; margin-bottom: 25px; }
+        ul li { position: relative; padding-left: 28px; margin-bottom: 12px; color: #334155; }
+        ol li { margin-bottom: 12px; color: #334155; padding-left: 8px; }
+        ul li::before {
+            content: ""; position: absolute; left: 0; top: 8px;
+            width: 8px; height: 8px; background: var(--secondary-blue);
+            transform: rotate(45deg); border-radius: 1px;
+        }
+
+        .next-btn-container { text-align: right; margin-top: 40px; }
+        .next-btn {
+            display: inline-block; background: var(--primary-blue); color: white;
+            padding: 15px 40px; border-radius: 30px; text-decoration: none;
+            font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            transition: transform 0.3s;
+        }
+        .next-btn:hover { transform: translateX(5px); background: var(--secondary-blue); }
+
+        footer { text-align: center; padding: 40px; color: #94a3b8; font-size: 13px; }
+
+        /* ===== Layout: Sidebar + Content ===== */
+        .layout-container {
+            display: flex;
+            max-width: 1320px;
+            margin: 40px auto;
+            gap: 30px;
+            width: 96%;
+            padding-bottom: 60px;
+            align-items: flex-start;
+        }
+
+        /* ===== Module Sidebar ===== */
+        .module-sidebar {
+            width: 300px;
+            flex-shrink: 0;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 90px;
+            height: fit-content;
+        }
+
+        .module-sidebar h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--secondary-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .module-sidebar a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+        }
+
+        .module-sidebar a:hover {
+            background: #f8fafc;
+            color: var(--primary-blue);
+        }
+
+        .module-sidebar a.active {
+            background: #eff6ff;
+            color: var(--primary-blue);
+            font-weight: 500;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        @media (max-width: 1024px) { .module-sidebar { display: none; } }
+    
+        /* Quiz CTA Styling */
+        .quiz-cta {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .quiz-cta h3 { color: #ffffff !important; margin-top: 0; font-size: 24px; border: none; padding: 0; }
+        .quiz-cta p { color: #ffffff !important; opacity: 0.95; margin-bottom: 25px; }
+        .btn-start-quiz {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .btn-start-quiz:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: #f8fafc;
+        }
+
+</style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="excel_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        <a href="excel_roadmap.html" class="exit-btn">EXIT</a>
+    </nav>
+
+    <header class="header-banner">
+        <h1>MODULE 2: LOGICAL FUNCTIONS</h1>
+    </header>
+
+    <div class="layout-container">
+
+        <!-- ===== MODULE SIDEBAR ===== -->
+        <aside class="module-sidebar">
+            <h3>Module Path</h3>
+            <a href="Excel-Module-1-1.html">01 Data Foundations & Business Variance</a>
+            <a href="Excel-Module-2.html" class="active">02 Logical Functions</a>
+            <a href="Excel-Module-3.html">03 The Power of Referencing</a>
+            <a href="Excel-Module-4.html">04 Structured Data</a>
+            <a href="Excel-Module-5-1.html">05 Conditional Formatting</a>
+            <a href="Excel-Module-6-1.html">06 Advanced Conditional Analysis</a>
+            <a href="Excel-Module-7-1.html">07 Data Relationship & Retrieval</a>
+            <a href="Excel-Module-8-1.html">08 Business Intelligence</a>
+            <a href="Excel-Module-9-1.html">09 Statistical Analysis & Forecasting</a>
+            <a href="Excel-Module-10-1.html">10 Visual Storytelling & Advanced Charts</a>
+            <a href="Excel-Module-11.html">11 Practicals</a>
+
+            <h3 style="margin-top: 35px;">Navigation</h3>
+            <a href="excel_roadmap.html" style="background: #f8fafc;">&larr; Return to Roadmap</a>
+        </aside>
+
+                <main class="main-content">
+            <div class="section-header">
+                <h2>2.3 Logical Functions</h2>
+                <p style="font-weight: 600; color: var(--secondary-blue);">Mastering Conditional Architecture</p>
+            </div>
+
+            <div class="interaction-box">
+                <strong>Strategic Logic</strong>
+                <p style="margin-top:10px;">Logical functions allow your data models to make decisions automatically. By chaining IF, AND, OR, and NOT, you transform static data into intelligent, dynamic business rules.</p>
+            </div>
+
+            <div class="practice-space">
+                <h3 style="margin-top:0; color: #1e3a5f;">Core Logical Functions</h3>
+                
+                <h4 style="color: #0284c7; margin-bottom: 5px;">1. IF Function</h4>
+                <p style="margin-top:0;">Returns one value if a condition is <strong>TRUE</strong> and another if it is <strong>FALSE</strong>.</p>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #0ea5e9; font-size: 14px;">
+                    <strong>Example:</strong> If a sale is over ₹5,000, label it "Premium"; otherwise, "Standard."<br>
+                    <code style="display:block; margin-top:8px; color: #d946ef;">=IF(Sales > 5000, "Premium", "Standard")</code>
+                </div>
+
+                <h4 style="color: #0284c7; margin-top: 25px; margin-bottom: 5px;">2. AND Function</h4>
+                <p style="margin-top:0;">Returns <strong>TRUE</strong> only if <em>all</em> conditions are met.</p>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #10b981; font-size: 14px;">
+                    <strong>Example:</strong> Trigger a bonus only if Sales > ₹1,00,000 AND Attendance > 95%.<br>
+                    <code style="display:block; margin-top:8px; color: #d946ef;">=AND(Sales > 100000, Attendance > 0.95)</code>
+                </div>
+
+                <h4 style="color: #0284c7; margin-top: 25px; margin-bottom: 5px;">3. OR Function</h4>
+                <p style="margin-top:0;">Returns <strong>TRUE</strong> if at least <em>one</em> condition is met.</p>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; font-size: 14px;">
+                    <strong>Example:</strong> Flag an invoice for review if it is Overdue OR the amount exceeds ₹50,000.<br>
+                    <code style="display:block; margin-top:8px; color: #d946ef;">=OR(Status = "Overdue", Amount > 50000)</code>
+                </div>
+
+                <h4 style="color: #0284c7; margin-top: 25px; margin-bottom: 5px;">4. NOT Function</h4>
+                <p style="margin-top:0;">Reverses the logic (TRUE becomes FALSE). Useful for excluding specific criteria.</p>
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid #ef4444; font-size: 14px;">
+                    <strong>Example:</strong> Identify all boutique branches that are NOT located in the "South" region.<br>
+                    <code style="display:block; margin-top:8px; color: #d946ef;">=NOT(Region = "South")</code>
+                </div>
+            </div>
+
+            
+            <hr style="border:0; border-top: 2px solid #f1f5f9; margin: 50px 0;">
+
+            <!-- MCQ Block -->
+            <div class="practice-space">
+                <h3 style="margin-top:0;">Choose the Correct Option</h3>
+                <p>You need to flag a supplier invoice for review if its status is <strong>Overdue</strong> OR if the <strong>amount exceeds ₹50,000</strong>. Which function structure is most appropriate?</p>
+                <div style="display:flex; flex-direction:column; gap:12px; margin-top:15px;">
+                    <label class="mcq-option">
+                        <input type="radio" name="mcq1" value="A"> &nbsp;A. =AND(Status="Overdue", Amount>50000)
+                    </label>
+                    <label class="mcq-option">
+                        <input type="radio" name="mcq1" value="B"> &nbsp;B. =OR(Status="Overdue", Amount>50000)
+                    </label>
+                    <label class="mcq-option">
+                        <input type="radio" name="mcq1" value="C"> &nbsp;C. =IF(Status="Overdue", Amount>50000)
+                    </label>
+                    <label class="mcq-option">
+                        <input type="radio" name="mcq1" value="D"> &nbsp;D. =NOT(Status="Overdue")
+                    </label>
+                </div>
+                <div style="display:flex; gap:12px; align-items:center; margin-top:20px;">
+                    <button class="mcq-btn" onclick="checkMCQ('mcq1','B','mcq-fb1')">Submit Answer</button>
+                    <button class="reset-btn" onclick="resetMCQ('mcq1','mcq-fb1')">Reset</button>
+                </div>
+                <div id="mcq-fb1" class="feedback"></div>
+            </div>
+
+            <!-- Match the Following Block -->
+            <div class="practice-space" style="margin-top:30px;">
+                <h3 style="margin-top:0;">Match the Following</h3>
+                <p>Match each Logical Function on the left with its correct behavior on the right. Select the right answer from each dropdown.</p>
+
+                <div style="display:grid; grid-template-columns:1fr auto 1fr; gap:14px 16px; align-items:center; margin-top:20px;">
+                    <!-- Row 1 -->
+                    <div style="background:#f8fafc; padding:12px 16px; border-radius:8px; font-weight:600; color:#1e3a5f; border:1px solid #e2e8f0;">IF() Function</div>
+                    <div style="color:#94a3b8; font-size:20px;">&rarr;</div>
+                    <select id="m1" style="padding:10px; border-radius:8px; border:1px solid #e2e8f0; font-size:14px; width:100%;">
+                        <option value="">— Select —</option>
+                        <option value="all">Returns TRUE only if all conditions are met</option>
+                        <option value="any">Returns TRUE if at least one condition is met</option>
+                        <option value="branch">Returns one value if TRUE, another if FALSE</option>
+                        <option value="reverse">Reverses the logic entirely</option>
+                    </select>
+
+                    <!-- Row 2 -->
+                    <div style="background:#f8fafc; padding:12px 16px; border-radius:8px; font-weight:600; color:#1e3a5f; border:1px solid #e2e8f0;">AND() Function</div>
+                    <div style="color:#94a3b8; font-size:20px;">&rarr;</div>
+                    <select id="m2" style="padding:10px; border-radius:8px; border:1px solid #e2e8f0; font-size:14px; width:100%;">
+                        <option value="">— Select —</option>
+                        <option value="all">Returns TRUE only if all conditions are met</option>
+                        <option value="any">Returns TRUE if at least one condition is met</option>
+                        <option value="branch">Returns one value if TRUE, another if FALSE</option>
+                        <option value="reverse">Reverses the logic entirely</option>
+                    </select>
+
+                    <!-- Row 3 -->
+                    <div style="background:#f8fafc; padding:12px 16px; border-radius:8px; font-weight:600; color:#1e3a5f; border:1px solid #e2e8f0;">OR() Function</div>
+                    <div style="color:#94a3b8; font-size:20px;">&rarr;</div>
+                    <select id="m3" style="padding:10px; border-radius:8px; border:1px solid #e2e8f0; font-size:14px; width:100%;">
+                        <option value="">— Select —</option>
+                        <option value="all">Returns TRUE only if all conditions are met</option>
+                        <option value="any">Returns TRUE if at least one condition is met</option>
+                        <option value="branch">Returns one value if TRUE, another if FALSE</option>
+                        <option value="reverse">Reverses the logic entirely</option>
+                    </select>
+
+                    <!-- Row 4 -->
+                    <div style="background:#f8fafc; padding:12px 16px; border-radius:8px; font-weight:600; color:#1e3a5f; border:1px solid #e2e8f0;">NOT() Function</div>
+                    <div style="color:#94a3b8; font-size:20px;">&rarr;</div>
+                    <select id="m4" style="padding:10px; border-radius:8px; border:1px solid #e2e8f0; font-size:14px; width:100%;">
+                        <option value="">— Select —</option>
+                        <option value="all">Returns TRUE only if all conditions are met</option>
+                        <option value="any">Returns TRUE if at least one condition is met</option>
+                        <option value="branch">Returns one value if TRUE, another if FALSE</option>
+                        <option value="reverse">Reverses the logic entirely</option>
+                    </select>
+                </div>
+
+                <div style="display:flex; gap:12px; align-items:center; margin-top:25px;">
+                    <button class="mcq-btn" onclick="checkMatch()">Check All Matches</button>
+                    <button class="reset-btn" onclick="resetMatch()">Reset All</button>
+                </div>
+                <div id="match-fb" class="feedback"></div>
+            </div>
+
+            <script>
+                /* === Confetti Burst === */
+                function celebrate() {
+                    if (typeof confetti !== "undefined") {
+                        confetti({
+                            particleCount: 120,
+                            spread: 80,
+                            origin: { y: 0.6 },
+                            colors: ['#1e3a5f', '#008eab', '#10b981', '#f59e0b', '#f472b6']
+                        });
+                        setTimeout(() => confetti({ particleCount: 60, spread: 120, origin: { x: 0.1, y: 0.7 }, colors: ['#38bdf8','#818cf8','#a3e635']}), 200);
+                        setTimeout(() => confetti({ particleCount: 60, spread: 120, origin: { x: 0.9, y: 0.7 }, colors: ['#fb7185','#fbbf24','#34d399']}), 400);
+                    }
+                }
+
+                /* === MCQ === */
+                function checkMCQ(name, correct, feedbackId) {
+                    const selected = document.querySelector('input[name="' + name + '"]:checked');
+                    const fb = document.getElementById(feedbackId);
+                    if (!selected) {
+                        fb.className = "feedback wrong";
+                        fb.innerHTML = "⚠️ Please select an option first.";
+                        return;
+                    }
+                    if (selected.value === correct) {
+                        fb.className = "feedback correct";
+                        fb.innerHTML = "✅ Correct! The OR statement is perfect for this requirement.";
+                        celebrate();
+                    } else {
+                        fb.className = "feedback wrong";
+                        fb.innerHTML = "❌ Not quite. Remember, we need to trigger if AT LEAST ONE of the conditions is true.";
+                    }
+                }
+
+                function resetMCQ(name, feedbackId) {
+                    document.querySelectorAll('input[name="' + name + '"]').forEach(r => r.checked = false);
+                    const fb = document.getElementById(feedbackId);
+                    fb.className = 'feedback'; fb.innerHTML = '';
+                }
+
+                /* === Match the Following === */
+                function checkMatch() {
+                    const answers = { m1: 'branch', m2: 'all', m3: 'any', m4: 'reverse' };
+                    let score = 0;
+                    for (const [id, val] of Object.entries(answers)) {
+                        const el = document.getElementById(id);
+                        el.style.borderColor = el.value === val ? '#10b981' : '#ef4444';
+                        el.style.boxShadow = el.value === val ? '0 0 0 2px rgba(16,185,129,0.25)' : '0 0 0 2px rgba(239,68,68,0.25)';
+                        if (el.value === val) score++;
+                    }
+                    const fb = document.getElementById('match-fb');
+                    if (score === 4) {
+                        fb.className = "feedback correct";
+                        fb.innerHTML = "✅ Perfect Score! All 4 matches are correct.";
+                        celebrate();
+                    } else {
+                        fb.className = "feedback wrong";
+                        fb.innerHTML = "❌ " + score + "/4 correct. Dropdowns highlighted red need revisiting.";
+                    }
+                }
+
+                function resetMatch() {
+                    ['m1','m2','m3','m4'].forEach(id => {
+                        const el = document.getElementById(id);
+                        el.value = ''; el.style.borderColor = '#e2e8f0'; el.style.boxShadow = 'none';
+                    });
+                    const fb = document.getElementById('match-fb');
+                    fb.className = 'feedback'; fb.innerHTML = '';
+                }
+            </script>
+            
+            <!-- Footer Navigation -->
+            <div class="module-navigation">
+                <a href="excel_index.html" class="nav-btn nav-home">Home</a>
+                <a href="Excel-Module-3.html" class="nav-btn nav-next">Next Topic &rarr;</a>
+                <a href="module_quiz.html?mod=ex2" class="nav-btn nav-assess">Assessment</a>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2024 KVJ. All Rights Reserved.
+    </footer>
+    </div>
+
+</body>
+</html>

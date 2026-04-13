@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 3: Data Analysis | KVJ Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --accent-blue: #38bdf8;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .logout-btn {
+            background: #dc2626; color: white; padding: 8px 18px;
+            text-decoration: none; font-size: 12px; font-weight: 700;
+            border-radius: 6px; transition: opacity 0.3s; text-transform: uppercase;
+        }
+
+        .header-banner {
+            background: var(--primary-blue); color: white;
+            padding: 120px 20px 60px; text-align: center;
+        }
+
+        .header-banner h1 {
+            font-family: 'Montserrat', sans-serif; font-size: 38px;
+            font-weight: 900; letter-spacing: -1px; text-transform: uppercase;
+        }
+
+        .layout-container {
+            display: flex; max-width: 1400px;
+            margin: 40px auto; gap: 40px; width: 95%; padding-bottom: 60px;
+        }
+
+        .sidebar {
+            width: 300px; background: white; padding: 30px;
+            border: 1px solid var(--border-color); position: sticky;
+            top: 100px; border-radius: 12px; height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-family: 'Montserrat', sans-serif; font-size: 12px;
+            color: var(--accent-blue); text-transform: uppercase;
+            margin-bottom: 20px; border-bottom: 2px solid var(--bg-light);
+            padding-bottom: 10px; font-weight: 800; letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            display: block; padding: 12px 15px;
+            color: var(--text-muted); text-decoration: none; font-size: 14px;
+            font-weight: 500; margin-bottom: 5px; border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .sidebar a.active {
+            color: var(--primary-blue); font-weight: 700;
+            background: #eff6ff; border-left: 4px solid var(--primary-blue);
+        }
+
+        .sidebar a:hover:not(.active) { background: #f8fafc; color: var(--primary-blue); }
+
+        .main-content {
+            flex: 1; background: #ffffff; border: 1px solid var(--border-color);
+            padding: 40px 60px; border-radius: 12px;
+        }
+
+        .section-header {
+            margin-bottom: 30px; border-bottom: 3px solid var(--bg-light);
+            padding-bottom: 15px;
+        }
+
+        .section-header h2 {
+            font-family: 'Montserrat', sans-serif; color: var(--primary-blue);
+            font-size: 28px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        p { line-height: 1.8; margin-bottom: 25px; color: #334155; font-size: 17px; }
+        strong { color: var(--primary-blue); font-weight: 700; }
+        h3 {
+            font-family: 'Montserrat', sans-serif; color: var(--primary-blue);
+            margin: 40px 0 20px; font-size: 22px; font-weight: 700;
+        }
+
+        .content-list { list-style: none; margin-bottom: 25px; }
+        .content-list li {
+            position: relative; padding-left: 28px; margin-bottom: 12px;
+            color: #334155; font-size: 16px;
+        }
+        .content-list li::before {
+            content: ""; position: absolute; left: 0; top: 8px; width: 8px; height: 8px;
+            background: var(--accent-blue); border-radius: 2px; transform: rotate(45deg);
+        }
+
+        .interaction-box {
+            background-color: #f7f9fc; border-left: 5px solid var(--accent-blue);
+            padding: 25px; margin: 30px 0; border-radius: 0 10px 10px 0; font-size: 15px;
+        }
+
+        
+        
+
+        
+        
+        
+        
+        
+        
+
+        
+        
+        
+        
+        
+
+        
+        
+        
+
+        
+        
+        
+
+        
+        
+
+        /* Module Illustrations */
+        .illustration-container {
+            position: fixed;
+            right: 20px;
+            top: 200px;
+            width: 280px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .illustration-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .illustration-card img { width: 80px; margin-bottom: 10px; }
+        .illustration-card span { display: block; font-weight: 800; color: var(--primary-blue); font-size: 14px; text-transform: uppercase; }
+
+        .quiz-cta { 
+            background: linear-gradient(135deg, #1e3a5f 0%, #38bdf8 100%); 
+            color: white; padding: 40px; border-radius: 12px; text-align: center; margin-top: 60px;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .btn-start-quiz { 
+            display: inline-block; background: #ffffff; color: var(--primary-blue); padding: 16px 40px; 
+            border-radius: 30px; text-decoration: none; font-weight: 800; font-size: 15px;
+            text-transform: uppercase; letter-spacing: 1px; margin-top: 20px; transition: all 0.3s; 
+        }
+        .btn-start-quiz:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); background: #f8fafc; }
+
+        pre { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); color: #1e293b; margin: 20px 0; font-family: 'Fira Code', monospace; font-size: 14px; overflow-x: auto; }
+        
+        .dnd-option { display: inline-block; background: #334155; color: white; padding: 8px 15px; border-radius: 6px; cursor: grab; margin: 5px; font-weight: 600; font-size: 14px; }
+        .dnd-target { border: 2px dashed #475569; padding: 10px; border-radius: 6px; color: #94a3b8; text-align: center; min-height: 40px; }
+        .dnd-target.filled { background: #0f172a; color: #00d2ff; border-style: solid; }
+
+        @media (max-width: 1600px) { .illustration-container { display: none; } }
+        @media (max-width: 992px) { .layout-container { flex-direction: column; } .sidebar { width: 100%; position: static; } .main-content { padding: 30px; } }
+
+    
+        /* Dark UI for Practice (matching Python coding-practice) */
+        .practice-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            border: none;
+        }
+        .practice-badge {
+            display: none;
+        }
+        .practice-card h3 { 
+            margin-top: 0; color: #38bdf8; font-size: 22px; font-weight: 700; border: none; padding-bottom: 0; margin-bottom: 20px; font-family: 'Outfit', sans-serif;
+        }
+        .practice-card p { color: #e2e8f0; font-size: 16px; margin-bottom: 20px; }
+        .practice-card strong { color: #f8fafc; font-weight: 800; }
+        
+        .mcq-option {
+            background: #0f172a; border: 1px solid #334155;
+            padding: 15px 20px; border-radius: 8px; margin-bottom: 10px;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 15px;
+            color: #e2e8f0;
+        }
+        .mcq-option:hover { background: #1e293b; border-color: #38bdf8; }
+        .mcq-option.selected { border-width: 2px; border-color: #38bdf8; }
+        .mcq-option.correct { border-color: #10b981; background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .mcq-option.wrong { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .mcq-prefix { font-weight: 800; color: #38bdf8; }
+
+        .tf-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #334155; }
+        .tf-statement { color: #e2e8f0; font-size: 15px; }
+        .tf-btn { padding: 6px 15px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; }
+        .tf-btn.selected { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+        .tf-btn.correct { background: #10b981 !important; border-color: #10b981 !important; color: white !important; }
+        .tf-btn.wrong { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
+
+        .practice-dark-btn {
+            background: #38bdf8; color: #0f172a; border: none;
+            padding: 12px 25px; border-radius: 8px; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s; margin-top: 20px;
+            margin-right: 10px; font-family: 'Outfit', sans-serif;
+        }
+        .practice-reset-btn {
+            background: #334155; color: #f8fafc; border: none;
+            padding: 12px 25px; border-radius: 8px; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s; margin-top: 20px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .practice-dark-btn:hover, .practice-reset-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .practice-reset-btn:hover { background: #475569; }
+
+        .feedback-dark { margin-top: 15px; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; display: none; }
+        .feedback-dark.correct { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; display: block; }
+        .feedback-dark.wrong { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; display: block; }
+
+        .dd-container select { 
+            padding: 10px 15px; border-radius: 8px; background: #0f172a; 
+            color: #f8fafc; border: 1px solid #334155; font-weight: 600;
+            width: 220px; outline: none; transition: border-color 0.2s;
+        }
+        .dd-container select:focus { border-color: #38bdf8; }
+        
+        .mcq-option strong { margin-right: 10px; color: #f8fafc; }
+        .dd-container select option { background: #0f172a; color: #f8fafc; }
+
+</style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="data_index.html"><img src="Kvj logo.jpeg" alt="Logo" class="kvj-logo-img"></a>
+        <a href="data_roadmap.html" class="logout-btn">EXIT</a>
+    </nav>
+    <header class="header-banner">
+        <h1>MODULE 3: DATA ANALYSIS</h1>
+    </header>
+
+    <div class="illustration-container">
+        <div class="illustration-card" style="animation-delay: 0s;">
+            <img src="https://img.icons8.com/color/100/microsoft-excel-2019.svg" alt="Excel">
+            <span>Data Analysis</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 2s;">
+            <img src="https://img.icons8.com/isometric/100/line-chart.png" alt="Chart">
+            <span>Insights</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 4s;">
+            <img src="https://img.icons8.com/isometric/100/database.png" alt="DB">
+            <span>Management</span>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        <aside class="sidebar">
+            <h3>Module Path</h3>
+            <a href="Data-Module-1.html">01 Data Basics</a>
+            <a href="Data-Module-2.html">02 Data Lifecycle</a>
+            <a href="Data-Module-3.html" class="active">03 Data Analysis</a>
+            <a href="Data-Module-4.html">04 Data Visualization</a>
+            <a href="Data-Module-5.html">05 Responsible Analytics</a>
+            
+            <h3 style="margin-top:35px;">Navigation</h3>
+            <a href="data_roadmap.html" style="background: #f8fafc;">&larr; Return to Roadmap</a>
+        </aside>
+
+        <main class="main-content">
+            <!-- 1. Data Analysis -->
+            <div class="section-header">
+                <h2>1. Data Analysis</h2>
+            </div>
+            <h3>Concept</h3>
+            <p>Data analysis is the process of examining, transforming, and interpreting data to discover useful information and support decision making.</p>
+            <p>Organizations analyze data to:
+            <ul class="content-list">
+                <li>understand trends</li>
+                <li>identify patterns</li>
+                <li>solve problems</li>
+                <li>make better decisions</li>
+            </ul></p>
+
+            <div class="interaction-box">
+                <strong>Example:</strong>
+                <p>A company collects monthly sales data.</p>
+                <table style="width:100%; border-collapse: collapse; margin-bottom: 20px; background: white; font-size: 14px; border: 1px solid #e2e8f0;">
+                    <thead>
+                        <tr style="background: var(--primary-blue); color: white;">
+                            <th style="padding:12px; text-align:left; border: 1px solid #334155;">Date</th>
+                            <th style="padding:12px; text-align:left; border: 1px solid #334155;">Region</th>
+                            <th style="padding:12px; text-align:left; border: 1px solid #334155;">Product</th>
+                            <th style="padding:12px; text-align:left; border: 1px solid #334155;">Category</th>
+                            <th style="padding:12px; text-align:left; border: 1px solid #334155;">Revenue (INR)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-01</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Bengaluru</td><td style="padding: 10px; border: 1px solid #e2e8f0;">UltraBook Pro</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹85,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-01</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Mumbai</td><td style="padding: 10px; border: 1px solid #e2e8f0;">SmartPhone 12</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹45,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-02</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Delhi</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Wireless Mouse</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Accessories</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹1,200</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-02</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Chennai</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Monitor 27"</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹22,500</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-03</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Hyderabad</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Keyboard RGB</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Accessories</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹3,500</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-03</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Bengaluru</td><td style="padding: 10px; border: 10px; border: 1px solid #e2e8f0;">UltraBook Pro</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹85,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-04</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Mumbai</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Headphones ANC</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Audio</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹12,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-04</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Delhi</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Tablet X</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹32,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-05</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Chennai</td><td style="padding: 10px; border: 1px solid #e2e8f0;">SmartPhone 12</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹45,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-05</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Hyderabad</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Wireless Mouse</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Accessories</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹1,200</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-06</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Bengaluru</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Monitor 27"</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹22,500</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-06</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Mumbai</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Keyboard RGB</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Accessories</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹3,500</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-07</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Delhi</td><td style="padding: 10px; border: 1px solid #e2e8f0;">UltraBook Pro</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹85,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-07</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Chennai</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Headphones ANC</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Audio</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹12,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-08</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Hyderabad</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Tablet X</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹32,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-08</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Bengaluru</td><td style="padding: 10px; border: 1px solid #e2e8f0;">SmartPhone 12</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹45,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-09</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Mumbai</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Wireless Mouse</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Accessories</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹1,200</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-09</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Delhi</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Monitor 27"</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹22,500</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-10</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Chennai</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Keyboard RGB</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Accessories</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹3,500</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-10</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Hyderabad</td><td style="padding: 10px; border: 1px solid #e2e8f0;">UltraBook Pro</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹85,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-11</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Bengaluru</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Headphones ANC</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Audio</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹12,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-11</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Mumbai</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Tablet X</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹32,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-12</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Delhi</td><td style="padding: 10px; border: 1px solid #e2e8f0;">SmartPhone 12</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹45,000</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-12</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Chennai</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Wireless Mouse</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Accessories</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹1,200</td></tr>
+                        <tr><td style="padding: 10px; border: 1px solid #e2e8f0;">2023-10-13</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Hyderabad</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Monitor 27"</td><td style="padding: 10px; border: 1px solid #e2e8f0;">Electronics</td><td style="padding: 10px; border: 1px solid #e2e8f0;">₹22,500</td></tr>
+                    </tbody>
+                </table>
+                <p>After analysis, the company might conclude: <strong>Sales are increasing every month.</strong></p>
+                <div style="margin-top: 15px; border-left: 3px solid #10b981; padding-left: 10px; background: #f0fdf4; padding: 10px;">
+                    <strong>Insight:</strong> Data analysis turns raw data into actionable insights. Without analysis, data is simply stored information with no value.
+                </div>
+            </div>
+
+            <div class="practice-card">
+                <h3>Practice: Data Analysis basics</h3>
+                <div id="mcq-m3-1">
+                    <p><strong>Challenge:</strong> What is the primary goal of data analysis?</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-1')"><span class="mcq-prefix">A.</span> Collecting data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-1')"><span class="mcq-prefix">B.</span> Storing data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-1')"><span class="mcq-prefix">C.</span> Extracting useful insights from data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-1')"><span class="mcq-prefix">D.</span> Deleting data</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m3-1', 'C', 'Correct! Extracting insights is the primary goal.')">Check Answer</button>
+
+                <div style="margin-top: 30px;">
+                    <p><strong>True/False Challenge:</strong></p>
+                    <div class="tf-row" id="tf-row-m3-1-1">
+                        <span class="tf-statement">Data analysis helps organizations make informed decisions.</span>
+                        <div>
+                            <button class="tf-btn" onclick="selectTF(this, 'm3-1-1', true)">True</button>
+                            <button class="tf-btn" onclick="selectTF(this, 'm3-1-1', false)">False</button>
+                        </div>
+                    </div>
+                    <button class="practice-dark-btn" onclick="checkTFGroup(['m3-1-1'], [true], 'feedback-tf-m3-1')">Check Answers</button>
+                    <div class="feedback-dark" id="feedback-tf-m3-1"></div>
+                </div>
+            </div>
+
+            <!-- 2. Types of Data Analysis -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>2. Types of Data Analysis</h2>
+            </div>
+            <p>Data analysis can be classified into four main types:</p>
+            <ul class="content-list">
+                <li>Descriptive analysis</li>
+                <li>Diagnostic analysis</li>
+                <li>Predictive analysis</li>
+                <li>Prescriptive analysis</li>
+            </ul>
+
+            <h3 style="margin-top: 30px;">2.1 Descriptive Analysis</h3>
+            <p><strong>Concept:</strong> Descriptive analysis explains what happened in the past. It summarizes historical data using reports, dashboards, and charts.</p>
+            <div class="interaction-box">
+                <strong>Example:</strong> A company reports Total sales last year, Number of customers, and Most popular products.<br><br>
+                <strong>Insight:</strong> Descriptive analysis answers the question: <em>"What happened?"</em>
+            </div>
+
+            <div class="practice-card">
+                <div id="mcq-m3-2">
+                    <p><strong>Challenge:</strong> Which type of analytics summarizes past data?</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-2')"><span class="mcq-prefix">A.</span> Diagnostic</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-2')"><span class="mcq-prefix">B.</span> Descriptive</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-2')"><span class="mcq-prefix">C.</span> Predictive</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-2')"><span class="mcq-prefix">D.</span> Prescriptive</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m3-2', 'B', 'Correct! Descriptive analytics looks at the past.')">Check Answer</button>
+            </div>
+
+            <h3 style="margin-top: 40px;">2.2 Diagnostic Analysis</h3>
+            <p><strong>Concept:</strong> Diagnostic analysis helps determine why something happened. It investigates patterns and relationships in data.</p>
+            <div class="interaction-box">
+                <strong>Example:</strong> If sales dropped in one region, diagnostic analysis might identify supply issues, price changes, or seasonal trends.<br><br>
+                <strong>Insight:</strong> Diagnostic analysis answers: <em>"Why did it happen?"</em>
+            </div>
+
+            <div class="practice-card">
+                <p><strong>True/False Challenge:</strong></p>
+                <div class="tf-row" id="tf-row-m3-2-1">
+                    <span class="tf-statement">Diagnostic analysis helps identify the cause of a problem.</span>
+                    <div>
+                        <button class="tf-btn" onclick="selectTF(this, 'm3-2-1', true)">True</button>
+                        <button class="tf-btn" onclick="selectTF(this, 'm3-2-1', false)">False</button>
+                    </div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkTFGroup(['m3-2-1'], [true], 'feedback-tf-m3-2-1')">Check Answer</button>
+                <div class="feedback-dark" id="feedback-tf-m3-2-1"></div>
+            </div>
+
+            <h3 style="margin-top: 40px;">2.3 Predictive Analysis</h3>
+            <p><strong>Concept:</strong> Predictive analysis uses historical data and statistical models to predict future outcomes. Techniques used include regression models and machine learning algorithms.</p>
+            <div class="interaction-box">
+                <strong>Example:</strong> Predicting next month's sales, forecasting customer demand.<br><br>
+                <strong>Insight:</strong> Predictive analysis answers: <em>"What is likely to happen in the future?"</em>
+            </div>
+
+            <div class="practice-card">
+                <div id="mcq-m3-3">
+                    <p><strong>Challenge:</strong> Predicting next year's sales using past sales data is an example of:</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-3')"><span class="mcq-prefix">A.</span> Diagnostic analysis</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-3')"><span class="mcq-prefix">B.</span> Predictive analysis</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-3')"><span class="mcq-prefix">C.</span> Descriptive analysis</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-3')"><span class="mcq-prefix">D.</span> Prescriptive analysis</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m3-3', 'B', 'Correct! Predictive analysis looks at the future.')">Check Answer</button>
+            </div>
+
+            <h3 style="margin-top: 40px;">2.4 Prescriptive Analysis</h3>
+            <p><strong>Concept:</strong> Prescriptive analysis recommends actions that should be taken based on data analysis. It combines predictive models and optimization techniques.</p>
+            <div class="interaction-box">
+                <strong>Example:</strong> A system recommends optimal pricing strategies or best marketing campaigns.<br><br>
+                <strong>Insight:</strong> Prescriptive analysis answers: <em>"What action should we take?"</em>
+            </div>
+
+            <div class="practice-card">
+                <div id="mcq-m3-4">
+                    <p><strong>Challenge:</strong> Which type of analysis recommends business actions?</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-4')"><span class="mcq-prefix">A.</span> Prescriptive</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-4')"><span class="mcq-prefix">B.</span> Diagnostic</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-4')"><span class="mcq-prefix">C.</span> Descriptive</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-4')"><span class="mcq-prefix">D.</span> Historical</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m3-4', 'A', 'Correct! Prescriptive gives actionable recommendations.')">Check Answer</button>
+            </div>
+
+            <!-- 3. Data Metrics -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>3. Data Metrics</h2>
+            </div>
+            <p><strong>Concept:</strong> Data metrics are numerical values used to summarize and analyze data. Common metrics include Sum, Maximum, Minimum, Count, Mean, Median, Standard Deviation.</p>
+            <div class="interaction-box">
+                <strong>Insight:</strong> Metrics help analysts understand overall trends and data distribution.
+            </div>
+
+            <div class="practice-card">
+                <h3>Practice: Data Metrics</h3>
+                <p><strong>Drag & Match Challenge:</strong> Match the metric with its description.</p>
+                <div id="dd-metrics">
+                    <div class="tf-row">
+                        <span class="tf-statement">Sum</span>
+                        <div class="dd-container">
+                            <select id="dd-met-1">
+                                <option value="">Select...</option>
+                                <option value="A">Total of values</option>
+                                <option value="B">Largest value</option>
+                                <option value="C">Smallest value</option>
+                                <option value="D">Number of values</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tf-row">
+                        <span class="tf-statement">Max</span>
+                        <div class="dd-container">
+                            <select id="dd-met-2">
+                                <option value="">Select...</option>
+                                <option value="A">Total of values</option>
+                                <option value="B">Largest value</option>
+                                <option value="C">Smallest value</option>
+                                <option value="D">Number of values</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tf-row">
+                        <span class="tf-statement">Min</span>
+                        <div class="dd-container">
+                            <select id="dd-met-3">
+                                <option value="">Select...</option>
+                                <option value="A">Total of values</option>
+                                <option value="B">Largest value</option>
+                                <option value="C">Smallest value</option>
+                                <option value="D">Number of values</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tf-row">
+                        <span class="tf-statement">Count</span>
+                        <div class="dd-container">
+                            <select id="dd-met-4">
+                                <option value="">Select...</option>
+                                <option value="A">Total of values</option>
+                                <option value="B">Largest value</option>
+                                <option value="C">Smallest value</option>
+                                <option value="D">Number of values</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="practice-dark-btn" onclick="checkDD(['dd-met-1', 'dd-met-2', 'dd-met-3', 'dd-met-4'], ['A', 'B', 'C', 'D'], 'feedback-dd-metrics')">Check Matching</button>
+                    <div class="feedback-dark" id="feedback-dd-metrics"></div>
+                </div>
+            </div>
+
+            <!-- 4. EDA -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>4. Exploratory Data Analysis (EDA)</h2>
+            </div>
+            <p><strong>Concept:</strong> EDA is the process of examining data to understand patterns, relationships, and anomalies. It helps analysts identify trends, correlations, outliers, and patterns.</p>
+            <div class="interaction-box">
+                <strong>Example:</strong> A company analyzes customer purchases and discovers certain products sell more during weekends.<br><br>
+                <strong>Insight:</strong> EDA helps analysts understand the dataset before building models or making predictions.
+            </div>
+
+            <div class="practice-card">
+                <div id="mcq-m3-5">
+                    <p><strong>Challenge:</strong> Which of the following is a goal of exploratory data analysis?</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-5')"><span class="mcq-prefix">A.</span> Deleting data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-5')"><span class="mcq-prefix">B.</span> Discovering patterns and relationships</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-5')"><span class="mcq-prefix">C.</span> Writing programs</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-5')"><span class="mcq-prefix">D.</span> Creating databases</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m3-5', 'B', 'Correct! Discovering patterns helps formulate analysis steps.')">Check Answer</button>
+            </div>
+
+            <!-- 5. Evaluating Data Analysis Results -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>5. Evaluating Data Analysis Results</h2>
+            </div>
+            <p><strong>Concept:</strong> After performing analysis, analysts evaluate the results to determine whether conclusions are valid. Evaluation includes identifying trends, testing models, verifying predictions, and checking accuracy.</p>
+            <div class="interaction-box">
+                <strong>Example:</strong> A predictive model forecasts next month's sales. Analysts compare the prediction with actual results to evaluate accuracy.<br><br>
+                <strong>Insight:</strong> Evaluation ensures that analysis results are reliable and meaningful.
+            </div>
+
+            <div class="practice-card">
+                <p><strong>True/False Challenge:</strong></p>
+                <div class="tf-row" id="tf-row-m3-5-1">
+                    <span class="tf-statement">Evaluating data analysis results helps confirm whether conclusions are accurate.</span>
+                    <div>
+                        <button class="tf-btn" onclick="selectTF(this, 'm3-5-1', true)">True</button>
+                        <button class="tf-btn" onclick="selectTF(this, 'm3-5-1', false)">False</button>
+                    </div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkTFGroup(['m3-5-1'], [true], 'feedback-tf-m3-5')">Check Answer</button>
+                <div class="feedback-dark" id="feedback-tf-m3-5"></div>
+            </div>
+
+            <!-- 6. AI and ML -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>6. AI and Machine Learning in Data Analytics</h2>
+            </div>
+            <p><strong>Concept:</strong> Artificial Intelligence (AI) and Machine Learning (ML) are advanced technologies used in data analytics to automate analysis, detect patterns in large datasets, and make predictions.</p>
+            <div class="interaction-box">
+                <strong>Examples:</strong> Recommendation systems, fraud detection, customer behavior prediction.<br><br>
+                <strong>Insight:</strong> AI enables organizations to analyze large volumes of data quickly and efficiently.
+            </div>
+
+            <div class="practice-card">
+                <div id="mcq-m3-6">
+                    <p><strong>Challenge:</strong> Machine learning in analytics is commonly used to:</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-6')"><span class="mcq-prefix">A.</span> Delete data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-6')"><span class="mcq-prefix">B.</span> Predict patterns in data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-6')"><span class="mcq-prefix">C.</span> Format spreadsheets</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m3-6')"><span class="mcq-prefix">D.</span> Create documents</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m3-6', 'B', 'Correct! AI is used to find advanced patterns.')">Check Answer</button>
+            </div>
+
+            <div class="quiz-cta">
+                <h3>Ready for the Final Assessment?</h3>
+                <p>Test your knowledge of the different analytical modes and algorithms.</p>
+                <a href="module_quiz.html?mod=data3" class="btn-start-quiz">Start Final Assessment &rarr;</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let selections = {};
+
+        function triggerConfetti() {
+            if (typeof confetti !== 'undefined') {
+                confetti({ 
+                    particleCount: 150, 
+                    spread: 70, 
+                    origin: { y: 0.6 }, 
+                    colors: ['#1e3a5f', '#008eab', '#ffffff'] 
+                });
+            }
+        }
+
+        function selectMCQ(el, qid) {
+            const parent = document.getElementById(qid);
+            if (!parent) return;
+            parent.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('selected', 'correct', 'wrong'));
+            el.classList.add('selected');
+            selections[qid] = el.innerText[0];
+        }
+
+        function checkMCQ(qid, correct, msg) {
+            const parent = document.getElementById(qid);
+            const feedback = document.getElementById('feedback-' + qid);
+            if (!parent || !feedback) return;
+            const sel = parent.querySelector('.selected');
+            if (!sel) return;
+
+            if (selections[qid] === correct) {
+                sel.classList.add('correct');
+                feedback.innerHTML = msg;
+                feedback.className = 'feedback-dark correct';
+                triggerConfetti();
+            } else {
+                sel.classList.add('wrong');
+                feedback.innerText = 'Try again!';
+                feedback.className = 'feedback-dark wrong';
+            }
+        }
+
+        function selectTF(el, qid, val) {
+            const row = document.getElementById('tf-row-' + qid);
+            if (!row) return;
+            row.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('selected', 'correct', 'wrong'));
+            el.classList.add('selected');
+            selections[qid] = val;
+        }
+
+        function checkTFGroup(qids, corrects, fbid) {
+            const feedback = document.getElementById(fbid);
+            if (!feedback) return;
+            
+            let allRight = true;
+            qids.forEach((q, idx) => {
+                const row = document.getElementById('tf-row-' + q);
+                if (!row) { allRight = false; return; }
+                const sel = row.querySelector('.selected');
+                if (!sel || selections[q] !== corrects[idx]) {
+                    allRight = false;
+                    if (sel) sel.classList.add('wrong');
+                } else {
+                    sel.classList.add('correct');
+                }
+            });
+
+            if (allRight) {
+                feedback.innerText = "All correct!";
+                feedback.className = 'feedback-dark correct';
+                triggerConfetti();
+            } else {
+                feedback.innerText = "One or more are incorrect. Try again!";
+                feedback.className = 'feedback-dark wrong';
+            }
+        }
+
+        function checkDD(qids, corrects, fbid) {
+            const feedback = document.getElementById(fbid);
+            if (!feedback) return;
+            
+            let allRight = true;
+            qids.forEach((q, idx) => {
+                const el = document.getElementById(q);
+                if (!el || el.value !== corrects[idx]) {
+                    allRight = false;
+                    if (el) el.style.borderColor = "#ef4444";
+                } else {
+                    el.style.borderColor = "#10b981";
+                }
+            });
+
+            if (allRight) {
+                feedback.innerText = "All correct!";
+                feedback.className = 'feedback-dark correct';
+                triggerConfetti();
+            } else {
+                feedback.innerText = "One or more are incorrect. Try again!";
+                feedback.className = 'feedback-dark wrong';
+            }
+        }
+
+        function resetPractice(type, id, feedbackId) {
+            const feedback = document.getElementById(feedbackId);
+            if (feedback) {
+                feedback.style.display = 'none';
+                feedback.classList.remove('correct', 'wrong');
+            }
+
+            if (type === 'mcq') {
+                const parent = document.getElementById(id);
+                if (parent) {
+                    parent.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('selected', 'correct', 'wrong'));
+                }
+                delete selections[id];
+            } else if (type === 'tf') {
+                const qids = Array.isArray(id) ? id : [id];
+                qids.forEach(q => {
+                    const row = document.getElementById('tf-row-' + q);
+                    if (row) row.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('selected', 'correct', 'wrong'));
+                    delete selections[q];
+                });
+            } else if (type === 'dd') {
+                const ids = Array.isArray(id) ? id : [id];
+                ids.forEach(q => {
+                    const el = document.getElementById(q);
+                    if (el) el.value = "";
+                });
+            } else if (type === 'dnd') {
+                const ids = Array.isArray(id) ? id : [id];
+                ids.forEach(q => {
+                    const el = document.getElementById(q);
+                    if (el) {
+                        el.innerText = "Drop here...";
+                        el.classList.remove('filled');
+                        el.style.borderColor = "#e2e8f0";
+                    }
+                });
+            }
+        }
+    </script>
+    </div>
+
+</body>
+</html>

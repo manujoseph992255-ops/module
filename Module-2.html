@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2: Flow Control | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --secondary-blue: #008eab;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex; 
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Top Nav */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0; width: 100%;
+            z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            padding: 8px 18px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 6px;
+            transition: opacity 0.3s;
+            text-transform: uppercase;
+        }
+
+        /* Header Banner */
+        .header-banner { 
+            background: var(--primary-blue); 
+            color: white; 
+            padding: 120px 20px 60px; 
+            text-align: center; 
+        }
+        .header-banner h1 { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 38px; 
+            font-weight: 900; 
+            letter-spacing: -1px; 
+            text-transform: uppercase;
+        }
+
+        /* Layout Container */
+        .layout-container {
+            display: flex;
+            max-width: 1400px;
+            margin: 40px auto;
+            gap: 40px;
+            width: 95%;
+            padding-bottom: 60px;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            padding: 40px 60px;
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.04);
+        }
+
+        .section-header { 
+            margin-bottom: 30px; 
+            border-bottom: 3px solid var(--bg-light); 
+            padding-bottom: 15px; 
+        }
+        .section-header h2 { 
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-blue); 
+            font-size: 28px; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: -0.5px;
+        }
+
+        /* Content Styles */
+        p { line-height: 1.8; margin-bottom: 25px; color: #334155; font-size: 17px; }
+        strong { color: var(--primary-blue); font-weight: 700; }
+        h1, h2, h3 { color: var(--primary-blue); font-weight: 700; }
+        
+        .interaction-box strong { color: var(--secondary-blue); }
+        
+        .interaction-box { 
+            background-color: #f7f9fc; 
+            border-left: 5px solid var(--secondary-blue); 
+            padding: 25px; 
+            margin: 30px 0; 
+            border-radius: 0 10px 10px 0;
+            font-size: 15px;
+        }
+
+        h3 { 
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-blue); 
+            margin: 40px 0 20px; 
+            font-size: 22px; 
+            font-weight: 700; 
+        }
+
+        /* Code Block Styling */
+        pre { 
+            background: #1e293b; 
+            color: #f8fafc; 
+            padding: 20px; 
+            border-radius: 8px; 
+            overflow-x: auto; 
+            font-family: 'Fira Code', 'Consolas', monospace; 
+            font-size: 14px; 
+            margin: 20px 0;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .output-box { 
+            background-color: #ecfeff; 
+            border: 1px solid #cffafe; 
+            padding: 15px; 
+            border-radius: 6px; 
+            font-family: monospace; 
+            font-size: 14px; 
+            margin-bottom: 30px; 
+            color: var(--secondary-blue); 
+            font-weight: 700; 
+            display: flex;
+            align-items: center;
+        }
+        .static-output::before { content: "> Result: "; margin-right: 10px; opacity: 0.6; }
+
+        .live-output-box {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #334155;
+            min-height: 40px;
+            white-space: pre-wrap;
+            display: none;
+        }
+        .live-output-box.active { display: block; }
+
+        /* Keywords */
+        .keyword { color: #f472b6; }
+        .function { color: #4ade80; }
+        .string { color: #fbbf24; }
+        .comment { color: #94a3b8; }
+
+        /* Quiz CTA */
+        .quiz-cta {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #008eab 100%);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .quiz-cta h3 { color: #ffffff !important; margin-top: 0; font-size: 24px; border: none; padding: 0; }
+        .quiz-cta p { color: #ffffff !important; opacity: 0.95; margin-bottom: 25px; }
+        .btn-start-quiz {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .btn-start-quiz:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: #f8fafc;
+        }
+
+        footer { text-align: center; padding: 40px; color: #94a3b8; font-size: 13px; border-top: 1px solid var(--border-color); margin-top: 40px; }
+        
+        /* Practice Space Styling */
+        .practice-space {
+            background: #ffffff;
+            border: 2px solid var(--secondary-blue);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 4px 15px rgba(0, 142, 171, 0.1);
+        }
+        .practice-space h3 { margin-top: 0; color: var(--secondary-blue); font-size: 20px; }
+        .practice-box {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .practice-box input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .practice-box button {
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background 0.3s;
+        }
+        .practice-box button:hover { background: var(--secondary-blue); }
+        .feedback {
+            margin-top: 15px;
+            font-weight: 700;
+            display: none;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .feedback.correct { color: #065f46; background: #ecfdf5; display: block; border: 1px solid #a7f3d0; }
+        .feedback.wrong { color: #991b1b; background: #fef2f2; display: block; border: 1px solid #fecaca; }
+
+        /* Coding Practice Styling */
+        .coding-practice {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        .coding-practice h3 { margin-top: 0; color: #7dd3fc; font-size: 22px; font-weight: 700; }
+        .coding-practice p { color: #e2e8f0; font-size: 16px; margin-bottom: 20px; }
+        .coding-practice strong { color: #f8fafc; font-weight: 800; }
+        .coding-practice textarea {
+            width: 100%;
+            height: 120px;
+            background: #0f172a;
+            color: #38bdf8;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            resize: vertical;
+            margin-bottom: 20px;
+            outline: none;
+        }
+        .coding-practice textarea:focus { border-color: #38bdf8; }
+        .coding-practice .btn-run {
+            background: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .coding-practice .btn-reset {
+            background: #334155;
+            color: #f8fafc;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .coding-practice .btn-run:hover, .coding-practice .btn-reset:hover {
+            background: #7dd3fc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .coding-practice .btn-reset:hover { background: #475569; }
+
+        /* Visual Illustrations */
+        .illustration-container {
+            position: fixed;
+            right: 20px;
+            top: 200px;
+            width: 280px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        .illustration-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        .illustration-card img { width: 80px; margin-bottom: 10px; }
+        .illustration-card span { display: block; font-weight: 800; color: var(--primary-blue); font-size: 14px; text-transform: uppercase; }
+
+        .purpose-box {
+            background: #f0f9ff;
+            border-left: 5px solid #0ea5e9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        .purpose-box h4 { color: #0369a1; margin-bottom: 10px; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; }
+
+        @media (max-width: 1600px) {
+            .illustration-container { display: none; }
+        }
+
+        /* Module Intro Animation Panel */
+        .module-intro-flex {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+
+
+        .sidebar {
+            width: 300px;
+            flex-shrink: 0;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--secondary-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            transition: all 0.2s;
+        }
+
+        .sidebar a:hover {
+            background: #f8fafc;
+            color: var(--primary-blue);
+        }
+
+        .sidebar a.active {
+            background: #eff6ff;
+            color: var(--primary-blue);
+            font-weight: 700;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .main-content li {
+            list-style: none;
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 12px;
+        }
+
+        .main-content li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 6px;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, var(--secondary-blue), var(--primary-blue));
+            border-radius: 2px;
+            transform: rotate(45deg);
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar { display: none; }
+            .layout-container { flex-direction: column; max-width: 900px; }
+        }
+
+        @media (max-width: 900px) {
+            .module-intro-flex { flex-direction: column; }
+            .module-intro-animation { display: none; }
+        }
+
+        @media (max-width: 768px) {
+            .layout-container { flex-direction: column; }
+            .main-content { padding: 30px; }
+            .practice-box { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="python_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        <a href="roadmap.html" class="logout-btn">EXIT</a>
+    </nav>
+
+    <header class="header-banner">
+        <h1>MODULE 2: FLOW CONTROL</h1>
+    </header>
+
+    <div class="illustration-container">
+        <div class="illustration-card" style="animation-delay: 0s;">
+            <img src="https://img.icons8.com/isometric/100/decision.png" alt="Decision">
+            <span>Branching</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 2s;">
+            <img src="https://img.icons8.com/isometric/100/recurring-appointment.png" alt="Loop">
+            <span>Iteration</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 4s;">
+            <img src="https://img.icons8.com/isometric/100/flow-chart.png" alt="Logic">
+            <span>Flow Control</span>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        <aside class="sidebar">
+            <h3>Module Path</h3>
+            <a href="Module-1.html">01 Foundation</a>
+            <a href="Module-2.html" class="active">02 Flow Control</a>
+            <a href="Module-3.html">03 I/O Operations</a>
+            <a href="Module-4.html">04 Documentation</a>
+            <a href="Module-5.html">05 Error Handling</a>
+            <a href="Module-6.html">06 Built-in Modules</a>
+
+            <h3 style="margin-top:35px;">Navigation</h3>
+            <a href="roadmap.html" style="background: #f8fafc;">&larr; Return to Roadmap</a>
+        </aside>
+
+        <main class="main-content">
+            <div class="section-header">
+                <h2>MODULE 2 – FLOW CONTROL WITH DECISIONS AND LOOPS</h2>
+                <p style="font-weight: 600; color: var(--secondary-blue);">Python Certification Course – Module 2</p>
+            </div>
+            
+                    <h3>Introduction to Flow Control</h3>
+                    <p>In Module 1, we learned:</p>
+                    <ul>
+                        <li>Data types</li>
+                        <li>Operators</li>
+                        <li>Boolean expressions</li>
+                    </ul>
+                    <p>Now we use those concepts to control the execution of a program.</p>
+                    <p>Flow control allows a program to:</p>
+                    <ul>
+                        <li>Make decisions</li>
+                        <li>Repeat actions</li>
+                        <li>Process data automatically</li>
+                    </ul>
+                    <p>For example, in business applications Python can be used to:</p>
+                    <ul>
+                        <li>Check whether a company made profit or loss</li>
+                        <li>Categorize sales performance</li>
+                        <li>Process multiple transactions</li>
+                        <li>Analyze financial records</li>
+                    </ul>
+                    <p>Flow control is implemented using:</p>
+                    <ul>
+                        <li>Decision statements (if)</li>
+                        <li>Loops (while, for)</li>
+                    </ul>
+
+
+            <div class="section-header">
+                <h2>2.1 Branching Statements (Decision Making)</h2>
+            </div>
+            <p>Branching allows a program to choose different actions depending on conditions.</p>
+
+            <h3>if Statement</h3>
+            <p>The <code>if</code> statement is the most basic form of decision making. It allows you to run a block of code <strong>only if</strong> a specific condition is True. If the condition is False, the code is skipped.</p>
+            
+            <div class="purpose-box">
+                <h4>Purpose</h4>
+                <p>Use the <code>if</code> statement when you want to perform an action based on a single condition, such as verifying a user's age or checking if a stock is available.</p>
+            </div>
+
+            <p><strong>Example:</strong></p>
+<pre>
+profit = <span class="number">5000</span>
+<span class="keyword">if</span> profit > <span class="number">0</span>:
+    <span class="function">print</span>(<span class="string">"The business made a profit"</span>)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">The business made a profit</div>
+            
+            <!-- Coding Practice: if -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Basic if</h3>
+                <p><strong>Challenge:</strong> Create a variable called <code>price</code> and assign a value to it. Write a program that checks if the value of <code>price</code> is greater than 100. If the price is greater than 100, print <code>"Expensive"</code>.</p>
+                <textarea id="coding-ans-if" placeholder="price = ...
+if price > ... :
+    print(...)"></textarea>
+                <button class="btn-run" onclick="runSkulpt('if', 'Expensive')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('if')">Reset</button>
+                <div id="coding-output-if" class="live-output-box"></div>
+                <div id="coding-feedback-if" class="feedback"></div>
+            </div>
+
+            <h3>if – else Statement</h3>
+            <p>The <code>if-else</code> statement provides two paths for the program. One path executes if the condition is True, and the <strong>other path</strong> (the else block) executes if the condition is False.</p>
+
+            <div class="purpose-box">
+                <h4>Purpose</h4>
+                <p>Use <code>if-else</code> when you have two mutually exclusive outcomes, like checking if a transaction is "Approved" or "Declined".</p>
+            </div>
+
+            <p><strong>Example</strong></p>
+<pre>
+profit = <span class="number">-2000</span>
+<span class="keyword">if</span> profit > <span class="number">0</span>:
+    <span class="function">print</span>(<span class="string">"Profit"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Loss"</span>)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">Loss</div>
+
+            <!-- Coding Practice: if-else -->
+            <div class="coding-practice">
+                <h3>Coding Practice: if-else</h3>
+                <p><strong>Challenge:</strong> Write a program that checks if <code>score</code> is 50 or more. If True, print <code>"Pass"</code>, otherwise print <code>"Fail"</code>.</p>
+                <textarea id="coding-ans-ifelse" placeholder="score = 45
+if score >= 50:
+    ...
+else:
+    ..."></textarea>
+                <button class="btn-run" onclick="runSkulpt('ifelse', 'Fail')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('ifelse')">Reset</button>
+                <div id="coding-output-ifelse" class="live-output-box"></div>
+                <div id="coding-feedback-ifelse" class="feedback"></div>
+            </div>
+
+            <h3>if – elif – else Statement</h3>
+            <p>The <code>elif</code> (short for else if) statement allows you to check multiple conditions one after another. Only the <strong>first</strong> condition that is True will be executed.</p>
+
+            <div class="purpose-box">
+                <h4>Purpose</h4>
+                <p>Use <code>if-elif-else</code> for categorization problems, such as grading students (A, B, C, D) or determining tax brackets based on income.</p>
+            </div>
+
+            <p><strong>Example</strong></p>
+<pre>
+sales = <span class="number">8500</span>
+<span class="keyword">if</span> sales >= <span class="number">10000</span>:
+    <span class="function">print</span>(<span class="string">"Excellent Sales"</span>)
+<span class="keyword">elif</span> sales >= <span class="number">7000</span>:
+    <span class="function">print</span>(<span class="string">"Good Sales"</span>)
+<span class="keyword">elif</span> sales >= <span class="number">4000</span>:
+    <span class="function">print</span>(<span class="string">"Average Sales"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Low Sales"</span>)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">Good Sales</div>
+
+            <h3>Nested if Statements</h3>
+            <p>A nested <code>if</code> is simply an <code>if</code> statement placed inside another <code>if</code>. This allows for hierarchical or multi-level decision making.</p>
+
+            <div class="purpose-box">
+                <h4>Purpose</h4>
+                <p>Use Nested if when a decision depends on a previous decision. For example, check if a user is logged in, and THEN check if they have admin permissions.</p>
+            </div>
+
+            <p><strong>Example</strong></p>
+<pre>
+profit = <span class="number">8000</span>
+<span class="keyword">if</span> profit > <span class="number">0</span>:
+    <span class="keyword">if</span> profit > <span class="number">5000</span>:
+        <span class="function">print</span>(<span class="string">"High Profit"</span>)
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(<span class="string">"Moderate Profit"</span>)
+<span class="keyword">else</span>:
+    <span class="function">print</span>(<span class="string">"Business Loss"</span>)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">High Profit</div>
+
+            <!-- Coding Practice: Nested if -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Nested if</h3>
+                <p><strong>Challenge:</strong> Write a nested <code>if</code> to check if <code>num</code> is positive ( > 0), and if it is, check if it's even (<code>num % 2 == 0</code>). Print <code>"Positive Even"</code> if both are true.</p>
+                <textarea id="coding-ans-nested" placeholder="num = 10
+if num > 0:
+    if ... :
+        print(...)"></textarea>
+                <button class="btn-run" onclick="runSkulpt('nested', 'Positive Even')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('nested')">Reset</button>
+                <div id="coding-output-nested" class="live-output-box"></div>
+                <div id="coding-feedback-nested" class="feedback"></div>
+            </div>
+
+            <h3>Compound Conditional Expressions</h3>
+            <p>Multiple conditions can be combined using logical operators.</p>
+            <p>Logical operators:</p>
+            <ul>
+                <li>and</li>
+                <li>or</li>
+                <li>not</li>
+            </ul>
+            <p><strong>Example</strong></p>
+<pre>
+age = <span class="number">25</span>
+has_account = <span class="keyword">True</span>
+<span class="keyword">if</span> age >= <span class="number">18</span> <span class="keyword">and</span> has_account:
+    <span class="function">print</span>(<span class="string">"Customer eligible for loan"</span>)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">Customer eligible for loan</div>
+            <div class="interaction-box">
+                Both conditions must be True for the statement to execute.
+            </div>
+            <!-- Coding Practice: and -->
+            <div class="coding-practice">
+                <h3>Coding Practice: Logical 'and'</h3>
+                <p><strong>Challenge:</strong> Write a program that checks if <code>age = 20</code> AND <code>gpa = 3.5</code> are both true. If they are, print <code>"Eligible"</code>.</p>
+                <textarea id="coding-ans-and" placeholder="age = 20
+gpa = 3.5
+if ... :
+    print(...)"></textarea>
+                <button class="btn-run" onclick="runSkulpt('and', 'Eligible')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('and')">Reset</button>
+                <div id="coding-output-and" class="live-output-box"></div>
+                <div id="coding-feedback-and" class="feedback"></div>
+            </div>
+
+            <div class="section-header">
+                <h2>2.2 Iteration (Loops)</h2>
+            </div>
+            <p>Loops allow a program to repeat a block of code multiple times.</p>
+            <p>Loops are useful for processing:</p>
+            <ul>
+                <li>Sales records</li>
+                <li>Transactions</li>
+                <li>Customer lists</li>
+                <li>Financial data</li>
+            </ul>
+            <p>Python provides two main loops:</p>
+            <ul>
+                <li>while loop</li>
+                <li>for loop</li>
+            </ul>
+
+            <h3>while Loop</h3>
+            <p>The <code>while</code> loop repeats a block of code as long as a specified condition is <strong>True</strong>. It is often used when you don't know exactly how many times you need to repeat something.</p>
+
+            <div class="purpose-box">
+                <h4>Purpose</h4>
+                <p>Use <code>while</code> loops for tasks like monitoring a system until an event occurs (e.g., waiting for a file to upload) or processing data until a "Stop" signal is received.</p>
+            </div>
+
+            <p><strong>Example</strong></p>
+<pre>
+day = <span class="number">1</span>
+<span class="keyword">while</span> day <= <span class="number">3</span>:
+    <span class="function">print</span>(<span class="string">"Processing sales data for day"</span>, day)
+    day += <span class="number">1</span>
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">
+                Processing sales data for day 1<br>
+                Processing sales data for day 2<br>
+                Processing sales data for day 3
+            </div>
+            <!-- Coding Practice: while -->
+            <div class="coding-practice">
+                <h3>Coding Practice: while Loop</h3>
+                <p><strong>Challenge:</strong> Fix the loop to print numbers from 1 to 5.</p>
+                <textarea id="coding-ans-while" placeholder="i = 1
+while i <= 5:
+    print(i)
+    i += 1"></textarea>
+                <button class="btn-run" onclick="runSkulpt('while', '5')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('while')">Reset</button>
+                <div id="coding-output-while" class="live-output-box"></div>
+                <div id="coding-feedback-while" class="feedback"></div>
+            </div>
+
+
+            <h3>for Loop</h3>
+            <p>The <code>for</code> loop is used to iterate over a sequence (like a list, tuple, or range). It is best used when you know the number of times you want to repeat a block of code.</p>
+
+            <div class="purpose-box">
+                <h4>Purpose</h4>
+                <p>Use <code>for</code> loops for processing every item in a list, such as calculating total revenue from a list of transactions or sending an email to every customer in a database.</p>
+            </div>
+
+            <p><strong>Example</strong></p>
+<pre>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">3</span>):
+    <span class="function">print</span>(<span class="string">"Monthly sales report"</span>, i)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">
+                Monthly sales report 0<br>
+                Monthly sales report 1<br>
+                Monthly sales report 2
+            </div>
+            
+            <!-- Coding Practice: for loop -->
+            <div class="coding-practice">
+                <h3>Coding Practice: for loop</h3>
+                <p><strong>Challenge:</strong> Use a <code>for</code> loop and <code>range(1, 4)</code> to print <code>"Record 1"</code>, <code>"Record 2"</code>, <code>"Record 3"</code>.</p>
+                <textarea id="coding-ans-for" placeholder="for i in range(1, 4):
+    print('Record', ...)"></textarea>
+                <button class="btn-run" onclick="runSkulpt('for', 'Record 3')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('for')">Reset</button>
+                <div id="coding-output-for" class="live-output-box"></div>
+                <div id="coding-feedback-for" class="feedback"></div>
+            </div>
+
+            <h3>Loop with Conditional Logic</h3>
+            <p>Loops can also contain decision statements.</p>
+            <p><strong>Example</strong></p>
+<pre>
+sales = [<span class="number">5000</span>, <span class="number">9000</span>, <span class="number">6500</span>, <span class="number">12000</span>]
+<span class="keyword">for</span> s <span class="keyword">in</span> sales:
+    <span class="keyword">if</span> s >= <span class="number">8000</span>:
+        <span class="function">print</span>(<span class="string">"High sales:"</span>, s)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">
+                High sales: 9000<br>
+                High sales: 12000
+            </div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                The loop checks each sales value and prints only those greater than or equal to 8000.
+            </div>
+
+            <h3>break Statement</h3>
+            <p>The <code>break</code> statement is used to exit a loop prematurely, even if the loop condition is still True.</p>
+
+            <div class="purpose-box">
+                <h4>Purpose</h4>
+                <p>Use <code>break</code> to stop searching once you've found what you're looking for, or to terminate a program if a critical error occurs during processing.</p>
+            </div>
+
+            <p><strong>Example</strong></p>
+<pre>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):
+    <span class="keyword">if</span> i == <span class="number">3</span>:
+        <span class="keyword">break</span>
+    <span class="function">print</span>(i)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">0, 1, 2</div>
+            
+            <!-- Coding Practice: break -->
+            <div class="coding-practice">
+                <h3>Coding Practice: break</h3>
+                <p><strong>Challenge:</strong> Write a loop that prints numbers from 1 to 10, but use <code>break</code> to stop the loop when the number reaches 4.</p>
+                <textarea id="coding-ans-break" placeholder="for i in range(1, 11):
+    if i == 4:
+        ...
+    print(i)"></textarea>
+                <button class="btn-run" onclick="runSkulpt('break', '3')">Run & Check</button>
+                <button class="btn-reset" onclick="resetCodingPractice('break')">Reset</button>
+                <div id="coding-output-break" class="live-output-box"></div>
+                <div id="coding-feedback-break" class="feedback"></div>
+            </div>
+
+            <h3>continue Statement</h3>
+            <p>The <code>continue</code> statement skips the current block of code and moves directly to the next iteration of the loop.</p>
+
+            <div class="purpose-box">
+                <h4>Purpose</h4>
+                <p>Use <code>continue</code> to skip specific items that don't meet a criteria, such as ignoring "Cancelled" orders in a list while processing the "Active" ones.</p>
+            </div>
+
+            <p><strong>Example</strong></p>
+<pre>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(<span class="number">5</span>):
+    <span class="keyword">if</span> i == <span class="number">2</span>:
+        <span class="keyword">continue</span>
+    <span class="function">print</span>(i)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">0, 1, 3, 4</div>
+
+            <h3>pass Statement</h3>
+            <p>The <code>pass</code> statement is a null operation. It is used as a placeholder when a statement is syntactically required but no action is needed.</p>
+
+            <div class="purpose-box">
+                <h4>Purpose</h4>
+                <p>Use <code>pass</code> when you are sketching out a program structure and plan to write the logic later, or when creating a minimal class or function.</p>
+            </div>
+
+            <h3>Nested Loops</h3>
+            <p>A nested loop is a loop inside another loop.</p>
+            <p><strong>Example</strong></p>
+<pre>
+<span class="keyword">for</span> month <span class="keyword">in</span> <span class="function">range</span>(<span class="number">2</span>):
+    <span class="keyword">for</span> week <span class="keyword">in</span> <span class="function">range</span>(<span class="number">3</span>):
+        <span class="function">print</span>(<span class="string">"Month:"</span>, month, <span class="string">"Week:"</span>, week)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">
+                Month: 0 Week: 0<br>
+                Month: 0 Week: 1<br>
+                Month: 0 Week: 2<br>
+                Month: 1 Week: 0<br>
+                Month: 1 Week: 1<br>
+                Month: 1 Week: 2
+            </div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                The inner loop runs completely for each iteration of the outer loop.
+            </div>
+
+            <div class="section-header">
+                <h2>Integrated Business Example</h2>
+            </div>
+            <p>Example: Sales performance analysis.</p>
+<pre>
+sales = [<span class="number">6500</span>, <span class="number">8800</span>, <span class="number">7200</span>, <span class="number">9000</span>, <span class="number">5400</span>]
+<span class="keyword">for</span> s <span class="keyword">in</span> sales:
+    <span class="keyword">if</span> s >= <span class="number">8000</span>:
+        <span class="function">print</span>(s, <span class="string">"High Sales"</span>)
+    <span class="keyword">else</span>:
+        <span class="function">print</span>(s, <span class="string">"Average Sales"</span>)
+</pre>
+            <p><strong>Output</strong></p>
+            <div class="output-box">
+                6500 Average Sales<br>
+                8800 High Sales<br>
+                7200 Average Sales<br>
+                9000 High Sales<br>
+                5400 Average Sales
+            </div>
+            <div class="interaction-box">
+                <strong>Explanation</strong><br>
+                This example combines:<br>
+                • Lists<br>
+                • Loops<br>
+                • Conditional statements<br>
+                to analyze sales performance.
+            </div>
+
+            <!-- Quiz CTA -->
+            <div class="quiz-cta">
+                <h3>Flow Control Standardized.</h3>
+                <p>Test your knowledge on branching and loops in Python.</p>
+                <a href="module_quiz.html?mod=2" class="btn-start-quiz">Start Module 2 Assessment &rarr;</a>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        © 2026 KVJ | Professional Python Certification Path
+    </footer>
+    <script>
+        function checkPracticeAnswer(id, correctAns) {
+            const userAns = document.getElementById(`practice-ans-${id}`).value.trim().toLowerCase();
+            const feedback = document.getElementById(`feedback-${id}`);
+            
+            if (userAns === correctAns.toLowerCase()) {
+                feedback.innerHTML = "✓ Correct! Well done.";
+                feedback.className = "feedback correct";
+            } else {
+                feedback.innerHTML = "✗ Incorrect. Try again! Hint: It's the keyword used for 'else if'.";
+                feedback.className = "feedback wrong";
+            }
+        }
+
+        function triggerConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) { return clearInterval(interval); }
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        function runSkulpt(id, expected) {
+            const prog = document.getElementById(`coding-ans-${id}`).value;
+            const outputDiv = document.getElementById(`coding-output-${id}`);
+            const feedback = document.getElementById(`coding-feedback-${id}`);
+            
+            outputDiv.innerHTML = "";
+            outputDiv.classList.add('active');
+            feedback.style.display = "none";
+            feedback.className = "feedback";
+
+            let outputText = "";
+            let validationText = "";
+            let userInputs = [];
+            
+            Sk.configure({
+                output: function(text) { 
+                    outputDiv.appendChild(document.createTextNode(text));
+                    outputDiv.scrollTop = outputDiv.scrollHeight;
+                    outputText += text; 
+                    validationText += text;
+                },
+                read: function(x) {
+                    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+                        throw "File not found: '" + x + "'";
+                    return Sk.builtinFiles["files"][x];
+                },
+                inputfun: function(prompt) {
+                    return new Promise((resolve) => {
+                        // Clean up double prompt if it exists in the output div
+                        if (outputDiv.lastChild && outputDiv.lastChild.nodeType === 3) {
+                            let lastText = outputDiv.lastChild.textContent;
+                            if (lastText.endsWith(prompt)) {
+                                outputDiv.lastChild.textContent = lastText.substring(0, lastText.length - prompt.length);
+                            }
+                        }
+
+                        const container = document.createElement('div');
+                        container.className = 'colab-input-container';
+                        container.innerHTML = `
+                            <span class="colab-prompt">${prompt}</span>
+                            <input type="text" class="colab-input" autocomplete="off">
+                        `;
+                        outputDiv.appendChild(container);
+                        
+                        const inputField = container.querySelector('.colab-input');
+                        inputField.focus();
+                        
+                        inputField.addEventListener('keydown', (e) => {
+                            if (e.key === 'Enter') {
+                                const val = inputField.value;
+                                userInputs.push(val);
+                                container.remove();
+                                // Add back the prompt and the answer to the output box permanently
+                                outputDiv.appendChild(document.createTextNode(prompt + val + ""));
+                                outputText += prompt + val + "";
+                                // Do NOT add prompt/input to validationText!
+                                resolve(val);
+                            }
+                        });
+                    });
+                }
+            });
+
+            const myPromise = Sk.misceval.asyncToPromise(function() {
+                return Sk.importMainWithBody("<stdin>", false, prog, true);
+            });
+
+            myPromise.then(function(mod) {
+                if (!outputDiv.innerHTML) outputDiv.innerText = outputText;
+                
+                const cleanOutput = validationText.trim().toLowerCase();
+                let cleanExpected = expected.trim().toLowerCase();
+
+                // Dynamic Validation Logic
+                if (userInputs.length > 0) {
+                    if (id === 'input') {
+                        cleanExpected = `welcome to ${userInputs[0].trim()}`.toLowerCase();
+                    } else if (id === 'int') {
+                        let num = parseInt(userInputs[0]);
+                        if (!isNaN(num)) {
+                            cleanExpected = (num * 2).toString().toLowerCase();
+                        }
+                    }
+                }
+
+                if (cleanOutput.includes(cleanExpected)) {
+                    feedback.innerHTML = "✓ Correct! Your code works perfectly. 🎉";
+                    feedback.className = "feedback correct";
+                    triggerConfetti();
+                } else {
+                    feedback.innerHTML = `✗ Wrong! Expected result not found.`;
+                    feedback.className = "feedback wrong";
+                }
+                feedback.style.display = "block";
+            }, function(err) {
+                outputDiv.innerText += "" + err.toString();
+                feedback.innerHTML = "✗ Error in your code!";
+                feedback.className = "feedback wrong";
+                feedback.style.display = "block";
+            });
+        }
+
+        function resetCodingPractice(id) {
+            const textarea = document.getElementById(`coding-ans-${id}`);
+            const output = document.getElementById(`coding-output-${id}`);
+            const feedback = document.getElementById(`coding-feedback-${id}`);
+            
+            if (textarea) textarea.value = "";
+            if (output) {
+                output.innerHTML = "";
+                output.classList.remove('active');
+            }
+            if (feedback) {
+                feedback.style.display = "none";
+                feedback.className = "feedback";
+            }
+        }
+    </script>
+    </div>
+
+</body>
+</html>

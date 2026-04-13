@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Roadmap | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-dark: #1e3a5f;
+            --blue-primary: #0066ff;
+            --teal-main: #008eab;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Top Bar */
+        .top-info {
+            background: #ffffff;
+            padding: 10px 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        /* Header Banner */
+        .header-banner {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .header-banner h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .header-banner p {
+            font-size: 1.25rem;
+            font-weight: 400;
+            opacity: 0.95;
+        }
+
+        /* Roadmap Section */
+        .roadmap-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .roadmap-title {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--blue-dark);
+            margin-bottom: 50px;
+            letter-spacing: -1px;
+        }
+
+        /* Grid Layout */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .module-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+            border-left: 6px solid #007bff;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+
+        .module-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0056b3;
+            margin-bottom: 15px;
+        }
+
+        .module-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        /* Buttons matching the screenshot exactly */
+        .card-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-roadmap {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+
+        .btn-study {
+            color: #007bff;
+            background: transparent;
+        }
+
+        .btn-study:hover {
+            background: rgba(0, 123, 255, 0.05);
+            border-color: #007bff;
+        }
+
+        .btn-quiz {
+            color: #10b981;
+            background: transparent;
+            border-color: #d1fae5;
+        }
+
+        .btn-quiz:hover {
+            background: #f0fdf4;
+            border-color: #10b981;
+        }
+
+        /* Mock Test Highlight Color */
+        .mock-active {
+            border-left-color: var(--teal-main);
+        }
+        .mock-active h3 {
+            color: var(--teal-main);
+        }
+
+        @media (max-width: 992px) {
+            .modules-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .modules-grid { grid-template-columns: 1fr; }
+            .header-banner h1 { font-size: 2.2rem; }
+        }
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .kvj-logo-img {
+            max-height: 40px;
+            width: auto;
+        }
+        .nav-logout {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #0066ff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .nav-logout:hover {
+            text-decoration: underline;
+        }
+        .nav-back {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: white !important;
+            background-color: #193855;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            padding: 12px 28px;
+            border-radius: 30px;
+            box-shadow: 0 10px 20px rgba(25, 56, 85, 0.3);
+        }
+
+        .nav-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(25, 56, 85, 0.4);
+            background-color: #11283f;
+        }
+    </style>
+    <script>
+        function logout() {
+            sessionStorage.clear();
+            localStorage.removeItem('strategist_user');
+            localStorage.removeItem('strategist_phone');
+            localStorage.removeItem('gmail');
+            localStorage.removeItem('class_code');
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <a href="sql_intro.html" class="nav-back">
+                Back
+            </a>
+            <a href="sql_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        </div>
+        <a onclick="logout()" class="nav-logout">Log Out</a>
+    </nav>
+    <div class="top-info">Data Analytics | Consulting | Training</div>
+
+    <header class="header-banner">
+        <h1>SQL CERTIFICATION</h1>
+        <p>Master the engine of modern business intelligence</p>
+    </header>
+
+    <main class="roadmap-container">
+        <h2 class="roadmap-title">Your Learning Roadmap</h2>
+
+        <div class="modules-grid">
+            <!-- Module 1 -->
+            <div class="module-card">
+                <h3>Module 1: Introduction to SQL</h3>
+                <p>Foundations of relational databases, SQL syntax, and basic data selection.</p>
+                <div class="card-buttons">
+                    <a href="SQL-Module-1.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?course=sql&mod=1" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="module-card">
+                <h3>Module 2: Data Retrieval & Filtering</h3>
+                <p>The SELECT statement, selecting columns, and basic WHERE clause filtering.</p>
+                <div class="card-buttons">
+                    <a href="SQL-Module-2.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?course=sql&mod=2" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 3 -->
+            <div class="module-card">
+                <h3>Module 3: Advanced Filtering & Sorting</h3>
+                <p>Logical operators, pattern matching with LIKE, handling NULLs, and ORDER BY.</p>
+                <div class="card-buttons">
+                    <a href="SQL-Module-3.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?course=sql&mod=3" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 4 -->
+            <div class="module-card">
+                <h3>Module 4: Joins & Relationships</h3>
+                <p>Connecting tables using INNER, LEFT, and RIGHT joins to combine data.</p>
+                <div class="card-buttons">
+                    <a href="SQL-Module-4.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?course=sql&mod=4" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 5 -->
+            <div class="module-card">
+                <h3>Module 5: Aggregations & Grouping</h3>
+                <p>Using COUNT, SUM, AVG, and GROUP BY to perform analytical calculations.</p>
+                <div class="card-buttons">
+                    <a href="SQL-Module-5.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?course=sql&mod=5" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 6 -->
+            <div class="module-card">
+                <h3>Module 6: Subqueries & CTEs</h3>
+                <p>Working with nested queries and Common Table Expressions for complex logic.</p>
+                <div class="card-buttons">
+                    <a href="SQL-Module-6.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?course=sql&mod=6" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <div class="module-card mock-active">
+                <h3>SQL Fundamentals Mock</h3>
+                <p>Comprehensive assessment covering core SQL concepts to solidify your fundamentals.</p>
+                <div class="card-buttons">
+                    <a href="module_quiz.html?course=sql&mock=1" class="btn-roadmap btn-quiz" style="color: var(--teal-main); border-color: #ccfbf1;">Take Mock</a>
+                </div>
+            </div>
+
+            <div class="module-card mock-active">
+                <h3>Advanced SQL Practice</h3>
+                <p>Complex scenario-based full-length practice exam designed for certification readiness.</p>
+                <div class="card-buttons">
+                    <a href="module_quiz.html?course=sql&mock=2" class="btn-roadmap btn-quiz" style="color: var(--teal-main); border-color: #ccfbf1;">Take Mock</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    </div>
+</body>
+</html>

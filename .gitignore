@@ -1,0 +1,5 @@
+.gemini/
+brain/
+Thumbs.db
+.DS_Store
+*.log

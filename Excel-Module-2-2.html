@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2.2: INDEX-MATCH Fundamentals | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --secondary-blue: #008eab;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+        }
+
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0; padding: 0;
+        }
+
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 3rem; background: #ffffff; border-bottom: 1px solid var(--border-color);
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .exit-btn {
+            background: #ef4444; color: white; padding: 8px 18px;
+            text-decoration: none; font-size: 12px; font-weight: 700;
+            border-radius: 6px; text-transform: uppercase;
+        }
+
+        .header-banner { 
+            background: var(--primary-blue); color: white; 
+            padding: 120px 20px 60px; text-align: center; 
+        }
+
+        .header-banner h1 { 
+            font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 900; text-transform: uppercase;
+        }
+
+        .layout-container { max-width: 900px; margin: 40px auto; width: 95%; padding-bottom: 60px; }
+
+        .main-content { 
+            background: #ffffff; border: 1px solid var(--border-color);
+            padding: 60px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.04);
+        }
+
+        .section-header { margin-bottom: 30px; border-bottom: 3px solid var(--bg-light); padding-bottom: 15px; }
+        .section-header h2 { color: var(--primary-blue); font-size: 24px; font-weight: 800; text-transform: uppercase; }
+
+        p { line-height: 1.8; margin-bottom: 25px; color: #334155; font-size: 17px; }
+        strong { color: var(--primary-blue); font-weight: 700; }
+
+        .interaction-box { 
+            background-color: #f7f9fc; border-left: 5px solid var(--secondary-blue); 
+            padding: 25px; margin: 30px 0; border-radius: 0 10px 10px 0; 
+        }
+
+        /* Professional diamond list marker */
+        ul { list-style: none; padding-left: 0; margin-bottom: 25px; }
+        ul li { position: relative; padding-left: 28px; margin-bottom: 12px; color: #334155; }
+        ol li { margin-bottom: 12px; color: #334155; padding-left: 8px; }
+        ul li::before {
+            content: ""; position: absolute; left: 0; top: 8px;
+            width: 8px; height: 8px; background: var(--secondary-blue);
+            transform: rotate(45deg); border-radius: 1px;
+        }
+
+        .next-btn-container { text-align: right; margin-top: 40px; }
+        .next-btn {
+            display: inline-block; background: var(--primary-blue); color: white;
+            padding: 15px 40px; border-radius: 30px; text-decoration: none;
+            font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            transition: transform 0.3s;
+        }
+        .next-btn:hover { transform: translateX(5px); background: var(--secondary-blue); }
+
+        .prev-btn {
+            display: inline-block; background: #cbd5e1; color: #475569;
+            padding: 15px 40px; border-radius: 30px; text-decoration: none;
+            font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
+            transition: transform 0.3s; margin-right: 15px;
+        }
+        .prev-btn:hover { transform: translateX(-5px); background: #94a3b8; }
+
+        footer { text-align: center; padding: 40px; color: #94a3b8; font-size: 13px; }
+
+        .excel-terminal {
+            background-color: #0f172a; color: #38bdf8;
+            padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace;
+            font-size: 14px; margin: 20px 0; border: 1px solid #1e293b;
+        }
+        .excel-terminal .keyword { color: #f472b6; }
+    
+        /* Quiz CTA Styling */
+        .quiz-cta {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .quiz-cta h3 { color: #ffffff !important; margin-top: 0; font-size: 24px; border: none; padding: 0; }
+        .quiz-cta p { color: #ffffff !important; opacity: 0.95; margin-bottom: 25px; }
+        .btn-start-quiz {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .btn-start-quiz:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: #f8fafc;
+        }
+
+</style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="excel_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        <a href="excel_roadmap.html" class="exit-btn">EXIT</a>
+    </nav>
+
+    <header class="header-banner">
+        <h1>MODULE 2: ADVANCED LOOKUPS & LOGIC</h1>
+    </header>
+
+    <div class="layout-container">
+        <main class="main-content">
+            <div class="section-header">
+                <h2>2.2 INDEX-MATCH Fundamentals</h2>
+                <p style="font-weight: 600; color: var(--secondary-blue);">The Specialist's Standard</p>
+            </div>
+
+            <p>While XLOOKUP is becoming the new standard, <strong>INDEX-MATCH</strong> remains a critical skill for legacy models and complex multi-dimensional searching. Understanding the "dynamic range" philosophy of this combination is essential for architectural mastery.</p>
+
+            <div class="excel-terminal">
+                <span class="keyword">=INDEX(</span>Return_Column, <span class="keyword">MATCH(</span>Lookup_Value, Lookup_Column, 0<span class="keyword">))</span>
+            </div>
+
+            <h3>The Mechanics of Precision</h3>
+            <ul>
+                <li><strong>INDEX:</strong> The map. It defines the range containing the answer.</li>
+                <li><strong>MATCH:</strong> The coordinate. It tells Excel exactly which row (or column) the lookup value is in.</li>
+                <li><strong>Combined:</strong> They create a "Live Link" that is immune to column deletions and additions.</li>
+            </ul>
+
+            <div class="interaction-box">
+                <strong>Why Pros Love It: CPU Efficiency</strong>
+                <p style="margin-top:10px;">In massive models (100k+ rows), calculating 50 XLOOKUPs is slower than calculating 1 MATCH and using that result in 50 INDEX functions. This "Result Injection" strategy is the hallmark of optimized engineering.</p>
+            </div>
+
+            <div class="next-btn-container" style="display: flex; justify-content: space-between;">
+                <a href="Excel-Module-2.html" class="prev-btn">&larr; Previous Page</a>
+                <a href="Excel-Module-2-3.html" class="next-btn">Next: Boolean Logic &rarr;</a>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2024 KVJ. All Rights Reserved.
+    </footer>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastery Sequence | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            margin: 0; padding: 0; background: #ffffff; color: #1a1a1a;
+            position: relative; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh;
+        }
+        .bg-pattern {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(66, 133, 244, 0.05) 2px, transparent 2px),
+                radial-gradient(circle at 90% 30%, rgba(52, 168, 83, 0.05) 2px, transparent 2px);
+            background-size: 100px 100px; z-index: -1;
+        }
+        .hero { text-align: center; padding: 5rem 1rem 3rem; max-width: 900px; margin: 0 auto; }
+        .hero h1 { font-size: 4rem; font-weight: 900; letter-spacing: -2px; margin-bottom: 1.5rem; color: #1a1a1a; }
+        .hero p.intro-text { font-size: 1.25rem; color: #64748b; line-height: 1.6; margin-bottom: 3rem; text-align: left; }
+        
+        .btn-primary {
+            background-color: #0066ff; color: white; border: none; padding: 1.2rem 2.5rem;
+            font-size: 1.1rem; font-weight: 600; border-radius: 30px; cursor: pointer;
+            display: inline-flex; align-items: center; text-decoration: none;
+            transition: all 0.3s ease; box-shadow: 0 10px 25px rgba(0, 102, 255, 0.2);
+        }
+        .btn-primary:hover { background-color: #0052cc; transform: translateY(-4px); }
+
+        .goals-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; padding: 0 2rem 4rem;
+            max-width: 1100px; margin: 0 auto;
+        }
+        .goal-box {
+            background: #ffffff; border-radius: 24px; padding: 2.5rem 2rem;
+            border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 40px -10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        .goal-box:hover { transform: translateY(-5px); }
+        .goal-box.blue { border-top: 4px solid #4285F4; }
+        .goal-box.green { border-top: 4px solid #34A853; }
+        .goal-box h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 1rem; color: #1a1a1a; text-transform: uppercase; }
+        .goal-box p { color: #64748b; font-size: 1rem; line-height: 1.6; margin: 0; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .goals-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <nav class="kvj-navbar">
+        <div class="kvj-container nav-wrapper">
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="excel_index.html" class="nav-back">Back</a>
+                <a href="index.html" class="kvj-logo">
+                    <div class="logo-box"><img src="Kvj logo.jpeg" alt="KVJ" style="max-height: 40px; width: auto;"></div>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="hero">
+        <h1 class="fade-in-up">Architect the Future.</h1>
+        <p class="intro-text fade-in-up">
+            <strong>Introduction:</strong> In a data-driven economy, the ability to process information is common, but the ability to architect automated, resilient, and insightful models is a rare strategic asset. This program uses a multi-departmental boutique textile case study to simulate real-world challenges in Sales, HR, and Finance.
+        </p>
+        
+        <div class="goals-container fade-in-up">
+            <div class="goal-box blue">
+                <h3>Program Objective</h3>
+                <p>To move participants from manual "data crunching" to building self-sustaining analytical ecosystems that provide instant clarity to stakeholders.</p>
+            </div>
+            <div class="goal-box green">
+                <h3>Program Outcome</h3>
+                <p>Graduates will possess the technical mastery to handle "Big Data" within Excel, automate 90% of repetitive reporting tasks, and present high-impact financial narratives to executive boards.</p>
+            </div>
+        </div>
+
+        <a href="excel_roadmap.html" class="btn-primary fade-in-up">
+            Begin Mastery Sequence
+        </a>
+    </div>
+
+    <footer style="margin-top: auto; padding: 40px 0; text-align: center; color: #94a3b8; font-size: 0.85rem;">
+        &copy; 2024 KVJ. All Rights Reserved.
+    </footer>
+    </div>
+
+</body>
+</html>

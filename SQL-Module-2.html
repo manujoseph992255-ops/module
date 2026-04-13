@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Module 1 | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --secondary-blue: #008eab;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main); 
+            display: flex; 
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Top Nav */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0; width: 100%;
+            z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .logout-btn {
+            background: #dc2626;
+            color: white;
+            padding: 8px 18px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 6px;
+            transition: opacity 0.3s;
+            text-transform: uppercase;
+        }
+
+        /* Header Banner */
+        .header-banner { 
+            background: var(--primary-blue); 
+            color: white; 
+            padding: 120px 20px 60px; 
+            text-align: center; 
+        }
+        .header-banner h1 { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 38px; 
+            font-weight: 900; 
+            letter-spacing: -1px; 
+            text-transform: uppercase;
+        }
+
+        /* Layout Container */
+        .layout-container {
+            max-width: 900px;
+            margin: 40px auto;
+            width: 95%;
+            padding-bottom: 60px;
+        }
+
+        
+
+        /* Main Content Area */
+        .main-content { 
+            
+            background: #ffffff; 
+            border: 1px solid var(--border-color);
+            padding: 100px 60px;
+            border-radius: 12px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.04);
+            text-align: center;
+        }
+
+        /* Placeholder Content */
+        .placeholder-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .placeholder-desc {
+            font-size: 18px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        footer { text-align: center; padding: 40px; color: #94a3b8; font-size: 13px; border-top: 1px solid var(--border-color); margin-top: 40px; }
+        
+        @media (max-width: 992px) {
+            .layout-container { flex-direction: column; }
+            .sidebar { width: 100%; position: static; margin-bottom: 30px; }
+            .main-content { padding: 60px 30px; }
+        }
+    
+        /* Quiz CTA Styling */
+        .quiz-cta {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .quiz-cta h3 { color: #ffffff !important; margin-top: 0; font-size: 24px; border: none; padding: 0; }
+        .quiz-cta p { color: #ffffff !important; opacity: 0.95; margin-bottom: 25px; }
+        .btn-start-quiz {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .btn-start-quiz:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: #f8fafc;
+        }
+
+</style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="sql_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        <a href="sql_roadmap.html" class="logout-btn">EXIT</a>
+    </nav>
+
+    <header class="header-banner">
+        <h1 id="module-title-header">SQL MODULE 1</h1>
+    </header>
+
+    <div class="layout-container">
+        
+
+        <main class="main-content">
+            <h2 class="placeholder-title">Module 2: Data Retrieval & Filtering</h2>
+            <div class="lesson-content" style="text-align: left;">
+                <h3>The SELECT Statement</h3>
+                <p>The <code>SELECT</code> statement is used to fetch data from a database. It is the most common SQL command.</p>
+                
+                <pre style="background: #f4f4f4; padding: 15px; border-radius: 5px; font-family: monospace;">SELECT column1, column2 FROM table_name;</pre>
+
+                <h3>Selecting All Columns</h3>
+                <p>Use the asterisk (<code>*</code>) to select all available columns in a table.</p>
+                <pre style="background: #f4f4f4; padding: 15px; border-radius: 5px; font-family: monospace;">SELECT * FROM Employees;</pre>
+
+                <h3>The WHERE Clause</h3>
+                <p>The <code>WHERE</code> clause filters records. It ensures that only data fulfilling a specific condition is retrieved.</p>
+                <pre style="background: #f4f4f4; padding: 15px; border-radius: 5px; font-family: monospace;">SELECT Name, Salary FROM Employees WHERE Salary > 50000;</pre>
+
+                <h3>Comparison Operators</h3>
+                <ul>
+                    <li><code>=</code> : Equal to</li>
+                    <li><code><></code> or <code>!=</code> : Not equal to</li>
+                    <li><code><</code>, <code>></code> : Less than, Greater than</li>
+                    <li><code><=</code>, <code>>=</code> : Less than or equal to, Greater than or equal to</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Simple script to set active class based on filename
+        const filename = window.location.pathname.split('/').pop();
+        const modNumber = filename.match(/\d/)[0];
+        document.getElementById(`nav-mod-${modNumber}`).classList.add('active');
+        document.getElementById('module-title-header').innerText = `SQL MODULE ${modNumber}`;
+    </script>
+    </div>
+
+</body>
+</html>

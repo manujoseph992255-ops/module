@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #ffffff; 
+            color: #1e293b; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .close-btn { 
+            position: fixed; 
+            top: 20px; 
+            right: 40px; 
+            text-decoration: none; 
+            color: #1e293b; 
+            text-align: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .close-btn div { font-size: 1.2rem; margin-bottom: -5px; }
+
+        .logo { margin-bottom: 40px; }
+        .logo svg { height: 35px; }
+
+        .checkout-container {
+            width: 100%;
+            max-width: 650px;
+            text-align: center;
+        }
+
+        .greeting {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+
+        .sub-header {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 30px;
+        }
+
+        /* Plan Box */
+        .plan-box {
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .plan-info h3 { font-size: 1rem; font-weight: 700; color: #0f172a; margin-bottom: 5px; }
+        .plan-info p { font-size: 0.85rem; color: #94a3b8; font-weight: 500; }
+        .plan-info .add-code { display: block; margin-top: 15px; color: #3b82f6; text-decoration: none; font-size: 0.85rem; font-weight: 600; }
+
+        .plan-price { font-size: 0.9rem; font-weight: 700; color: #0f172a; }
+
+        /* Payment Form */
+        .payment-form {
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: -10px;
+            left: 12px;
+            background: #fff;
+            padding: 0 5px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #3b82f6;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 1.5px solid #3b82f6;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .form-control.secondary {
+            border-color: #e2e8f0;
+            color: #475569;
+        }
+        .form-control.secondary:focus {
+            border-color: #3b82f6;
+        }
+
+        .error-msg {
+            color: #f43f5e;
+            font-size: 0.75rem;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Captcha Simulation */
+        .captcha-box {
+            background: #f9f9f9;
+            border: 1px solid #d3d3d3;
+            border-radius: 3px;
+            width: 300px;
+            height: 74px;
+            margin: 30px auto;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            justify-content: space-between;
+        }
+
+        .captcha-left { display: flex; align-items: center; gap: 10px; }
+        .captcha-check { width: 28px; height: 28px; border: 2px solid #c1c1c1; background: #fff; border-radius: 2px; cursor: pointer; }
+        .captcha-text { font-size: 14px; font-family: 'Roboto', sans-serif; color: #000; }
+        .captcha-right { text-align: center; }
+        .captcha-logo { font-size: 10px; color: #555; }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: #d6336c; /* GoSkills Pink */
+            color: #fff;
+            border: none;
+            border-radius: 40px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 20px;
+        }
+
+        .submit-btn:hover { background: #be185d; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(214, 51, 108, 0.2); }
+
+        .renew-text { text-align: center; color: #94a3b8; font-size: 0.85rem; font-weight: 500; margin-bottom: 40px; }
+
+        /* Trust Badges */
+        .secured-by {
+            border-top: 1px solid #f1f5f9;
+            padding-top: 30px;
+            text-align: center;
+        }
+
+        .secured-by p { font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 15px; }
+        .trust-logos { display: flex; justify-content: center; align-items: center; gap: 30px; opacity: 0.6; }
+        .trust-logos img, .trust-logos svg { height: 25px; width: auto; filter: grayscale(1); }
+
+        @media (max-width: 600px) {
+            .close-btn { right: 20px; }
+            .row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="payment.html" class="close-btn">
+        <div>✕</div>
+        Close
+    </a>
+
+    <div class="logo">
+        <img src="Kvj logo.jpeg" alt="KVJ Analytics Logo" style="height: 60px;">
+    </div>
+
+    <div class="checkout-container">
+        <h1 class="greeting">Hi <span id="userName">Manu</span>!</h1>
+        <p class="sub-header">Please enter your payment details</p>
+
+        <div class="plan-box">
+            <div class="plan-info">
+                <h3 id="planNameDisplay">Monthly plan</h3>
+                <p>to all KVJ Analytics courses</p>
+                <a href="#" class="add-code">Add a code</a>
+            </div>
+            <div class="plan-price" id="planPriceDisplay">INR1400 INR/month</div>
+        </div>
+
+        <form class="payment-form" id="paymentForm" onsubmit="handlePayment(event)">
+            <div class="input-group">
+                <label>Cardholder's name</label>
+                <input type="text" class="form-control" value="Manu" id="cardName">
+                <p class="error-msg">Please enter the name as it appears on the card.</p>
+            </div>
+
+            <div class="input-group">
+                <input type="text" class="form-control secondary" placeholder="Card Number" required>
+            </div>
+
+            <div class="row">
+                <div class="input-group">
+                    <input type="text" class="form-control secondary" placeholder="MM/YY" required>
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control secondary" placeholder="CVV" required>
+                </div>
+            </div>
+
+            <!-- Captcha Simulation -->
+            <div class="captcha-box">
+                <div class="captcha-left">
+                    <div class="captcha-check" onclick="this.style.background='#4c8bf5'; this.innerHTML='<span style=\'color:white; font-size:20px; line-height:28px; display:block; text-align:center\'>✓</span>'"></div>
+                    <div class="captcha-text">I'm not a robot</div>
+                </div>
+                <div class="captcha-right">
+                    <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" style="height:30px">
+                    <div class="captcha-logo">reCAPTCHA</div>
+                    <div style="font-size:8px; color:#555">Privacy - Terms</div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="finishBtn">Start your plan</button>
+        </form>
+
+        <p class="renew-text" id="billingCycle">Your monthly plan will automatically renew in one month. Cancel anytime.</p>
+
+        <div class="secured-by">
+            <p>Secured by:</p>
+            <div class="trust-logos">
+                <!-- Braintree (Text Logo) -->
+                <svg width="80" height="20" viewBox="0 0 120 30" xmlns="http://www.w3.org/2000/svg">
+                    <text x="0" y="22" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#000">Braintree</text>
+                </svg>
+                <!-- Visa (SVG Path) -->
+                <svg width="45" height="15" viewBox="0 0 1010 327" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M418.15 322.1l-61.9-281.3c-2-.1-38.3-.1-57.8-.1L231.1 217l-26.6-141.2C195.9 31.8 152.9 2.5 107.5.1H0v12.3c66.7 15.3 123.6 51.5 141.7 122.9L228.3 322h67.3l104.9-266.3L427.6 322h57.9M618.3 103.1c-43.2-19.9-106.6-16.1-106.6 20.3 0 60.1 83.3 64.9 83.3 98.2 0 10.6-9.6 23.3-43.7 23.3-39.7 0-66.7-18.4-66.7-18.4l-11.9 44.9s27.2 20.3 75.9 20.3c58.7 0 114.7-28.7 114.7-86.2 0-63.5-84.1-71.1-84.1-102.7 0-10.6 11.1-23.7 41.2-23.7 28.3 0 51.1 12.3 51.1 12.3l12-43.2M879.8 40.7c-15.5 0-28.7 9-34.6 23.1L745.3 322.1h67.4l13.4-37.1h82.4l7.8 37.1H976l-50.6-281.4h-45.6m-41 195.3l34.8-95.6 19.8 95.6H838.8M676.6 40.7v281.4h67.3V40.7h-67.3Z" fill="#1A1F71"/>
+                </svg>
+                <!-- Mastercard (SVG Shapes) -->
+                <svg width="45" height="30" viewBox="0 0 82 51" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="26" cy="25" r="25" fill="#eb001b"/>
+                    <circle cx="56" cy="25" r="25" fill="#f79e1b"/>
+                    <path d="M41 12a14.9 14.9 0 0 1 0 26 14.9 14.9 0 0 1 0-26Z" fill="#ff5f00"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get data from URL
+            const params = new URLSearchParams(window.location.search);
+            const plan = params.get('plan') || 'Monthly plan';
+            const price = params.get('price') || '1,400';
+            
+            document.getElementById('planNameDisplay').textContent = plan;
+            document.getElementById('planPriceDisplay').textContent = 'INR' + price + ' INR/month';
+            
+            if (plan.toLowerCase().includes('yearly')) {
+                document.getElementById('billingCycle').textContent = 'Your yearly plan will automatically renew in one year. Cancel anytime.';
+            }
+
+            // Set user name
+            const userName = sessionStorage.getItem('userName') || localStorage.getItem('strategist_user') || 'Manu';
+            document.getElementById('userName').textContent = userName;
+            document.getElementById('cardName').value = userName;
+        });
+
+        function handlePayment(event) {
+            event.preventDefault();
+            const btn = document.getElementById('finishBtn');
+            const params = new URLSearchParams(window.location.search);
+            const courseName = params.get('course') || 'General Enrollment';
+            
+            btn.disabled = true;
+            btn.textContent = "Processing Payment...";
+            
+            setTimeout(() => {
+                // Save enrollment state locally
+                const userPhone = localStorage.getItem('strategist_phone') || 'guest';
+                localStorage.setItem('registered_' + userPhone + '_' + courseName, 'true');
+                localStorage.setItem('registered_' + courseName, 'true'); // Fallback for legacy
+                
+                // Submit details to Google Sheet ONLY AFTER payment
+                const pendingReg = sessionStorage.getItem('pendingRegistration');
+                if (pendingReg) {
+                    try {
+                        const regData = JSON.parse(pendingReg);
+                        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxlV5NHGvtyuRmUV3lt83VzXt67B1C44vjoJne3G6gIIHCUdt4aEzaSn1A9_iUxoVMD/exec";
+                        const script = document.createElement('script');
+                        const callbackName = 'checkoutCallback_' + Math.floor(Math.random() * 1000000);
+                        
+                        window[callbackName] = function(response) {
+                            delete window[callbackName];
+                            document.body.removeChild(script);
+                        };
+
+                        script.src = SCRIPT_URL + "?action=courseRegister" +
+                                     "&name=" + encodeURIComponent(regData.name) +
+                                     "&email=" + encodeURIComponent(regData.email) +
+                                     "&phone=" + encodeURIComponent(regData.phone) +
+                                     "&branch=" + encodeURIComponent(regData.branch || '') +
+                                     "&course=" + encodeURIComponent(regData.course) +
+                                     "&callback=" + callbackName;
+                        
+                        document.body.appendChild(script);
+                        sessionStorage.removeItem('pendingRegistration'); // Clear it to prevent duplicates
+                    } catch (e) {
+                        console.error('Error recording registration', e);
+                    }
+                }
+                
+                alert("Payment Successful! Taking you to your course...");
+                
+                // Redirect mapping
+                const courseMaps = {
+                    'Marian Business Analytics': 'marian_analytics.html',
+                    'Python Mastery': 'python_index.html',
+                    'SQL Mastery': 'sql_index.html',
+                    'Artificial Intelligence': 'ai_index.html',
+                    'Power BI Mastery': 'powerbi_index.html',
+                    'Data Analytics': 'data_index.html',
+                    'Advanced Gaming': 'gaming_index.html',
+                    'Advanced Excel': 'excel_index.html'
+                };
+                
+                const target = courseMaps[courseName] || 'index.html';
+                window.location.href = target;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

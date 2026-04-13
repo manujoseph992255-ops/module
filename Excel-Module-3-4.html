@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 3.4: Advanced Payroll Synthesis | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --secondary-blue: #008eab;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+        }
+
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            margin: 0; padding: 0;
+        }
+
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1rem 3rem; background: #ffffff; border-bottom: 1px solid var(--border-color);
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .exit-btn {
+            background: #ef4444; color: white; padding: 8px 18px;
+            text-decoration: none; font-size: 12px; font-weight: 700;
+            border-radius: 6px; text-transform: uppercase;
+        }
+
+        .header-banner { 
+            background: var(--primary-blue); color: white; 
+            padding: 120px 20px 60px; text-align: center; 
+        }
+
+        .header-banner h1 { 
+            font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 900; text-transform: uppercase;
+        }
+
+        .layout-container { max-width: 900px; margin: 40px auto; width: 95%; padding-bottom: 60px; }
+
+        .main-content { 
+            background: #ffffff; border: 1px solid var(--border-color);
+            padding: 60px; border-radius: 12px; box-shadow: 0 4px 25px rgba(0,0,0,0.04);
+        }
+
+        .section-header { margin-bottom: 30px; border-bottom: 3px solid var(--bg-light); padding-bottom: 15px; }
+        .section-header h2 { color: var(--primary-blue); font-size: 24px; font-weight: 800; text-transform: uppercase; }
+
+        p { line-height: 1.8; margin-bottom: 25px; color: #334155; font-size: 17px; }
+        strong { color: var(--primary-blue); font-weight: 700; }
+
+        .interaction-box { 
+            background-color: #f7f9fc; border-left: 5px solid var(--secondary-blue); 
+            padding: 25px; margin: 30px 0; border-radius: 0 10px 10px 0; 
+        }
+
+        /* Professional diamond list marker */
+        ul { list-style: none; padding-left: 0; margin-bottom: 25px; }
+        ul li { position: relative; padding-left: 28px; margin-bottom: 12px; color: #334155; }
+        ol li { margin-bottom: 12px; color: #334155; padding-left: 8px; }
+        ul li::before {
+            content: ""; position: absolute; left: 0; top: 8px;
+            width: 8px; height: 8px; background: var(--secondary-blue);
+            transform: rotate(45deg); border-radius: 1px;
+        }
+
+        .next-btn-container { text-align: center; margin-top: 60px; padding: 40px; background: #f8fafc; border-radius: 12px; }
+        .next-btn {
+            display: inline-block; background: #10b981; color: white;
+            padding: 18px 50px; border-radius: 40px; text-decoration: none;
+            font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px;
+            transition: all 0.3s; box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+        }
+        .next-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4); }
+
+        .prev-btn {
+            display: block; width: 150px; margin: 0 auto 30px; color: #64748b;
+            text-decoration: none; font-size: 14px; font-weight: 600;
+        }
+        .prev-btn:hover { text-decoration: underline; color: var(--primary-blue); }
+
+        footer { text-align: center; padding: 40px; color: #94a3b8; font-size: 13px; }
+
+        .excel-terminal {
+            background-color: #0f172a; color: #38bdf8;
+            padding: 20px; border-radius: 8px; font-family: 'Consolas', monospace;
+            font-size: 14px; margin: 20px 0; border: 1px solid #1e293b;
+        }
+        .excel-terminal .keyword { color: #f472b6; }
+    
+        /* Quiz CTA Styling */
+        .quiz-cta {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .quiz-cta h3 { color: #ffffff !important; margin-top: 0; font-size: 24px; border: none; padding: 0; }
+        .quiz-cta p { color: #ffffff !important; opacity: 0.95; margin-bottom: 25px; }
+        .btn-start-quiz {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .btn-start-quiz:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: #f8fafc;
+        }
+
+</style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="excel_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        <a href="excel_roadmap.html" class="exit-btn">EXIT</a>
+    </nav>
+
+    <header class="header-banner">
+        <h1>MODULE 3: FINANCIAL & HR ENGINEERING</h1>
+    </header>
+
+    <div class="layout-container">
+        <main class="main-content">
+            <div class="section-header">
+                <h2>3.4 Advanced Payroll Synthesis</h2>
+                <p style="font-weight: 600; color: var(--secondary-blue);">The Final Integration</p>
+            </div>
+
+            <p>Payroll is the intersection of HR compliance and Finance budgeting. In a multi-departmental boutique, payroll synthesis must account for overheads, statutory deductions, and overtime tiers across different production hubs.</p>
+
+            <h3>Synthesizing the Payroll Engine</h3>
+            <ul>
+                <li><strong>Statutory Logic:</strong> Using nested lookups to apply tax brackets based on localized regulations.</li>
+                <li><strong>Overhead Allocation:</strong> Distributing fixed salary costs across different SKU production lines for true profitability analysis.</li>
+                <li><strong>The Disbursement Matrix:</strong> Building an error-proof output sheet that triggers automatic flags for payroll anomalies.</li>
+            </ul>
+
+            <div class="interaction-box">
+                <strong>Course Capstone Insight</strong>
+                <p style="margin-top:10px;">You have now learned to build a resilient, multi-departmental analytical ecosystem. From the structural foundation in Module 1 to the logical retrieval in Module 2, you are now equipped to architect complex financial narratives.</p>
+            </div>
+
+            <div class="next-btn-container">
+                <a href="Excel-Module-3-3.html" class="prev-btn">&larr; Back to Topic 3.3</a>
+                <p style="margin-bottom: 20px; font-weight: 700; color: var(--primary-blue);">CONGRATULATIONS! You have completed the curriculum.</p>
+                <a href="module_quiz.html?mod=ex3" class="next-btn">Start Final Certificate Quiz &checkmark;</a>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2024 KVJ. All Rights Reserved.
+    </footer>
+    </div>
+
+</body>
+</html>

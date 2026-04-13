@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 5: Responsible Analytics | KVJ Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --accent-blue: #38bdf8;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .logout-btn {
+            background: #dc2626; color: white; padding: 8px 18px;
+            text-decoration: none; font-size: 12px; font-weight: 700;
+            border-radius: 6px; transition: opacity 0.3s; text-transform: uppercase;
+        }
+
+        .header-banner {
+            background: var(--primary-blue); color: white;
+            padding: 120px 20px 60px; text-align: center;
+        }
+
+        .header-banner h1 {
+            font-family: 'Montserrat', sans-serif; font-size: 38px;
+            font-weight: 900; letter-spacing: -1px; text-transform: uppercase;
+        }
+
+        .layout-container {
+            display: flex; max-width: 1400px;
+            margin: 40px auto; gap: 40px; width: 95%; padding-bottom: 60px;
+        }
+
+        .sidebar {
+            width: 300px; background: white; padding: 30px;
+            border: 1px solid var(--border-color); position: sticky;
+            top: 100px; border-radius: 12px; height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-family: 'Montserrat', sans-serif; font-size: 12px;
+            color: var(--accent-blue); text-transform: uppercase;
+            margin-bottom: 20px; border-bottom: 2px solid var(--bg-light);
+            padding-bottom: 10px; font-weight: 800; letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            display: block; padding: 12px 15px;
+            color: var(--text-muted); text-decoration: none; font-size: 14px;
+            font-weight: 500; margin-bottom: 5px; border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .sidebar a.active {
+            color: var(--primary-blue); font-weight: 700;
+            background: #eff6ff; border-left: 4px solid var(--primary-blue);
+        }
+
+        .sidebar a:hover:not(.active) { background: #f8fafc; color: var(--primary-blue); }
+
+        .main-content {
+            flex: 1; background: #ffffff; border: 1px solid var(--border-color);
+            padding: 40px 60px; border-radius: 12px;
+        }
+
+        .section-header {
+            margin-bottom: 30px; border-bottom: 3px solid var(--bg-light);
+            padding-bottom: 15px;
+        }
+
+        .section-header h2 {
+            font-family: 'Montserrat', sans-serif; color: var(--primary-blue);
+            font-size: 28px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        p { line-height: 1.8; margin-bottom: 25px; color: #334155; font-size: 17px; }
+        strong { color: var(--primary-blue); font-weight: 700; }
+        h3 {
+            font-family: 'Montserrat', sans-serif; color: var(--primary-blue);
+            margin: 40px 0 20px; font-size: 22px; font-weight: 700;
+        }
+
+        .content-list { list-style: none; margin-bottom: 25px; }
+        .content-list li {
+            position: relative; padding-left: 28px; margin-bottom: 12px;
+            color: #334155; font-size: 16px;
+        }
+        .content-list li::before {
+            content: ""; position: absolute; left: 0; top: 8px; width: 8px; height: 8px;
+            background: var(--accent-blue); border-radius: 2px; transform: rotate(45deg);
+        }
+
+        .interaction-box {
+            background-color: #f7f9fc; border-left: 5px solid var(--accent-blue);
+            padding: 25px; margin: 30px 0; border-radius: 0 10px 10px 0; font-size: 15px;
+        }
+
+        /* Module Illustrations */
+        .illustration-container {
+            position: fixed;
+            right: 20px;
+            top: 200px;
+            width: 280px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .illustration-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .illustration-card img { width: 80px; margin-bottom: 10px; }
+        .illustration-card span { display: block; font-weight: 800; color: var(--primary-blue); font-size: 14px; text-transform: uppercase; }
+
+        .quiz-cta { 
+            background: linear-gradient(135deg, #1e3a5f 0%, #38bdf8 100%); 
+            color: white; padding: 40px; border-radius: 12px; text-align: center; margin-top: 60px;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .btn-start-quiz { 
+            display: inline-block; background: #ffffff; color: var(--primary-blue); padding: 16px 40px; 
+            border-radius: 30px; text-decoration: none; font-weight: 800; font-size: 15px;
+            text-transform: uppercase; letter-spacing: 1px; margin-top: 20px; transition: all 0.3s; 
+        }
+        .btn-start-quiz:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); background: #f8fafc; }
+
+        pre { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); color: #1e293b; margin: 20px 0; font-family: 'Fira Code', monospace; font-size: 14px; overflow-x: auto; }
+        
+        .dnd-option { display: inline-block; background: #334155; color: white; padding: 8px 15px; border-radius: 6px; cursor: grab; margin: 5px; font-weight: 600; font-size: 14px; }
+        .dnd-target { border: 2px dashed #475569; padding: 10px; border-radius: 6px; color: #94a3b8; text-align: center; min-height: 40px; }
+        .dnd-target.filled { background: #0f172a; color: #00d2ff; border-style: solid; }
+
+        @media (max-width: 1600px) { .illustration-container { display: none; } }
+        @media (max-width: 992px) { .layout-container { flex-direction: column; } .sidebar { width: 100%; position: static; } .main-content { padding: 30px; } }
+
+        /* Dark UI for Practice (matching Python coding-practice) */
+        .practice-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            border: none;
+        }
+        .practice-badge {
+            display: none;
+        }
+        .practice-card h3 { 
+            margin-top: 0; color: #38bdf8; font-size: 22px; font-weight: 700; border: none; padding-bottom: 0; margin-bottom: 20px; font-family: 'Outfit', sans-serif;
+        }
+        .practice-card p { color: #e2e8f0; font-size: 16px; margin-bottom: 20px; }
+        .practice-card strong { color: #f8fafc; font-weight: 800; }
+        
+        .mcq-option {
+            background: #0f172a; border: 1px solid #334155;
+            padding: 15px 20px; border-radius: 8px; margin-bottom: 10px;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 15px;
+            color: #e2e8f0;
+        }
+        .mcq-option:hover { background: #1e293b; border-color: #38bdf8; }
+        .mcq-option.selected { border-width: 2px; border-color: #38bdf8; }
+        .mcq-option.correct { border-color: #10b981; background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .mcq-option.wrong { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .mcq-prefix { font-weight: 800; color: #38bdf8; }
+
+        .tf-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #334155; }
+        .tf-statement { color: #e2e8f0; font-size: 15px; }
+        .tf-btn { padding: 6px 15px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; }
+        .tf-btn.selected { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+        .tf-btn.correct { background: #10b981 !important; border-color: #10b981 !important; color: white !important; }
+        .tf-btn.wrong { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
+
+        .tf-btn-group { display: flex; gap: 15px; margin-top: 20px; }
+        .tf-btn-large {
+            flex: 1; padding: 15px; border: 1px solid #334155;
+            background: #0f172a; color: #e2e8f0; border-radius: 8px;
+            cursor: pointer; font-weight: 800; font-size: 16px; transition: all 0.2s;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .tf-btn-large:hover { background: #1e293b; border-color: #38bdf8; }
+        .tf-btn-large.correct { background: #10b981 !important; border-color: #10b981; color: white; }
+        .tf-btn-large.wrong { background: #ef4444 !important; border-color: #ef4444; color: white; }
+
+        .practice-dark-btn {
+            background: #38bdf8; color: #0f172a; border: none;
+            padding: 12px 25px; border-radius: 8px; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s; margin-top: 20px;
+            margin-right: 10px; font-family: 'Outfit', sans-serif;
+        }
+        .practice-reset-btn {
+            background: #334155; color: #f8fafc; border: none;
+            padding: 12px 25px; border-radius: 8px; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s; margin-top: 20px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .practice-dark-btn:hover, .practice-reset-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .practice-reset-btn:hover { background: #475569; }
+
+        .feedback-dark { margin-top: 15px; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; display: none; }
+        .feedback-dark.correct { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; display: block; }
+        .feedback-dark.wrong { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; display: block; }
+
+        .dd-container select { 
+            padding: 10px 15px; border-radius: 8px; background: #0f172a; 
+            color: #f8fafc; border: 1px solid #334155; font-weight: 600;
+            width: 220px; outline: none; transition: border-color 0.2s;
+        }
+        .dd-container select:focus { border-color: #38bdf8; }
+        
+        .mcq-option strong { margin-right: 10px; color: #f8fafc; }
+        .dd-container select option { background: #0f172a; color: #f8fafc; }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="data_index.html"><img src="Kvj logo.jpeg" alt="Logo" class="kvj-logo-img"></a>
+        <a href="data_roadmap.html" class="logout-btn">EXIT</a>
+    </nav>
+    <header class="header-banner">
+        <h1>MODULE 5: RESPONSIBLE ANALYTICS</h1>
+    </header>
+
+    <div class="illustration-container">
+        <div class="illustration-card" style="animation-delay: 0s;">
+            <img src="https://img.icons8.com/isometric/100/scales.png" alt="Ethics">
+            <span>Data Ethics</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 2s;">
+            <img src="https://img.icons8.com/isometric/100/shield.png" alt="Security">
+            <span>Protection</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 4s;">
+            <img src="https://img.icons8.com/isometric/100/law.png" alt="Laws">
+            <span>Compliance</span>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        <aside class="sidebar">
+            <h3>Module Path</h3>
+            <a href="Data-Module-1.html">01 Data Basics</a>
+            <a href="Data-Module-2.html">02 Data Lifecycle</a>
+            <a href="Data-Module-3.html">03 Data Analysis</a>
+            <a href="Data-Module-4.html">04 Data Visualization</a>
+            <a href="Data-Module-5.html" class="active">05 Responsible Analytics</a>
+
+            <h3 style="margin-top:35px;">Navigation</h3>
+            <a href="data_roadmap.html" style="background: #f8fafc;">&larr; Return to Roadmap</a>
+        </aside>
+
+        <main class="main-content">
+            <!-- Section 1 -->
+            <div class="section-header">
+                <h2>1. Responsible Data Analytics</h2>
+            </div>
+            <h3>Concept</h3>
+            <p><strong>Responsible analytics</strong> refers to the practice of handling data ethically, securely, and legally during collection, analysis, and reporting. It ensures that data is used properly, protected from misuse, and interpreted fairly.</p>
+            
+            <div class="interaction-box">
+                <strong>Insight:</strong> Just because you <em>can</em> use data does not mean you <em>should</em> use it without responsibility.
+            </div>
+
+            <div class="practice-card">
+                <h3>Quick Check: Responsible Analytics</h3>
+                <p>What is the primary focus of responsible analytics?</p>
+                <div id="mcq-m5-1">
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-1')"><span class="mcq-prefix">A.</span> Increasing data size</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-1')"><span class="mcq-prefix">B.</span> Ethical and secure use of data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-1')"><span class="mcq-prefix">C.</span> Data visualization</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-1')"><span class="mcq-prefix">D.</span> Data storage only</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m5-1', 'B', 'Correct! Ensuring ethical usage and security is the core of responsible analytics.')">Run & Check</button>
+                <button class="practice-reset-btn" onclick="resetPractice('mcq', 'mcq-m5-1', 'feedback-mcq-m5-1')">Reset</button>
+                <div class="feedback-dark" id="feedback-mcq-m5-1"></div>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>2. Data Privacy Laws</h2>
+            </div>
+            <h3>Concept</h3>
+            <p>Organizations must follow data privacy laws to protect user information. These laws regulate how data is collected, stored, and shared.</p>
+            
+            <div class="content-list">
+                <li><strong>GDPR:</strong> General Data Protection Regulation (Europe).</li>
+                <li><strong>FERPA:</strong> For education data protection.</li>
+                <li><strong>HIPAA:</strong> For health data protection.</li>
+                <li><strong>PCI:</strong> For payment card data security.</li>
+            </div>
+
+            <div class="interaction-box" style="border-left-color: #ef4444; background: #fef2f2;">
+                <strong>Warning:</strong> Violating data privacy laws can lead to severe legal penalties and a permanent loss of customer trust.
+            </div>
+
+            <div class="practice-card">
+                <h3>Quick Check: Data Privacy</h3>
+                <p>Which of the following is a major data privacy regulation?</p>
+                <div id="mcq-m5-2">
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-2')"><span class="mcq-prefix">A.</span> JSON</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-2')"><span class="mcq-prefix">B.</span> GDPR</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-2')"><span class="mcq-prefix">C.</span> CSV</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-2')"><span class="mcq-prefix">D.</span> SQL</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m5-2', 'B', 'Correct! GDPR is one of the most comprehensive privacy laws globally.')">Run & Check</button>
+                <button class="practice-reset-btn" onclick="resetPractice('mcq', 'mcq-m5-2', 'feedback-mcq-m5-2')">Reset</button>
+                <div class="feedback-dark" id="feedback-mcq-m5-2"></div>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>3. Personally Identifiable Information (PII)</h2>
+            </div>
+            <h3>Concept</h3>
+            <p><strong>PII</strong> refers to any information that can identify an individual. Organizations <strong>must</strong> protect PII to prevent misuse and data breaches.</p>
+            
+            <div class="concept-visual-container">
+                <div class="comparison-side">
+                    <h4>Direct Identifiers (PII)</h4>
+                    <div style="background: #fee2e2; padding: 15px; border-radius: 8px; text-align: left; font-size: 13px;">
+                        <div style="margin-bottom: 5px;">👤 <strong>Name:</strong> Anoop Kumar</div>
+                        <div style="margin-bottom: 5px;">📧 <strong>Email:</strong> anoop@email.com</div>
+                        <div>📞 <strong>Phone:</strong> +91 98765...</div>
+                    </div>
+                </div>
+                <div class="comparison-arrow">&rarr;</div>
+                <div class="comparison-side">
+                    <h4>Anonymized Data</h4>
+                    <div style="background: #dcfce7; padding: 15px; border-radius: 8px; text-align: left; font-size: 13px;">
+                        <div style="margin-bottom: 5px;">🆔 <strong>User ID:</strong> KVJ_101</div>
+                        <div style="margin-bottom: 5px;">📧 <strong>Email:</strong> [MASKED]</div>
+                        <div>📞 <strong>Phone:</strong> [HIDDEN]</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="interaction-box">
+                <strong>Examples of PII:</strong>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>Full Name</li>
+                    <li>Phone Number</li>
+                    <li>Email Address</li>
+                    <li>Aadhaar/National ID Number</li>
+                </ul>
+            </div>
+
+            <div class="practice-card">
+                <h3>PII Identification Challenge</h3>
+                <p>Which of the following items are considered PII? (Multiple choices may apply)</p>
+                
+                <div class="tf-row" id="tf-row-m5-3-1">
+                    <div class="tf-statement">1. Customer Name</div>
+                    <button class="tf-btn" onclick="toggleTF(this, 'm5-3-1')">PII</button>
+                </div>
+                <div class="tf-row" id="tf-row-m5-3-2">
+                    <div class="tf-statement">2. Product Price</div>
+                    <button class="tf-btn" onclick="toggleTF(this, 'm5-3-2')">PII</button>
+                </div>
+                <div class="tf-row" id="tf-row-m5-3-3">
+                    <div class="tf-statement">3. Email Address</div>
+                    <button class="tf-btn" onclick="toggleTF(this, 'm5-3-3')">PII</button>
+                </div>
+
+                <button class="practice-dark-btn" onclick="checkPII(['m5-3-1', 'm5-3-2', 'm5-3-3'], [true, false, true], 'feedback-m5-3')">Check Selections</button>
+                <button class="practice-reset-btn" onclick="resetPractice('tf', ['m5-3-1', 'm5-3-2', 'm5-3-3'], 'feedback-m5-3')">Reset</button>
+                <div class="feedback-dark" id="feedback-m5-3"></div>
+            </div>
+
+            <!-- Section 4 -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>4. Data Security</h2>
+            </div>
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="https://img.icons8.com/isometric/120/security-shield.png" alt="Security Vault" style="width: 120px;">
+            </div>
+            <h3>Concept</h3>
+            <p>Data security involves protecting data from unauthorized access, breaches, and loss. Without proper security, data can be stolen, misused, or leaked.</p>
+            
+            <div class="content-list">
+                <li><strong>Encryption:</strong> Scrambling data so only authorized users can read it.</li>
+                <li><strong>Access Control:</strong> Limiting who can view or edit specific data.</li>
+                <li><strong>Secure Storage:</strong> Using protected servers and databases.</li>
+            </div>
+
+            <div class="practice-card">
+                <h3>Quick Check: Security Methods</h3>
+                <p>Which of the following is a primary method used to protect data?</p>
+                <div id="mcq-m5-4">
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-4')"><span class="mcq-prefix">A.</span> Deleting data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-4')"><span class="mcq-prefix">B.</span> Encryption</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-4')"><span class="mcq-prefix">C.</span> Visualization</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-4')"><span class="mcq-prefix">D.</span> Sorting</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m5-4', 'B', 'Correct! Encryption is a fundamental pillar of data security.')">Run & Check</button>
+                <button class="practice-reset-btn" onclick="resetPractice('mcq', 'mcq-m5-4', 'feedback-mcq-m5-4')">Reset</button>
+                <div class="feedback-dark" id="feedback-mcq-m5-4"></div>
+            </div>
+
+            <!-- Section 5 -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>5. Data Anonymization</h2>
+            </div>
+            <h3>Concept</h3>
+            <p><strong>Anonymization</strong> means removing personal identifiers from data so that individuals cannot be identified. This allows data to be used for analysis without compromising user privacy.</p>
+            
+            <div class="interaction-box">
+                <strong>Example:</strong><br>
+                Instead of: <code>Name: Anoop, Age: 28</code><br>
+                Use: <code>User ID: 101, Age: 28</code>
+            </div>
+
+            <div class="practice-card">
+                <h3>Quick Check: Anonymization</h3>
+                <p>Does anonymization remove personal identity from data?</p>
+                <div class="tf-btn-group">
+                    <button class="tf-btn-large" onclick="checkDirectTF(this, true, 'feedback-m5-5', 'Correct! The goal of anonymization is to protect individual identity while retaining data utility.')">TRUE</button>
+                    <button class="tf-btn-large" onclick="checkDirectTF(this, false, 'feedback-m5-5', 'Try again! Anonymization is specifically for removing identity.')">FALSE</button>
+                </div>
+                <div class="feedback-dark" id="feedback-m5-5"></div>
+            </div>
+
+            <!-- Section 6 -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>6. Bias in Data</h2>
+            </div>
+            <div style="text-align: center; margin-bottom: 30px;">
+                <img src="https://img.icons8.com/isometric/120/scales.png" alt="Data Bias" style="width: 120px;">
+            </div>
+            <h3>Concept</h3>
+            <p><strong>Bias</strong> refers to errors or unfair patterns in data collection or interpretation. Biased data leads to incorrect conclusions and unfair decisions.</p>
+            
+            <div class="interaction-box" style="border-left-color: #f59e0b; background: #fffbeb;">
+                <strong>Key Insight:</strong> If your data is biased, your analysis will be flawed, regardless of how advanced your tools are.
+            </div>
+
+            <div class="practice-card">
+                <h3>Quick Check: Data Bias</h3>
+                <p>Which of the following is an example of bias in data?</p>
+                <div id="mcq-m5-6">
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-6')"><span class="mcq-prefix">A.</span> Sorting</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-6')"><span class="mcq-prefix">B.</span> Sampling bias</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-6')"><span class="mcq-prefix">C.</span> Filtering</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-6')"><span class="mcq-prefix">D.</span> Aggregation</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m5-6', 'B', 'Correct! Sampling bias occurs when the data does not accurately represent the entire population.')">Run & Check</button>
+                <button class="practice-reset-btn" onclick="resetPractice('mcq', 'mcq-m5-6', 'feedback-mcq-m5-6')">Reset</button>
+                <div class="feedback-dark" id="feedback-mcq-m5-6"></div>
+            </div>
+
+            <!-- Section 7 -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>7. Types of Bias</h2>
+            </div>
+            
+            <h3>7.1 Confirmation Bias</h3>
+            <p>Occurs when analysts focus only on data that supports their existing beliefs while ignoring data that suggests the opposite.</p>
+            
+            <h3>7.2 Sampling Bias</h3>
+            <p>Occurs when the sample does not represent the whole population. For example, surveying only urban customers and ignoring rural customers.</p>
+            
+            <div class="concept-visual-container">
+                <div class="comparison-side">
+                    <h4>Target Population</h4>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; background: #f8fafc; padding: 10px; border-radius: 8px;">
+                        <span style="font-size: 20px;">🏙️</span> <span style="font-size: 20px;">🏙️</span> <span style="font-size: 20px;">🚜</span> <span style="font-size: 20px;">🚜</span>
+                        <span style="font-size: 20px;">🏙️</span> <span style="font-size: 20px;">🏙️</span> <span style="font-size: 20px;">🚜</span> <span style="font-size: 20px;">🚜</span>
+                    </div>
+                </div>
+                <div class="comparison-arrow">&rarr;</div>
+                <div class="comparison-side">
+                    <h4>Biased Sample</h4>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; background: #fee2e2; padding: 10px; border-radius: 8px; border: 1px solid #ef4444;">
+                        <span style="font-size: 20px;">🏙️</span> <span style="font-size: 20px;">🏙️</span> <span style="font-size: 20px;">🏙️</span> <span style="font-size: 20px;">🏙️</span>
+                        <span style="font-size: 20px; opacity: 0.2;">🚜</span> <span style="font-size: 20px; opacity: 0.2;">🚜</span> <span style="font-size: 20px; opacity: 0.2;">🚜</span> <span style="font-size: 20px; opacity: 0.2;">🚜</span>
+                    </div>
+                </div>
+            </div>
+            
+            <h3>7.3 Motivational Bias</h3>
+            <p>Occurs when data is interpreted to support a desired outcome or goal, rather than looking at what the data actually says.</p>
+
+            <div class="practice-card">
+                <h3>Bias Recognition Challenge</h3>
+                <p>An analyst selects only data that supports their opinion. This is an example of:</p>
+                <div id="mcq-m5-7">
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-7')"><span class="mcq-prefix">A.</span> Sampling bias</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-7')"><span class="mcq-prefix">B.</span> Confirmation bias</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-7')"><span class="mcq-prefix">C.</span> Data cleaning</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m5-7')"><span class="mcq-prefix">D.</span> Aggregation</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m5-7', 'B', 'Correct! This is confirmation bias.')">Run & Check</button>
+                <button class="practice-reset-btn" onclick="resetPractice('mcq', 'mcq-m5-7', 'feedback-mcq-m5-7')">Reset</button>
+                <div class="feedback-dark" id="feedback-mcq-m5-7"></div>
+            </div>
+
+            <!-- Section 8 -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>8. Ethical Data Usage</h2>
+            </div>
+            <h3>Concept</h3>
+            <p>Ethical data usage means using data responsibly, avoiding misuse, and ensuring fairness. This includes obtaining consent and being transparent about how data is used.</p>
+            
+            <div class="interaction-box" style="border-left-color: #10b981; background: #f0fdf4;">
+                <strong>Final Insight:</strong> Ethics ensures trust in data and analytics. Without ethics, the value of insights is lost.
+            </div>
+
+            <div class="practice-card">
+                <h3>Quick Check: Ethical Usage</h3>
+                <p>Is using data without user consent considered ethical?</p>
+                <div class="tf-btn-group">
+                    <button class="tf-btn-large" onclick="checkDirectTF(this, false, 'feedback-m5-8', 'Try again! Consent is a fundamental part of ethical data practices.')">TRUE</button>
+                    <button class="tf-btn-large" onclick="checkDirectTF(this, true, 'feedback-m5-8', 'Correct! Using data without consent is generally unethical and often illegal under privacy laws.')">FALSE</button>
+                </div>
+                <div class="feedback-dark" id="feedback-m5-8"></div>
+            </div>
+
+            <div class="quiz-cta">
+                <h3>Ready for the Final Module Assessment?</h3>
+                <p>Test your knowledge of responsible analytics practices and data ethics.</p>
+                <a href="module_quiz.html?mod=data5" class="btn-start-quiz">Start Assessment &rarr;</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let selections = {};
+
+        function triggerConfetti() {
+            if (typeof confetti !== 'undefined') {
+                confetti({ 
+                    particleCount: 150, 
+                    spread: 70, 
+                    origin: { y: 0.6 }, 
+                    colors: ['#1e3a5f', '#008eab', '#ffffff'] 
+                });
+            }
+        }
+
+        function selectMCQ(el, qid) {
+            const parent = document.getElementById(qid);
+            if (!parent) return;
+            parent.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('selected', 'correct', 'wrong'));
+            el.classList.add('selected');
+            selections[qid] = el.innerText[0];
+        }
+
+        function checkMCQ(qid, correct, msg) {
+            const parent = document.getElementById(qid);
+            const feedback = document.getElementById('feedback-' + qid);
+            if (!parent || !feedback) return;
+            const sel = parent.querySelector('.selected');
+            if (!sel) return;
+
+            if (selections[qid] === correct) {
+                sel.classList.add('correct');
+                feedback.innerHTML = msg;
+                feedback.className = 'feedback-dark correct';
+                triggerConfetti();
+            } else {
+                sel.classList.add('wrong');
+                feedback.innerText = 'Try again!';
+                feedback.className = 'feedback-dark wrong';
+            }
+        }
+
+        function checkDirectTF(btn, isCorrect, feedbackId, msg) {
+            const parent = btn.parentElement;
+            const feedback = document.getElementById(feedbackId);
+            
+            parent.querySelectorAll('button').forEach(b => b.classList.remove('correct', 'wrong', 'selected'));
+            
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedback.innerHTML = msg;
+                feedback.className = 'feedback-dark correct';
+                triggerConfetti();
+            } else {
+                btn.classList.add('wrong');
+                feedback.innerText = msg;
+                feedback.className = 'feedback-dark wrong';
+            }
+        }
+
+        function toggleTF(btn, qid) {
+            btn.classList.toggle('selected');
+            selections[qid] = btn.classList.contains('selected');
+        }
+
+        function checkPII(ids, answers, feedbackId) {
+            const feedback = document.getElementById(feedbackId);
+            let allCorrect = true;
+            ids.forEach((id, i) => {
+                const btn = document.querySelector(`[onclick*="${id}"]`);
+                const isSelected = selections[id] === true;
+                if (isSelected !== answers[i]) {
+                    allCorrect = false;
+                    btn.classList.add('wrong');
+                } else {
+                    if (isSelected) btn.classList.add('correct');
+                }
+            });
+
+            if (allCorrect) {
+                feedback.innerHTML = "Well done! You correctly identified the PII items.";
+                feedback.className = "feedback-dark correct";
+                triggerConfetti();
+            } else {
+                feedback.innerText = "Some selections are incorrect. Personal information is data that uniquely identifies a person.";
+                feedback.className = "feedback-dark wrong";
+            }
+        }
+
+        function resetPractice(type, id, feedbackId) {
+            const feedback = document.getElementById(feedbackId);
+            if (feedback) {
+                feedback.style.display = 'none';
+                feedback.classList.remove('correct', 'wrong');
+            }
+
+            if (type === 'mcq') {
+                const parent = document.getElementById(id);
+                if (parent) {
+                    parent.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('selected', 'correct', 'wrong'));
+                }
+                delete selections[id];
+            } else if (type === 'tf') {
+                const qids = Array.isArray(id) ? id : [id];
+                qids.forEach(q => {
+                    const btn = document.querySelector(`[onclick*="${q}"]`);
+                    if (btn) btn.classList.remove('selected', 'correct', 'wrong');
+                    delete selections[q];
+                });
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | KVJ</title>
+    <!-- We will use the fonts matched to our new theme, but keep your exact logic -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --secondary-blue: #008eab;
+            --text-main: #1d1d1f;
+            --text-muted: #6e6e73;
+            --bg-light: #f6f8fb;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Inter', -apple-system, sans-serif; 
+            background: #ffffff;
+            color: var(--text-main);
+            margin: 0;
+            display: grid;
+            place-items: center;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 440px;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .nav-back {
+            position: fixed;
+            top: 25px;
+            left: 25px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff !important;
+            background-color: var(--primary-blue);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            padding: 10px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(30, 58, 95, 0.15);
+            z-index: 100;
+        }
+
+        .nav-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(30, 58, 95, 0.25);
+            background-color: #11233a;
+        }
+
+        .kvj-logo-img {
+            max-width: 250px;
+            max-height: 80px;
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+
+        .datacamp-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e2e8f0;
+        }
+
+        .datacamp-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 25px;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+
+        .datacamp-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 8px;
+        }
+
+        .datacamp-input {
+            width: 100%;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 12px 14px;
+            font-size: 15px;
+            margin-bottom: 20px;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        .datacamp-input:focus {
+            border-color: var(--secondary-blue);
+            box-shadow: 0 0 0 3px rgba(0, 142, 171, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-login:hover {
+            background: #152b47;
+        }
+
+        .signup-footer {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .signup-footer a {
+            color: var(--secondary-blue);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        #error-message {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid #fee2e2;
+            display: none;
+            text-align: center;
+        }
+
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 14px;
+            cursor: pointer;
+            color: #64748b;
+            background: none;
+            border: none;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-toggle:hover {
+            color: var(--secondary-blue);
+        }
+
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear,
+        input[type="password"]::-webkit-contacts-auto-fill-button,
+        input[type="password"]::-webkit-credentials-auto-fill-button {
+            display: none !important;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Antigravity Liftoff Animation -->
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="login-wrapper">
+        <a href="index.html" class="nav-back">
+            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 2px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+        </a>
+        <div style="text-align: center;">
+            <img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img">
+        </div>
+
+        <!-- Login Screen -->
+        <div id="login-screen" class="datacamp-card">
+            <h2 class="datacamp-title">Welcome Back!</h2>
+            <div id="error-message">Invalid credentials. Please attempt again.</div>
+            <label class="datacamp-label">Phone Number (Registered)</label>
+            <input type="text" id="phone" name="phone" class="datacamp-input" placeholder="e.g. 9876543210" required>
+            <label class="datacamp-label">Password (Registration ID)</label>
+            <div class="password-wrapper">
+                <input type="password" id="password" name="password" class="datacamp-input" placeholder="Enter Registration ID" required style="padding-right: 40px;">
+                <button type="button" class="password-toggle" onclick="togglePasswordVisibility(this)" title="Toggle Password">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                </button>
+            </div>
+            <div style="text-align: right; margin-top: -10px; margin-bottom: 20px;">
+                <a href="#" onclick="showForgotPasswordScreen()" style="color: var(--secondary-blue); text-decoration: none; font-size: 13px; font-weight: 500;">Forgot Password?</a>
+            </div>
+            <button onclick="validate()" class="btn-login">Sign In</button>
+            <div class="signup-footer">
+                Don't have an account? <a href="#" onclick="showSignUpScreen()">Sign Up</a>
+            </div>
+        </div>
+
+        <!-- Signup Screen -->
+        <div id="signup-screen" class="datacamp-card hidden">
+            <h2 class="datacamp-title">Create Account</h2>
+            <label class="datacamp-label">Full Name</label>
+            <input type="text" id="reg-name" name="full_name" class="datacamp-input" placeholder="Enter your name" required>
+            <label class="datacamp-label">Email ID</label>
+            <input type="email" id="reg-email" name="gmail" class="datacamp-input" placeholder="Enter email address" required>
+            <label class="datacamp-label">Phone Number</label>
+            <input type="text" id="reg-phone" name="phone" class="datacamp-input" placeholder="Enter phone number" required>
+            <label class="datacamp-label">Class Code</label>
+            <input type="text" id="reg-class-code" name="class_code" class="datacamp-input" placeholder="Enter class code" required>
+            <label class="datacamp-label">Password</label>
+            <div class="password-wrapper">
+                <input type="password" id="reg-password" name="password" class="datacamp-input" placeholder="Create password" required style="margin-bottom: 5px; padding-right: 40px;">
+                <button type="button" class="password-toggle" onclick="togglePasswordVisibility(this)" title="Toggle Password">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                </button>
+            </div>
+            <div style="font-size: 12px; color: #94a3b8; margin-bottom: 20px;">Password must contain digits and be at least 6 characters long.</div>
+            <label class="datacamp-label">Confirm Password</label>
+            <div class="password-wrapper">
+                <input type="password" id="reg-confirm-password" name="confirm_password" class="datacamp-input" placeholder="Confirm password" required style="padding-right: 40px;">
+                <button type="button" class="password-toggle" onclick="togglePasswordVisibility(this)" title="Toggle Password">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                </button>
+            </div>
+            <button onclick="register()" class="btn-login">Register</button>
+            <div class="signup-footer">
+                Already have an account? <a href="#" onclick="showLoginScreen()">Log In</a>
+            </div>
+        </div>
+
+        <!-- Forgot Password Screen -->
+        <div id="forgot-password-screen" class="datacamp-card hidden">
+            <h2 class="datacamp-title">Reset Password</h2>
+            <div id="reset-step-1">
+                <p style="text-align: center; color: #64748b; font-size: 14px; margin-bottom: 25px;">Enter your registered phone number to verify your account.</p>
+                <label class="datacamp-label">Phone Number</label>
+                <input type="text" id="recover-phone" class="datacamp-input" placeholder="e.g. 9876543210" required>
+                <button onclick="verifyPhoneForReset()" class="btn-login">Verify Phone Number</button>
+            </div>
+            <div id="reset-step-2" class="hidden">
+                <p style="text-align: center; color: #64748b; font-size: 14px; margin-bottom: 25px;">Create and confirm your new password.</p>
+                <label class="datacamp-label">New Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="reset-new-password" class="datacamp-input" required style="padding-right: 40px;">
+                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility(this)" title="Toggle Password">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    </button>
+                </div>
+                <label class="datacamp-label">Confirm Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="reset-confirm-password" class="datacamp-input" required style="padding-right: 40px;">
+                    <button type="button" class="password-toggle" onclick="togglePasswordVisibility(this)" title="Toggle Password">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    </button>
+                </div>
+                <button onclick="resetPasswordNow()" class="btn-login">Reset Password</button>
+            </div>
+            <div class="signup-footer">
+                Back to <a href="#" onclick="showLoginScreen()">Log In</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- YOUR EXACT JS LOGIC FOR THE AUTHENTICATION  -->
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyKUrP28dEY_Ma2EirPSf7VwGjQBzKo09Bpm5riLzHth0a7bE4uildUq7-2v_Ri7icy/exec';
+
+        function showLoginScreen() {
+            document.querySelectorAll('.datacamp-card').forEach(c => c.classList.add('hidden'));
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        function togglePasswordVisibility(btn) {
+            const input = btn.previousElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+            } else {
+                input.type = 'password';
+                btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+            }
+        }
+
+        function showSignUpScreen() {
+            document.querySelectorAll('.datacamp-card').forEach(c => c.classList.add('hidden'));
+            document.getElementById('signup-screen').classList.remove('hidden');
+        }
+
+        function showForgotPasswordScreen() {
+            document.querySelectorAll('.datacamp-card').forEach(c => c.classList.add('hidden'));
+            document.getElementById('forgot-password-screen').classList.remove('hidden');
+            document.getElementById('reset-step-1').classList.remove('hidden');
+            document.getElementById('reset-step-2').classList.add('hidden');
+        }
+
+        function validate() {
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value.trim();
+            
+            if(!phone || !password) {
+                alert("Enter Phone Number and Password");
+                return;
+            }
+
+            const btn = document.querySelector('#login-screen .btn-login');
+            const origText = btn.innerText;
+            btn.innerText = "Validating...";
+            btn.disabled = true;
+
+            const script = document.createElement('script');
+            window.handleResponse = function(data) {
+                if (data.exists) {
+                    localStorage.setItem('strategist_user', data.name);
+                    localStorage.setItem('strategist_phone', phone);
+                    localStorage.setItem('gmail', data.gmail || "");
+                    localStorage.setItem('class_code', data.classCode || "");
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    sessionStorage.setItem('userName', data.name);
+                    
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const course = urlParams.get('course');
+                    const action = urlParams.get('action');
+                    const redirectUrl = sessionStorage.getItem('redirectAfterLogin');
+
+                    if (action === 'enter' && course) {
+                        const userPhone = localStorage.getItem('strategist_phone') || 'guest';
+                        const isRegistered = localStorage.getItem('registered_' + course) === 'true' || 
+                                             localStorage.getItem('registered_' + userPhone + '_' + course) === 'true';
+                        
+                        if (isRegistered) {
+                            const courseMaps = {
+                                'Marian Business Analytics': 'marian_analytics.html',
+                                'Python Mastery': 'python_index.html',
+                                'SQL Mastery': 'sql_index.html',
+                                'Artificial Intelligence': 'ai_index.html',
+                                'Power BI Mastery': 'powerbi_index.html',
+                                'Data Analytics': 'data_index.html',
+                                'Advanced Gaming': 'gaming_index.html',
+                                'Advanced Excel': 'excel_index.html'
+                            };
+                            const target = courseMaps[course] || 'index.html';
+                            window.location.href = target;
+                        } else {
+                            alert("You have not purchased this course yet. Please register first.");
+                            window.location.href = "index.html";
+                        }
+                    } else if (course) {
+                        window.location.href = "registration.html?course=" + encodeURIComponent(course);
+                    } else if (redirectUrl) {
+                        sessionStorage.removeItem('redirectAfterLogin');
+                        window.location.href = redirectUrl;
+                    } else {
+                        window.location.href = "index.html";
+                    }
+                } else {
+                    alert(data.error || "Incorrect Phone Number or Password.");
+                    btn.innerText = origText;
+                    btn.disabled = false;
+                }
+                document.body.removeChild(script);
+                delete window.handleResponse;
+            };
+            script.src = `${scriptURL}?action=login&phone=${encodeURIComponent(phone)}&password=${encodeURIComponent(password)}&callback=handleResponse&t=${Date.now()}`;
+            document.body.appendChild(script);
+        }
+
+        function register() {
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const classCode = document.getElementById('reg-class-code').value.trim();
+            const password = document.getElementById('reg-password').value.trim();
+            const confirmPassword = document.getElementById('reg-confirm-password').value.trim();
+
+            if (!name || !email || !phone || !classCode || !password || !confirmPassword) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            if (!/^\d{10}$/.test(phone)) {
+                alert("Phone number must contain exactly 10 digits.");
+                return;
+            }
+
+            if (password.length < 6 || !/(?=.*[0-9])/.test(password)) {
+                alert("Password must contain digits and be at least 6 characters long.");
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match.");
+                return;
+            }
+
+            const btn = document.querySelector('#signup-screen .btn-login');
+            const origText = btn.innerText;
+            btn.innerText = "Registering...";
+            btn.disabled = true;
+
+            const script = document.createElement('script');
+            window.handleRegister = function(data) {
+                if (data.success) {
+                    alert("Success! " + (data.message || "Registration Successful!"));
+                    document.getElementById('reg-name').value = '';
+                    document.getElementById('reg-email').value = '';
+                    document.getElementById('reg-phone').value = '';
+                    document.getElementById('reg-class-code').value = '';
+                    document.getElementById('reg-password').value = '';
+                    document.getElementById('reg-confirm-password').value = '';
+                    btn.innerText = origText;
+                    btn.disabled = false;
+                    showLoginScreen();
+                } else {
+                    alert("Registration failed: " + (data.error || data.message || "Unknown error"));
+                    btn.innerText = origText;
+                    btn.disabled = false;
+                }
+                delete window.handleRegister;
+            };
+            const finalURL = `${scriptURL}?action=register&name=${encodeURIComponent(name)}&gmail=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&classCode=${encodeURIComponent(classCode)}&password=${encodeURIComponent(password)}&callback=handleRegister&t=${Date.now()}`;
+            console.log("Registering with URL:", finalURL);
+            script.src = finalURL;
+            document.body.appendChild(script);
+        }
+
+        function verifyPhoneForReset() {
+            const phone = document.getElementById('recover-phone').value.trim();
+            if (!phone) {
+                alert("Please enter your phone number.");
+                return;
+            }
+
+            const btn = document.querySelector('#reset-step-1 .btn-login');
+            const origText = btn.innerText;
+            btn.innerText = "Verifying...";
+            btn.disabled = true;
+
+            const script = document.createElement('script');
+            window.handleRecover = function(data) {
+                if (data.recovered) {
+                    document.getElementById('reset-step-1').classList.add('hidden');
+                    document.getElementById('reset-step-2').classList.remove('hidden');
+                } else {
+                    alert(data.error || "Phone number not found.");
+                    btn.innerText = origText;
+                    btn.disabled = false;
+                }
+                document.body.removeChild(script);
+                delete window.handleRecover;
+            };
+            script.src = `${scriptURL}?action=recover&phone=${encodeURIComponent(phone)}&callback=handleRecover&t=${Date.now()}`;
+            document.body.appendChild(script);
+        }
+
+        function resetPasswordNow() {
+            const phone = document.getElementById('recover-phone').value.trim();
+            const newPassword = document.getElementById('reset-new-password').value.trim();
+            const confirmPassword = document.getElementById('reset-confirm-password').value.trim();
+
+            if (!newPassword || newPassword !== confirmPassword) {
+                alert("Passwords do not match or are empty.");
+                return;
+            }
+
+            const btn = document.querySelector('#reset-step-2 .btn-login');
+            const origText = btn.innerText;
+            btn.innerText = "Updating...";
+            btn.disabled = true;
+
+            const script = document.createElement('script');
+            window.handleReset = function(data) {
+                if (data.success) {
+                    alert("Password Reset Successful! Log in with your new password.");
+                    showLoginScreen();
+                } else {
+                    alert("Update failed: " + (data.error || data.message || "Unknown error"));
+                    btn.innerText = origText;
+                    btn.disabled = false;
+                }
+                document.body.removeChild(script);
+                delete window.handleReset;
+            };
+            script.src = `${scriptURL}?action=reset&phone=${encodeURIComponent(phone)}&password=${encodeURIComponent(newPassword)}&callback=handleReset&t=${Date.now()}`;
+            document.body.appendChild(script);
+        }
+
+        // --- INTERACTIVE ANTIGRAVITY ANIMATION ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const colors = ['#4285F4', '#EA4335', '#FBBC05', '#9C27B0']; // Blue, Red, Yellow, Purple
+        const mouse = { x: -1000, y: -1000, radius: 150 };
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        class Particle {
+            constructor() {
+                this.init();
+            }
+            init() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.vx = (Math.random() - 0.5) * 0.8;
+                this.vy = (Math.random() - 0.5) * 0.8;
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.alpha = Math.random() * 0.5 + 0.3;
+            }
+            update() {
+                // Natural drift
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+
+                // Mouse interaction (Repulsion)
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < mouse.radius) {
+                    const forceDirectionX = dx / distance;
+                    const forceDirectionY = dy / distance;
+                    const force = (mouse.radius - distance) / mouse.radius;
+                    const directionX = forceDirectionX * force * 5;
+                    const directionY = forceDirectionY * force * 5;
+                    
+                    this.x -= directionX;
+                    this.y -= directionY;
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.alpha;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.shadowBlur = 0; // Reset for performance
+            }
+        }
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = [];
+            const particleCount = 200; 
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+    </script>
+    </div>
+</body>
+</html>

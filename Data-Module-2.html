@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 2: Data Lifecycle | KVJ Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --accent-blue: #38bdf8;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .logout-btn {
+            background: #dc2626; color: white; padding: 8px 18px;
+            text-decoration: none; font-size: 12px; font-weight: 700;
+            border-radius: 6px; transition: opacity 0.3s; text-transform: uppercase;
+        }
+
+        .header-banner {
+            background: var(--primary-blue); color: white;
+            padding: 120px 20px 60px; text-align: center;
+        }
+
+        .header-banner h1 {
+            font-family: 'Montserrat', sans-serif; font-size: 38px;
+            font-weight: 900; letter-spacing: -1px; text-transform: uppercase;
+        }
+
+        .layout-container {
+            display: flex; max-width: 1400px;
+            margin: 40px auto; gap: 40px; width: 95%; padding-bottom: 60px;
+        }
+
+        .sidebar {
+            width: 300px; background: white; padding: 30px;
+            border: 1px solid var(--border-color); position: sticky;
+            top: 100px; border-radius: 12px; height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-family: 'Montserrat', sans-serif; font-size: 12px;
+            color: var(--accent-blue); text-transform: uppercase;
+            margin-bottom: 20px; border-bottom: 2px solid var(--bg-light);
+            padding-bottom: 10px; font-weight: 800; letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            display: block; padding: 12px 15px;
+            color: var(--text-muted); text-decoration: none; font-size: 14px;
+            font-weight: 500; margin-bottom: 5px; border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .sidebar a.active {
+            color: var(--primary-blue); font-weight: 700;
+            background: #eff6ff; border-left: 4px solid var(--accent-blue);
+        }
+
+        .sidebar a:hover:not(.active) { background: #f8fafc; color: var(--primary-blue); }
+
+        .main-content {
+            flex: 1; background: #ffffff; border: 1px solid var(--border-color);
+            padding: 40px 60px; border-radius: 12px;
+        }
+
+        .section-header {
+            margin-bottom: 30px; border-bottom: 3px solid var(--bg-light);
+            padding-bottom: 15px;
+        }
+
+        .section-header h2 {
+            font-family: 'Montserrat', sans-serif; color: var(--primary-blue);
+            font-size: 28px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        p { line-height: 1.8; margin-bottom: 25px; color: #334155; font-size: 17px; }
+        strong { color: var(--primary-blue); font-weight: 700; }
+        h3 {
+            font-family: 'Montserrat', sans-serif; color: var(--primary-blue);
+            margin: 40px 0 20px; font-size: 22px; font-weight: 700;
+        }
+
+        .content-list { list-style: none; margin-bottom: 25px; }
+        .content-list li {
+            position: relative; padding-left: 28px; margin-bottom: 12px;
+            color: #334155; font-size: 16px;
+        }
+        .content-list li::before {
+            content: ""; position: absolute; left: 0; top: 8px; width: 8px; height: 8px;
+            background: var(--accent-blue); border-radius: 2px; transform: rotate(45deg);
+        }
+
+        .interaction-box {
+            background-color: #f7f9fc; border-left: 5px solid var(--accent-blue);
+            padding: 25px; margin: 30px 0; border-radius: 0 10px 10px 0; font-size: 15px;
+        }
+
+        
+        
+
+        
+        
+        
+        
+        
+        
+
+        
+        
+        
+        
+        
+
+        
+        
+        
+
+        
+        
+        
+
+        
+        
+
+        /* Module Illustrations */
+        .illustration-container {
+            position: fixed;
+            right: 20px;
+            top: 200px;
+            width: 280px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .illustration-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .illustration-card img { width: 80px; margin-bottom: 10px; }
+        .illustration-card span { display: block; font-weight: 800; color: var(--primary-blue); font-size: 14px; text-transform: uppercase; }
+
+        .quiz-cta { 
+            background: linear-gradient(135deg, #1e3a5f 0%, #38bdf8 100%); 
+            color: white; padding: 40px; border-radius: 12px; text-align: center; margin-top: 60px;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .btn-start-quiz { 
+            display: inline-block; background: #ffffff; color: var(--primary-blue); padding: 16px 40px; 
+            border-radius: 30px; text-decoration: none; font-weight: 800; font-size: 15px;
+            text-transform: uppercase; letter-spacing: 1px; margin-top: 20px; transition: all 0.3s; 
+        }
+        .btn-start-quiz:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); background: #f8fafc; }
+
+        pre { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); color: #1e293b; margin: 20px 0; font-family: 'Fira Code', monospace; font-size: 14px; overflow-x: auto; }
+        
+        .dnd-option { display: inline-block; background: #334155; color: white; padding: 8px 15px; border-radius: 6px; cursor: grab; margin: 5px; font-weight: 600; font-size: 14px; }
+        .dnd-target { border: 2px dashed #475569; padding: 10px; border-radius: 6px; color: #94a3b8; text-align: center; min-height: 40px; }
+        .dnd-target.filled { background: #0f172a; color: #00d2ff; border-style: solid; }
+
+        @media (max-width: 1600px) { .illustration-container { display: none; } }
+        @media (max-width: 992px) { .layout-container { flex-direction: column; } .sidebar { width: 100%; position: static; } .main-content { padding: 30px; } }
+
+    
+        /* Dark UI for Practice (matching Python coding-practice) */
+        .practice-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            border: none;
+        }
+        .practice-badge {
+            display: none;
+        }
+        .practice-card h3 { 
+            margin-top: 0; color: #38bdf8; font-size: 22px; font-weight: 700; border: none; padding-bottom: 0; margin-bottom: 20px; font-family: 'Outfit', sans-serif;
+        }
+        .practice-card p { color: #e2e8f0; font-size: 16px; margin-bottom: 20px; }
+        .practice-card strong { color: #f8fafc; font-weight: 800; }
+        
+        .mcq-option {
+            background: #0f172a; border: 1px solid #334155;
+            padding: 15px 20px; border-radius: 8px; margin-bottom: 10px;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 15px;
+            color: #e2e8f0;
+        }
+        .mcq-option:hover { background: #1e293b; border-color: #38bdf8; }
+        .mcq-option.selected { border-width: 2px; border-color: #38bdf8; }
+        .mcq-option.correct { border-color: #10b981; background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .mcq-option.wrong { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .mcq-prefix { font-weight: 800; color: #38bdf8; }
+
+        .tf-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #334155; }
+        .tf-statement { color: #e2e8f0; font-size: 15px; }
+        .tf-btn { padding: 6px 15px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; }
+        .tf-btn.selected { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+        .tf-btn.correct { background: #10b981 !important; border-color: #10b981 !important; color: white !important; }
+        .tf-btn.wrong { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
+
+        .practice-dark-btn {
+            background: #38bdf8; color: #0f172a; border: none;
+            padding: 12px 25px; border-radius: 8px; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s; margin-top: 20px;
+            margin-right: 10px; font-family: 'Outfit', sans-serif;
+        }
+        .practice-reset-btn {
+            background: #334155; color: #f8fafc; border: none;
+            padding: 12px 25px; border-radius: 8px; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s; margin-top: 20px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .practice-dark-btn:hover, .practice-reset-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .practice-reset-btn:hover { background: #475569; }
+
+        .feedback-dark { margin-top: 15px; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; display: none; }
+        .feedback-dark.correct { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; display: block; }
+        .feedback-dark.wrong { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; display: block; }
+
+        .dd-container select { 
+            padding: 10px 15px; border-radius: 8px; background: #0f172a; 
+            color: #f8fafc; border: 1px solid #334155; font-weight: 600;
+            width: 220px; outline: none; transition: border-color 0.2s;
+        }
+        .dd-container select:focus { border-color: #38bdf8; }
+        
+        .mcq-option strong { margin-right: 10px; color: #f8fafc; }
+        .dd-container select option { background: #0f172a; color: #f8fafc; }
+
+        /* Raw Data Table Styling */
+        .raw-data-table { width: 100%; border-collapse: collapse; margin: 25px 0; font-size: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .raw-data-table th { background: #f8fafc; color: #1e3a5f; padding: 12px 15px; text-align: left; border-bottom: 2px solid #e2e8f0; text-transform: uppercase; font-size: 12px; letter-spacing: 0.5px; }
+        .raw-data-table td { padding: 10px 15px; border-bottom: 1px solid #f1f5f9; color: #475569; }
+        .error-cell { background: #fef2f2; color: #dc2626; font-weight: 600; border: 1px solid #fecaca !important; }
+        .duplicate-row { background: #f8fafc; color: #94a3b8; font-style: italic; }
+        .missing-cell { color: #94a3b8; font-family: monospace; }
+        .cleaned-cell { background: #f0fdf4; color: #166534; font-weight: 600; }
+
+</style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="data_index.html"><img src="Kvj logo.jpeg" alt="Logo" class="kvj-logo-img"></a>
+        <a href="data_roadmap.html" class="logout-btn">EXIT</a>
+    </nav>
+    <header class="header-banner">
+        <h1>MODULE 2: DATA LIFECYCLE</h1>
+    </header>
+
+    <div class="illustration-container">
+        <div class="illustration-card" style="animation-delay: 0s;">
+            <img src="https://img.icons8.com/color/100/microsoft-excel-2019.svg" alt="Excel">
+            <span>Data Analysis</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 2s;">
+            <img src="https://img.icons8.com/isometric/100/line-chart.png" alt="Chart">
+            <span>Insights</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 4s;">
+            <img src="https://img.icons8.com/isometric/100/database.png" alt="DB">
+            <span>Management</span>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        <aside class="sidebar">
+            <h3>Module Path</h3>
+            <a href="Data-Module-1.html">01 Data Basics</a>
+            <a href="Data-Module-2.html" class="active">02 Data Lifecycle</a>
+            <a href="Data-Module-3.html">03 Data Analysis</a>
+            <a href="Data-Module-4.html">04 Data Visualization</a>
+            <a href="Data-Module-5.html">05 Responsible Analytics</a>
+            
+            <h3 style="margin-top:35px;">Navigation</h3>
+            <a href="data_roadmap.html" style="background: #f8fafc;">&larr; Return to Roadmap</a>
+        </aside>
+
+        <main class="main-content">
+            <!-- 1. Data Manipulation -->
+            <div class="section-header">
+                <h2>1. Data Manipulation</h2>
+            </div>
+            <h3>Concept</h3>
+            <p><strong>Data manipulation</strong> refers to the process of modifying, organizing, and preparing data so it can be analyzed effectively. It is an essential step before performing data analysis because raw data often contains:
+            <ul class="content-list">
+                <li>missing values</li>
+                <li>duplicate records</li>
+                <li>inconsistent formats</li>
+                <li>errors</li>
+            </ul>
+            Data manipulation ensures the dataset becomes accurate, consistent, and usable.</p>
+            
+            <div class="interaction-box">
+                <strong>Example of Raw Data (With Errors):</strong>
+                <table class="raw-data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>City</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>101</td>
+                            <td>Arjun</td>
+                            <td>28</td>
+                            <td>Kochi</td>
+                            <td>Active</td>
+                        </tr>
+                        <tr class="duplicate-row">
+                            <td>101</td>
+                            <td>Arjun</td>
+                            <td>28</td>
+                            <td>Kochi</td>
+                            <td>Active (Duplicate)</td>
+                        </tr>
+                        <tr>
+                            <td>102</td>
+                            <td>Sarah</td>
+                            <td class="error-cell">NULL</td>
+                            <td>Dubai</td>
+                            <td>Inactive</td>
+                        </tr>
+                        <tr>
+                            <td>103</td>
+                            <td>John</td>
+                            <td>35</td>
+                            <td class="error-cell">new york</td>
+                            <td>Active</td>
+                        </tr>
+                        <tr>
+                            <td>104</td>
+                            <td class="error-cell">M@ike</td>
+                            <td>twenty</td>
+                            <td>London</td>
+                            <td>Pending</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size: 14px; color: var(--text-muted);"><strong>Notice:</strong> 101 is a <strong>duplicate</strong>, Sarah has a <strong>missing value</strong>, "new york" is <strong>inconsistently formatted</strong>, and Mike has <strong>special character errors</strong>.</p>
+            </div>
+
+            <div class="practice-card">
+                <h3>Practice: Data Manipulation</h3>
+                <p><strong>Challenge:</strong> Which of the following best describes data manipulation?</p>
+                <div id="mcq-m2-1">
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-1')"><span class="mcq-prefix">A.</span> Collecting data from sensors</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-1')"><span class="mcq-prefix">B.</span> Preparing and modifying data for analysis</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-1')"><span class="mcq-prefix">C.</span> Visualizing data with charts</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-1')"><span class="mcq-prefix">D.</span> Making business decisions</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m2-1', 'B', 'Correct! Manipulation prepares the data for analysis.')">Check Answer</button>
+                
+                <div style="margin-top: 30px;">
+                    <p><strong>True/False Challenge:</strong></p>
+                    <div class="tf-row" id="tf-row-m2-1-1">
+                        <span class="tf-statement">1. Data manipulation improves data quality.</span>
+                        <div>
+                            <button class="tf-btn" onclick="selectTF('m2-1-1', true)">True</button>
+                            <button class="tf-btn" onclick="selectTF('m2-1-1', false)">False</button>
+                        </div>
+                    </div>
+                    <div class="tf-row" id="tf-row-m2-1-2">
+                        <span class="tf-statement">2. Raw data is always ready for analysis without modification.</span>
+                        <div>
+                            <button class="tf-btn" onclick="selectTF('m2-1-2', true)">True</button>
+                            <button class="tf-btn" onclick="selectTF('m2-1-2', false)">False</button>
+                        </div>
+                    </div>
+                    <button class="practice-dark-btn" onclick="checkTF(['m2-1-1', 'm2-1-2'], [true, false], 'feedback-tf-m2-1')">Check Answers</button>
+                    <div class="feedback-dark" id="feedback-tf-m2-1"></div>
+                </div>
+            </div>
+
+            <!-- 2. ETL Process -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>2. ETL Process</h2>
+            </div>
+            <p><strong>ETL</strong> stands for <strong>Extract, Transform, and Load</strong>. It is a common process used to move and prepare data for analysis.</p>
+            
+            <ul class="content-list">
+                <li><strong>2.1 Extract:</strong> Data is collected from various sources (databases, files, websites) and stored in a staging area.</li>
+                <li><strong>2.2 Transform:</strong> Data is cleaned and converted (removing duplicates, correcting errors, converting formats).</li>
+                <li><strong>2.3 Load:</strong> Cleaned data is stored in a target system like a data warehouse or database.</li>
+            </ul>
+
+            <div class="interaction-box">
+                <strong>Insight:</strong>
+                <p>ETL ensures that data from different sources becomes consistent and ready for analysis.</p>
+            </div>
+
+            <div class="practice-card">
+                <h3>Practice: ETL Process</h3>
+                <div id="mcq-m2-2">
+                    <p><strong>Challenge:</strong> What does ETL stand for?</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-2')"><span class="mcq-prefix">A.</span> Extract, Transfer, Load</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-2')"><span class="mcq-prefix">B.</span> Extract, Transform, Load</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-2')"><span class="mcq-prefix">C.</span> Enter, Transform, Link</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-2')"><span class="mcq-prefix">D.</span> Export, Transfer, Link</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m2-2', 'B', 'Correct! Extract, Transform, and Load.')">Check Answer</button>
+
+                <div style="margin-top: 30px;">
+                    <p><strong>Matching Challenge:</strong> Match the step with its description.</p>
+                    <div id="dd-etl">
+                        <div class="tf-row">
+                            <span class="tf-statement">Extract</span>
+                            <div class="dd-container">
+                                <select id="dd-etl-1">
+                                    <option value="">Select...</option>
+                                    <option value="A">Clean and process data</option>
+                                    <option value="B">Collect data from sources</option>
+                                    <option value="C">Store data into database</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="tf-row">
+                            <span class="tf-statement">Transform</span>
+                            <div class="dd-container">
+                                <select id="dd-etl-2">
+                                    <option value="">Select...</option>
+                                    <option value="A">Clean and process data</option>
+                                    <option value="B">Collect data from sources</option>
+                                    <option value="C">Store data into database</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="tf-row">
+                            <span class="tf-statement">Load</span>
+                            <div class="dd-container">
+                                <select id="dd-etl-3">
+                                    <option value="">Select...</option>
+                                    <option value="A">Clean and process data</option>
+                                    <option value="B">Collect data from sources</option>
+                                    <option value="C">Store data into database</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button class="practice-dark-btn" onclick="checkDD(['dd-etl-1', 'dd-etl-2', 'dd-etl-3'], ['B', 'A', 'C'], 'feedback-dd-etl')">Check Matching</button>
+                        <div class="feedback-dark" id="feedback-dd-etl"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2.4 Scenario Question -->
+            <div class="interaction-box">
+                <strong>Scenario Question:</strong>
+                <p>A company collects sales data from an online store, physical store, and mobile app. Which ETL stage combines and cleans this data?</p>
+                <p><em>Answer: The <strong>Transform</strong> stage handles combining and cleaning data from multiple sources.</em></p>
+            </div>
+
+            <!-- 3. Common Data File Formats -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>3. Common Data File Formats</h2>
+            </div>
+            <p>Data is often stored and transferred using common file formats:</p>
+            <ul class="content-list">
+                <li><strong>CSV (Comma Separated Values):</strong> Data separated by commas, used for spreadsheets.</li>
+                <li><strong>XML (Extensible Markup Language):</strong> Uses tags to describe data structure.</li>
+                <li><strong>JSON (JavaScript Object Notation):</strong> Stores data in key-value pairs.</li>
+            </ul>
+
+            <div class="interaction-box">
+                <strong>Format Examples:</strong>
+                <pre><code>// CSV
+Name,Age,City
+Arjun,28,Kochi
+
+// XML
+&lt;name&gt;Arjun&lt;/name&gt;
+
+// JSON
+{ "name": "Arjun", "age": 28 }</code></pre>
+            </div>
+
+            <div class="practice-card">
+                <h3>Practice: File Formats</h3>
+                <div id="mcq-m2-3">
+                    <p><strong>Challenge:</strong> Which file format stores data separated by commas?</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-3')"><span class="mcq-prefix">A.</span> XML</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-3')"><span class="mcq-prefix">B.</span> CSV</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-3')"><span class="mcq-prefix">C.</span> JSON</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-3')"><span class="mcq-prefix">D.</span> SQL</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m2-3', 'B', 'Correct! CSV stands for Comma Separated Values.')">Check Answer</button>
+
+                <div style="margin-top: 30px;">
+                    <p><strong>True/False Challenge:</strong></p>
+                    <div class="tf-row" id="tf-row-m2-2-1">
+                        <span class="tf-statement">1. JSON stores data using key-value pairs.</span>
+                        <div>
+                            <button class="tf-btn" onclick="selectTF('m2-2-1', true)">True</button>
+                            <button class="tf-btn" onclick="selectTF('m2-2-1', false)">False</button>
+                        </div>
+                    </div>
+                    <div class="tf-row" id="tf-row-m2-2-2">
+                        <span class="tf-statement">2. CSV files are commonly used for spreadsheet data.</span>
+                        <div>
+                            <button class="tf-btn" onclick="selectTF('m2-2-2', true)">True</button>
+                            <button class="tf-btn" onclick="selectTF('m2-2-2', false)">False</button>
+                        </div>
+                    </div>
+                    <button class="practice-dark-btn" onclick="checkTF(['m2-2-1', 'm2-2-2'], [true, true], 'feedback-tf-m2-2')">Check Answers</button>
+                    <div class="feedback-dark" id="feedback-tf-m2-2"></div>
+                </div>
+            </div>
+
+            <!-- 4. Data Cleaning -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>4. Data Cleaning</h2>
+            </div>
+            <p><strong>Data cleaning</strong> is the process of identifying and correcting errors or inconsistencies to ensure data is <strong>accurate, complete, and consistent</strong>.</p>
+            
+            <div class="interaction-box">
+                <strong>Before vs. After Cleaning:</strong>
+                <table class="raw-data-table">
+                    <thead>
+                        <tr>
+                            <th>Issue Type</th>
+                            <th>Raw Data (Dirty)</th>
+                            <th>Cleaned Data (Result)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Duplicate</td>
+                            <td>ID: 101, Name: Arjun (Duplicate)</td>
+                            <td class="cleaned-cell">ID: 101, Name: Arjun (Unique)</td>
+                        </tr>
+                        <tr>
+                            <td>Missing</td>
+                            <td>Age: <span class="error-cell">NULL</span></td>
+                            <td class="cleaned-cell">Age: 28 (Mean)</td>
+                        </tr>
+                        <tr>
+                            <td>Formatting</td>
+                            <td>City: <span class="error-cell">new york</span></td>
+                            <td class="cleaned-cell">City: New York</td>
+                        </tr>
+                        <tr>
+                            <td>Special Chars</td>
+                            <td>Name: <span class="error-cell">M@ike</span></td>
+                            <td class="cleaned-cell">Name: Mike</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size: 14px; color: var(--text-muted);">Cleaning transforms uncleaned, raw datasets into reliable information for analysis.</p>
+            </div>
+
+            <p><strong>4.1 Handling Missing Values:</strong> Occur when data is not recorded (e.g., NULL). Can be handled by replacing with mean/median or removing rows.</p>
+            
+            <div class="practice-card">
+                <h3>Practice: Cleaning Basics</h3>
+                <div id="mcq-m2-4">
+                    <p><strong>Challenge:</strong> Missing values in a dataset are often called:</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-4')"><span class="mcq-prefix">A.</span> duplicates</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-4')"><span class="mcq-prefix">B.</span> null values</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-4')"><span class="mcq-prefix">C.</span> indexes</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-4')"><span class="mcq-prefix">D.</span> metadata</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m2-4', 'B', 'Correct! Missing data is represented as NULL in databases.')">Check Answer</button>
+            </div>
+
+            <p><strong>4.2 Removing Special Characters:</strong> Characters like @, #, $ can cause processing errors. They must be removed or encoded.</p>
+            <div class="practice-card">
+                <p><strong>True/False:</strong> Special characters can cause problems during data processing.</p>
+                <div class="tf-row" id="tf-row-m2-3-1">
+                    <span class="tf-statement">Special characters interfere with analysis logic.</span>
+                    <div>
+                        <button class="tf-btn" onclick="selectTF('m2-3-1', true)">True</button>
+                        <button class="tf-btn" onclick="selectTF('m2-3-1', false)">False</button>
+                    </div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkTF(['m2-3-1'], [true], 'feedback-tf-m2-3')">Check Answer</button>
+                <div class="feedback-dark" id="feedback-tf-m2-3"></div>
+            </div>
+
+            <p><strong>4.3 Trimming Spaces:</strong> Extra spaces before or after text (e.g., "  fruits  ") should be removed to ensure formatting consistency.</p>
+            <div class="practice-card">
+                <div id="mcq-m2-5">
+                    <p><strong>Challenge:</strong> Why is trimming spaces important?</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-5')"><span class="mcq-prefix">A.</span> Improves formatting consistency</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-5')"><span class="mcq-prefix">B.</span> Reduces file size</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-5')"><span class="mcq-prefix">C.</span> Deletes rows</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-5')"><span class="mcq-prefix">D.</span> Creates charts</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m2-5', 'A', 'Correct! Leading/trailing spaces can break lookups and matches.')">Check Answer</button>
+            </div>
+
+            <p><strong>4.4 Removing Duplicates:</strong> Duplicate records (e.g., same ID and Name appearing twice) must be removed to avoid incorrect counts and statistics.</p>
+            <div class="practice-card">
+                <div id="mcq-m2-6">
+                    <p><strong>Challenge:</strong> Duplicate records should be:</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-6')"><span class="mcq-prefix">A.</span> Ignored</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-6')"><span class="mcq-prefix">B.</span> Removed</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-6')"><span class="mcq-prefix">C.</span> Multiplied</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-6')"><span class="mcq-prefix">D.</span> Added</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m2-6', 'B', 'Correct! Removing duplicates ensures data accuracy.')">Check Answer</button>
+            </div>
+
+            <!-- 5. Organizing Data -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>5. Organizing Data</h2>
+            </div>
+            <p>Methods to make data easier to analyze include:</p>
+            <ul class="content-list">
+                <li><strong>5.1 Sorting:</strong> Arranges data in ascending or descending order (e.g., sorting by salary).</li>
+                <li><strong>5.2 Filtering:</strong> Selects records based on conditions (e.g., salary > 50,000).</li>
+                <li><strong>5.3 Transposing:</strong> Changes rows into columns or vice versa.</li>
+            </ul>
+
+            <div class="practice-card">
+                <h3>Practice: Organizing Data</h3>
+                <div id="mcq-m2-7">
+                    <p><strong>Challenge:</strong> Sorting data helps to:</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-7')"><span class="mcq-prefix">A.</span> Delete records</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-7')"><span class="mcq-prefix">B.</span> Arrange data logically</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-7')"><span class="mcq-prefix">C.</span> Create duplicates</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-7')"><span class="mcq-prefix">D.</span> Remove columns</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m2-7', 'B', 'Correct! Sorting arranges data for better visibility.')">Check Answer</button>
+
+                <div style="margin-top: 30px;">
+                    <p><strong>Selection:</strong> Filtering hides records that do not meet the condition.</p>
+                    <div class="tf-row" id="tf-row-m2-4-1">
+                        <span class="tf-statement">Filtering removes data permanently.</span>
+                        <div>
+                            <button class="tf-btn" onclick="selectTF('m2-4-1', true)">True</button>
+                            <button class="tf-btn" onclick="selectTF('m2-4-1', false)">False</button>
+                        </div>
+                    </div>
+                    <button class="practice-dark-btn" onclick="checkTF(['m2-4-1'], [false], 'feedback-tf-m2-4')">Check Answer</button>
+                    <div class="feedback-dark" id="feedback-tf-m2-4"></div>
+                </div>
+            </div>
+
+            <!-- 6. Aggregating Data -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>6. Aggregating Data</h2>
+            </div>
+            <p>Aggregation combines multiple values to produce summary results. Key operations:</p>
+            <ul class="content-list">
+                <li><strong>6.1 Sum:</strong> Calculates the total value (e.g., total sales per region).</li>
+                <li><strong>6.2 Count:</strong> Counts the number of records (e.g., number of employees per department).</li>
+                <li><strong>6.3 Average:</strong> Calculates the mean value (e.g., average salary per department).</li>
+            </ul>
+
+            <div class="practice-card">
+                <h3>Practice: Aggregation</h3>
+                <p><strong>Matching Challenge:</strong> Match the metric with its description.</p>
+                <div id="dd-metrics">
+                    <div class="tf-row">
+                        <span class="tf-statement">Sum</span>
+                        <div class="dd-container">
+                            <select id="dd-metrics-1">
+                                <option value="">Select...</option>
+                                <option value="A">Number of records</option>
+                                <option value="B">Total value</option>
+                                <option value="C">Mean value</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tf-row">
+                        <span class="tf-statement">Count</span>
+                        <div class="dd-container">
+                            <select id="dd-metrics-2">
+                                <option value="">Select...</option>
+                                <option value="A">Number of records</option>
+                                <option value="B">Total value</option>
+                                <option value="C">Mean value</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="tf-row">
+                        <span class="tf-statement">Average</span>
+                        <div class="dd-container">
+                            <select id="dd-metrics-3">
+                                <option value="">Select...</option>
+                                <option value="A">Number of records</option>
+                                <option value="B">Total value</option>
+                                <option value="C">Mean value</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="practice-dark-btn" onclick="checkDD(['dd-metrics-1', 'dd-metrics-2', 'dd-metrics-3'], ['B', 'A', 'C'], 'feedback-dd-metrics')">Check Matching</button>
+                    <div class="feedback-dark" id="feedback-dd-metrics"></div>
+                </div>
+
+                <div id="mcq-m2-9" style="margin-top: 30px;">
+                    <p><strong>Challenge:</strong> Aggregation is mainly used to:</p>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-9')"><span class="mcq-prefix">A.</span> visualize data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-9')"><span class="mcq-prefix">B.</span> summarize data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-9')"><span class="mcq-prefix">C.</span> collect data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m2-9')"><span class="mcq-prefix">D.</span> delete data</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m2-9', 'B', 'Correct! Aggregation provides summary insights.')">Check Answer</button>
+            </div>
+
+            <div class="quiz-cta">
+                <h3>Ready for the Module 2 Assessment?</h3>
+                <p>Test your knowledge of data manipulation, cleaning, and aggregation techniques.</p>
+                <a href="module_quiz.html?mod=data2" class="btn-start-quiz">Start Final Assessment</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let selections = {};
+
+        function triggerConfetti() {
+            if (typeof confetti !== 'undefined') {
+                confetti({ 
+                    particleCount: 150, 
+                    spread: 70, 
+                    origin: { y: 0.6 }, 
+                    colors: ['#1e3a5f', '#38bdf8', '#ffffff'] 
+                });
+            }
+        }
+
+        function selectMCQ(el, qid) {
+            const parent = document.getElementById(qid);
+            if (!parent) return;
+            parent.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('selected', 'correct', 'wrong'));
+            el.classList.add('selected');
+            selections[qid] = el.innerText[0];
+        }
+
+        function checkMCQ(qid, correct, msg) {
+            const parent = document.getElementById(qid);
+            const feedback = parent.parentElement.querySelector('.feedback-dark') || document.getElementById('feedback-' + qid);
+            if (!parent) return;
+            const sel = parent.querySelector('.selected');
+            
+            let targetFeedback = feedback;
+            if(!targetFeedback) {
+                targetFeedback = document.createElement('div');
+                targetFeedback.className = 'feedback-dark';
+                parent.parentElement.appendChild(targetFeedback);
+            }
+
+            if (!sel) return;
+
+            if (selections[qid] === correct) {
+                sel.classList.add('correct');
+                targetFeedback.innerHTML = msg;
+                targetFeedback.className = 'feedback-dark correct';
+                triggerConfetti();
+            } else {
+                sel.classList.add('wrong');
+                targetFeedback.innerText = 'Try again!';
+                targetFeedback.className = 'feedback-dark wrong';
+            }
+        }
+
+        function selectTF(qid, val) {
+            const row = document.getElementById('tf-row-' + qid);
+            if (!row) return;
+            row.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('selected'));
+            const btn = row.querySelectorAll('.tf-btn')[val ? 0 : 1];
+            btn.classList.add('selected');
+            selections[qid] = val;
+        }
+
+        function checkTF(qids, corrects, feedbackId) {
+            const feedback = document.getElementById(feedbackId);
+            let allCorrect = true;
+            qids.forEach((qid, i) => {
+                const row = document.getElementById('tf-row-' + qid);
+                const btns = row.querySelectorAll('.tf-btn');
+                btns.forEach(b => b.classList.remove('correct', 'wrong'));
+                
+                if (selections[qid] === corrects[i]) {
+                    btns[selections[qid] ? 0 : 1].classList.add('correct');
+                } else {
+                    btns[selections[qid] ? 0 : 1].classList.add('wrong');
+                    allCorrect = false;
+                }
+            });
+
+            if (allCorrect) {
+                feedback.innerHTML = "Perfect! You've mastered these concepts.";
+                feedback.className = 'feedback-dark correct';
+                triggerConfetti();
+            } else {
+                feedback.innerText = "Some answers are incorrect. Review the statements and try again.";
+                feedback.className = 'feedback-dark wrong';
+            }
+        }
+
+        function checkDD(ids, corrects, feedbackId) {
+            const feedback = document.getElementById(feedbackId);
+            let allCorrect = true;
+            ids.forEach((id, i) => {
+                const el = document.getElementById(id);
+                if (el.value === corrects[i]) {
+                    el.style.borderColor = "#10b981";
+                } else {
+                    el.style.borderColor = "#ef4444";
+                    allCorrect = false;
+                }
+            });
+
+            if (allCorrect) {
+                feedback.innerHTML = "All matches are correct!";
+                feedback.className = 'feedback-dark correct';
+                triggerConfetti();
+            } else {
+                feedback.innerText = "Some items are incorrectly matched.";
+                feedback.className = 'feedback-dark wrong';
+            }
+        }
+
+        function resetPractice(type, id, feedbackId) {
+            const feedback = document.getElementById(feedbackId);
+            if (feedback) {
+                feedback.style.display = 'none';
+                feedback.classList.remove('correct', 'wrong');
+            }
+        }
+    </script>
+    </div>
+
+</body>
+</html>

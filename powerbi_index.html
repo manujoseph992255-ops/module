@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KVJ Advanced Power BI Certification - KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .typing-container {
+            display: inline-block;
+            min-height: 2.2em;
+            position: relative;
+        }
+        .blinking-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: var(--blue-dark);
+            margin-left: 2px;
+            animation: blink-caret 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+        @keyframes blink-caret {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        /* Dashboard Animation Specifics */
+        .bar-fill {
+            height: 0;
+            transition: height 1s ease-out;
+        }
+        .mockup-active .bar-fill {
+            height: var(--final-height);
+        }
+        .pie-slice {
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .mockup-active .pie-slice {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="landing-body">
+    <!-- Navbar -->
+    <nav class="kvj-navbar">
+        <div class="kvj-container nav-wrapper">
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="index.html" class="nav-back">
+                    Back
+                </a>
+                <a href="index.html" class="kvj-logo">
+                    <div class="logo-box">
+                        <img src="Kvj logo.jpeg" alt="KVJ" style="max-height: 45px; width: auto;">
+                    </div>
+                </a>
+            </div>
+            <div class="nav-links-right">
+                <a href="#" class="kvj-btn kvj-btn-primary">Coming Soon</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="kvj-hero">
+        <div class="kvj-container hero-grid">
+            
+            <!-- Left Content -->
+            <div class="hero-left fade-in-up" style="animation-delay: 0.1s;">
+                <h1 class="hero-title typing-container">
+                    <span id="typewriter"></span><span class="blinking-cursor"></span>
+                </h1>
+                
+                <h2 class="hero-subtitle">
+                    KVJ Advanced Power BI Certification
+                </h2>
+                
+                <p class="hero-desc">
+                    Visualize insights and master business intelligence. Build dynamic dashboards and reports. Transform raw data into strategic decisions with KVJ.
+                </p>
+                
+                <div class="hero-action">
+                </div>
+            </div>
+            
+            <!-- Right Content - Power BI Dashboard Graphic -->
+            <div class="hero-right fade-in-up" style="animation-delay: 0.3s;">
+                <div class="dashboard-mockup" id="dashboard">
+                    <div class="window-controls">
+                        <div class="dot dot-r"></div>
+                        <div class="dot dot-y"></div>
+                        <div class="dot dot-g"></div>
+                        <div class="fy-text">Executive_Sales_Overview.pbix</div>
+                    </div>
+                    <div class="dash-content">
+                        <!-- KPI Row -->
+                        <div class="kpi-row">
+                            <div class="kpi-card bg-blue">
+                                <div class="kpi-title">Total Revenue</div>
+                                <div class="kpi-value">$2.4M</div>
+                                <div class="kpi-trend">↑ 14.2%</div>
+                            </div>
+                            <div class="kpi-card bg-green">
+                                <div class="kpi-title">Active Users</div>
+                                <div class="kpi-value">12.8K</div>
+                                <div class="kpi-trend">↑ 5.7%</div>
+                            </div>
+                            <div class="kpi-card bg-purple">
+                                <div class="kpi-title">Conversion</div>
+                                <div class="kpi-value">3.2%</div>
+                                <div class="kpi-trend">↑ 1.2%</div>
+                            </div>
+                            <div class="kpi-card bg-sky">
+                                <div class="kpi-title">Avg Order</div>
+                                <div class="kpi-value">$184</div>
+                                <div class="kpi-trend">↓ 0.4%</div>
+                            </div>
+                        </div>
+
+                        <!-- Charts Row -->
+                        <div class="charts-row">
+                            <div class="chart-box">
+                                <div class="kpi-title" style="margin-bottom: 20px;">Revenue by Region</div>
+                                <div class="bars">
+                                    <div class="bar" style="height: 80%; background: #4285F4;"><div class="label">North</div></div>
+                                    <div class="bar" style="height: 60%; background: #34A853;"><div class="label">South</div></div>
+                                    <div class="bar" style="height: 90%; background: #FBBC05;"><div class="label">East</div></div>
+                                    <div class="bar" style="height: 45%; background: #EA4335;"><div class="label">West</div></div>
+                                </div>
+                            </div>
+                            <div class="chart-box flex-center" style="flex-direction: column;">
+                                <div class="kpi-title" style="margin-bottom: 10px;">Market Share</div>
+                                <div class="css-pie pie-slice"></div>
+                                <div class="pie-legend">
+                                    <span><span class="ldot" style="background: #2563eb;"></span> Web</span>
+                                    <span><span class="ldot" style="background: #10b981;"></span> App</span>
+                                    <span><span class="ldot" style="background: #8b5cf6;"></span> Other</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    <script>
+        // Typing Effect logic
+        const line1 = "Transform Data Into ";
+        const line2 = "Powerful Business<br>";
+        const line3 = "Insights";
+        const typewriterEl = document.getElementById('typewriter');
+        let typeIndex = 0;
+        const blueStyle = "<span class='text-blue'>";
+        const tealStyle = "<span class='text-teal'>";
+        const closeSpan = "</span>";
+        let fullHTML = "";
+
+        function typeWriter() {
+            if (typeIndex < line1.length) {
+                fullHTML = blueStyle + line1.substring(0, typeIndex + 1) + closeSpan;
+                typewriterEl.innerHTML = fullHTML;
+                typeIndex++;
+                setTimeout(typeWriter, 40);
+            } 
+            else if (typeIndex < line1.length + line2.length) {
+                let idx2 = typeIndex - line1.length;
+                fullHTML = blueStyle + line1 + closeSpan + tealStyle + line2.substring(0, idx2 + 1) + closeSpan;
+                typewriterEl.innerHTML = fullHTML;
+                typeIndex++;
+                setTimeout(typeWriter, 40);
+            }
+            else if (typeIndex < line1.length + line2.length + line3.length) {
+                let idx3 = typeIndex - line1.length - line2.length;
+                fullHTML = blueStyle + line1 + closeSpan + tealStyle + line2 + closeSpan + blueStyle + line3.substring(0, idx3 + 1) + closeSpan;
+                typewriterEl.innerHTML = fullHTML;
+                typeIndex++;
+                setTimeout(typeWriter, 40);
+            } else {
+                // Activate dashboard animation after typing
+                document.getElementById('dashboard').classList.add('mockup-active');
+            }
+        }
+        
+        setTimeout(typeWriter, 500);
+    </script>
+    </div>
+</body>
+</html>

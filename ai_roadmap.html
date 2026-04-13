@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Learning Roadmap | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue-dark: #0f172a;
+            --blue-primary: #3b82f6;
+            --teal-main: #10b981;
+            --bg-light: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .kvj-logo-img {
+            max-height: 40px;
+            width: auto;
+        }
+        .nav-logout {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--blue-primary);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .nav-logout:hover {
+            text-decoration: underline;
+        }
+        .nav-back {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: white !important;
+            background-color: #193855;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            padding: 12px 28px;
+            border-radius: 30px;
+            box-shadow: 0 10px 20px rgba(25, 56, 85, 0.3);
+        }
+
+        .nav-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(25, 56, 85, 0.4);
+            background-color: #11283f;
+        }
+
+        .top-info {
+            background: #ffffff;
+            padding: 10px 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        /* Header Banner */
+        .header-banner {
+            background-color: var(--blue-dark);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-banner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .header-banner h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header-banner p {
+            font-size: 1.25rem;
+            font-weight: 400;
+            opacity: 0.95;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Roadmap Section */
+        .roadmap-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .roadmap-title {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--blue-dark);
+            margin-bottom: 50px;
+            letter-spacing: -1px;
+        }
+
+        /* Grid Layout */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .module-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+            border-left: 6px solid var(--blue-primary);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+
+        .module-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--blue-dark);
+            margin-bottom: 15px;
+        }
+
+        .module-card p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .card-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-roadmap {
+            flex: 1;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+
+        .btn-study {
+            color: var(--blue-primary);
+            background: transparent;
+        }
+
+        .btn-study:hover {
+            background: rgba(59, 130, 246, 0.05);
+            border-color: var(--blue-primary);
+        }
+
+        .btn-quiz {
+            color: var(--teal-main);
+            background: transparent;
+            border-color: #d1fae5;
+        }
+
+        .btn-quiz:hover {
+            background: #f0fdf4;
+            border-color: var(--teal-main);
+        }
+
+        /* Mock Test Highlight Color */
+        .mock-active {
+            border-left-color: var(--teal-main);
+        }
+
+        @media (max-width: 992px) {
+            .modules-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 600px) {
+            .modules-grid { grid-template-columns: 1fr; }
+            .header-banner h1 { font-size: 2.2rem; }
+        }
+    </style>
+    <script>
+        function logout() {
+            sessionStorage.clear();
+            localStorage.removeItem('strategist_user');
+            localStorage.removeItem('strategist_phone');
+            localStorage.removeItem('gmail');
+            localStorage.removeItem('class_code');
+            window.location.href = 'login.html';
+        }
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <div style="display: flex; align-items: center; gap: 1.5rem;">
+            <a href="ai_index.html" class="nav-back">
+                Back
+            </a>
+            <a href="ai_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        </div>
+        <a onclick="logout()" class="nav-logout">Log Out</a>
+    </nav>
+    <div class="top-info">KVJ Advanced AI Certification | Strategic Intelligence | Next-Gen Curriculum</div>
+
+    <header class="header-banner">
+        <h1>AI CERTIFICATION</h1>
+        <p>Architecting the Future with Intelligent Systems</p>
+    </header>
+
+    <main class="roadmap-container">
+        <h2 class="roadmap-title">AI Learning Path</h2>
+
+        <div class="modules-grid">
+            <!-- Module 1 -->
+            <div class="module-card">
+                <h3>Module 1: AI Foundations</h3>
+                <p>Understanding the basics, features, applications, and goals of Artificial Intelligence.</p>
+                <div class="card-buttons">
+                    <a href="AI-Module-1.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="#" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="module-card">
+                <h3>Module 2: Problem & ML</h3>
+                <p>Defining AI problems and classifying them into Supervised, Unsupervised, and Generative AI.</p>
+                <div class="card-buttons">
+                    <a href="AI-Module-2.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="#" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 3 -->
+            <div class="module-card">
+                <h3>Module 3: Ethics & Security</h3>
+                <p>Navigating risks, ethical principles, and safeguarding intelligent systems from threats.</p>
+                <div class="card-buttons">
+                    <a href="AI-Module-3.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="#" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 4 -->
+            <div class="module-card">
+                <h3>Module 4: Data Engineering</h3>
+                <p>Mastering data modalities, quality control, feature engineering, and bias mitigation.</p>
+                <div class="card-buttons">
+                    <a href="AI-Module-4.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="#" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 5 -->
+            <div class="module-card">
+                <h3>Module 5: Deep Learning</h3>
+                <p>Exploring neural architectures, convolutional networks, transformers, and GANs.</p>
+                <div class="card-buttons">
+                    <a href="AI-Module-5.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="#" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 6 -->
+            <div class="module-card">
+                <h3>Module 6: Deployment</h3>
+                <p>Integrating AI solutions, production pipelines, and continuous model monitoring.</p>
+                <div class="card-buttons">
+                    <a href="AI-Module-6.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="#" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Live Project Section -->
+            <div class="module-card" style="border-left-color: #ec4899; grid-column: span 3; background: linear-gradient(to right, #ffffff, #fff1f2);">
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <div>
+                        <h3 style="color: #db2777; margin-bottom: 5px;">Live Project: Intelligence Architect</h3>
+                        <p style="margin-bottom: 0;">Apply your skills to design prompt strategies and analyze complex AI architectures in a professional environment.</p>
+                    </div>
+                    <a href="ai_project.html" class="btn-roadmap" style="max-width: 200px; background: #db2777; color: white; border: none; flex: 0 0 auto; padding: 15px 30px;">Start Project</a>
+                </div>
+            </div>
+
+            <div class="module-card mock-active">
+                <h3>AI Mock Test 1</h3>
+                <p>Comprehensive assessment on Foundations, Data, and Ethical AI principles.</p>
+                <div class="card-buttons">
+                    <a href="#" class="btn-roadmap btn-quiz" style="color: var(--teal-main); border-color: #ccfbf1;">Take Mock</a>
+                </div>
+            </div>
+
+            <div class="module-card mock-active">
+                <h3>AI Mock Test 2</h3>
+                <p>Full-length practice exam simulating the KVJ Advanced AI Certification environment.</p>
+                <div class="card-buttons">
+                    <a href="#" class="btn-roadmap btn-quiz" style="color: var(--teal-main); border-color: #ccfbf1;">Take Mock</a>
+                </div>
+            </div>
+        </div>
+    </main>
+    </div>
+</body>
+</html>

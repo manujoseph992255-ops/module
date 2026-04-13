@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Module 2: Problem & ML | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0f172a;
+            --secondary-blue: #3b82f6;
+            --bg-light: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+            --ai-accent: #10b981;
+            --purple: #8b5cf6;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex; 
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+            padding-top: 70px;
+        }
+
+        /* Top Nav */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0; width: 100%;
+            z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .exit-btn {
+            background: #ef4444;
+            color: white;
+            padding: 8px 18px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 6px;
+            transition: opacity 0.3s;
+            text-transform: uppercase;
+        }
+
+        /* Header Banner */
+        .header-banner { 
+            background: var(--primary-blue); 
+            color: white; 
+            padding: 60px 20px; 
+            text-align: center;
+        }
+
+        .header-banner h1 { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 38px; 
+            font-weight: 900; 
+            text-transform: uppercase;
+        }
+
+        /* Layout Container */
+        .layout-container {
+            max-width: 900px;
+            margin: 40px auto;
+            width: 95%;
+            padding-bottom: 60px;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 300px;
+            background: white;
+            padding: 30px;
+            border: 1px solid var(--border-color);
+            position: sticky;
+            top: 100px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            height: fit-content;
+        }
+
+        .sidebar h3 { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px; 
+            color: var(--secondary-blue); 
+            text-transform: uppercase; 
+            margin-bottom: 20px; 
+            border-bottom: 2px solid var(--bg-light); 
+            padding-bottom: 10px; 
+            font-weight: 800; 
+        }
+
+        .sidebar a { 
+            display: flex; 
+            padding: 12px 15px; 
+            color: var(--text-muted); 
+            text-decoration: none; 
+            font-size: 14px; 
+            font-weight: 500;
+            margin-bottom: 5px;
+            border-radius: 8px;
+        }
+
+        .sidebar a.active { 
+            color: var(--secondary-blue); 
+            font-weight: 700; 
+            background: #eff6ff; 
+            border-left: 4px solid var(--secondary-blue); 
+        }
+
+        /* Main Content */
+        .main-content { 
+            
+            background: #ffffff; 
+            border: 1px solid var(--border-color);
+            padding: 60px;
+            border-radius: 12px;
+        }
+
+        .section-header { margin-bottom: 30px; border-bottom: 3px solid var(--bg-light); padding-bottom: 15px; }
+        .section-header h2 { font-family: 'Montserrat', sans-serif; color: var(--primary-blue); font-size: 28px; font-weight: 800; }
+
+        p { margin-bottom: 25px; color: #334155; font-size: 17px; }
+        ul { margin-bottom: 25px; padding-left: 20px; }
+        li { margin-bottom: 10px; }
+
+        /* AI Workspace */
+        .ai-workspace {
+            background: #0f172a;
+            border-radius: 16px;
+            padding: 40px;
+            margin: 40px 0;
+            color: #f8fafc;
+        }
+
+        .workspace-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+        }
+
+        .workspace-title { color: #38bdf8; font-weight: 800; text-transform: uppercase; }
+
+        .classification-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .class-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .class-card:hover { border-color: var(--secondary-blue); transform: translateY(-5px); }
+        .class-icon { font-size: 40px; margin-bottom: 15px; }
+
+        .btn-interact {
+            background: var(--ai-accent);
+            color: var(--primary-blue);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 13px; border-top: 1px solid var(--border-color); margin-top: 40px; }
+    
+        /* Dark UI for Practice (matching Python coding-practice) */
+        .practice-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            border: none;
+        }
+        .practice-badge {
+            display: none;
+        }
+        .practice-card h3 { 
+            margin-top: 0; color: #38bdf8; font-size: 22px; font-weight: 700; border: none; padding-bottom: 0; margin-bottom: 20px; font-family: 'Outfit', sans-serif;
+        }
+        .practice-card p { color: #e2e8f0; font-size: 16px; margin-bottom: 20px; }
+        .practice-card strong { color: #f8fafc; font-weight: 800; }
+        
+        .mcq-option {
+            background: #0f172a; border: 1px solid #334155;
+            padding: 15px 20px; border-radius: 8px; margin-bottom: 10px;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 15px;
+            color: #e2e8f0;
+        }
+        .mcq-option:hover { background: #1e293b; border-color: #38bdf8; }
+        .mcq-option.selected { border-width: 2px; border-color: #38bdf8; }
+        .mcq-option.correct { border-color: #10b981; background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .mcq-option.wrong { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .mcq-prefix { font-weight: 800; color: #38bdf8; }
+
+        .tf-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #334155; }
+        .tf-statement { color: #e2e8f0; font-size: 15px; }
+        .tf-btn { padding: 6px 15px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; }
+        .tf-btn.selected { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+        .tf-btn.correct { background: #10b981 !important; border-color: #10b981 !important; color: white !important; }
+        .tf-btn.wrong { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
+
+        .practice-dark-btn {
+            background: #38bdf8; color: #0f172a; border: none;
+            padding: 12px 25px; border-radius: 8px; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s; margin-top: 20px;
+            margin-right: 10px; font-family: 'Outfit', sans-serif;
+        }
+        .practice-reset-btn {
+            background: #334155; color: #f8fafc; border: none;
+            padding: 12px 25px; border-radius: 8px; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s; margin-top: 20px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .practice-dark-btn:hover, .practice-reset-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .practice-reset-btn:hover { background: #475569; }
+
+        .feedback-dark { margin-top: 15px; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; display: none; }
+        .feedback-dark.correct { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; display: block; }
+        .feedback-dark.wrong { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; display: block; }
+
+        .dd-container select { 
+            padding: 10px 15px; border-radius: 8px; background: #0f172a; 
+            color: #f8fafc; border: 1px solid #334155; font-weight: 600;
+            width: 220px; outline: none; transition: border-color 0.2s;
+        }
+        .dd-container select:focus { border-color: #38bdf8; }
+        
+        .mcq-option strong { margin-right: 10px; color: #f8fafc; }
+        .dd-container select option { background: #0f172a; color: #f8fafc; }
+
+
+        /* Quiz CTA Styling */
+        .quiz-cta {
+            margin-top: 60px;
+            padding: 40px;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .quiz-cta h3 { color: #ffffff !important; margin-top: 0; font-size: 24px; border: none; padding: 0; }
+        .quiz-cta p { color: #ffffff !important; opacity: 0.95; margin-bottom: 25px; }
+        .btn-start-quiz {
+            display: inline-block;
+            background: #ffffff;
+            color: var(--primary-blue);
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        .btn-start-quiz:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            background: #f8fafc;
+        }
+
+</style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="ai_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" class="kvj-logo-img"></a>
+        <a href="ai_roadmap.html" class="exit-btn">EXIT</a>
+    </nav>
+
+    <header class="header-banner">
+        <h1>MODULE 2: PROBLEM & ML CLASSIFICATION</h1>
+    </header>
+
+    <div class="layout-container">
+        
+
+        <main class="main-content">
+            <div class="section-header">
+                <h2>2.1 Defining AI Problems</h2>
+            </div>
+            
+            <p>Every AI journey begins with a clearly defined problem. Without a goal, a model is just an expensive random number generator.</p>
+
+            <h3>Key Steps in Problem Definition</h3>
+            <ul>
+                <li><strong>Identification:</strong> What is the core business or research challenge?</li>
+                <li><strong>Data Availability:</strong> Do we have the right data to solve it?</li>
+                <li><strong>Success Metrics:</strong> How will we know if the AI is "working"? (Accuracy, Precision, Recall)</li>
+            </ul>
+
+            <div class="ai-workspace">
+                <div class="workspace-header">
+                    <div class="workspace-title">Intelligence Space: ML Classification</div>
+                </div>
+                
+                <div class="classification-grid">
+                    <div class="class-card" id="card-supervised">
+                        <div class="class-icon">🏷️</div>
+                        <h4>Supervised</h4>
+                        <p style="font-size: 12px; color: #94a3b8;">Learning with labels. Teacher-led.</p>
+                    </div>
+                    <div class="class-card" id="card-unsupervised">
+                        <div class="class-icon">🧩</div>
+                        <h4>Unsupervised</h4>
+                        <p style="font-size: 12px; color: #94a3b8;">Finding patterns. Self-discovery.</p>
+                    </div>
+                </div>
+
+                <button class="btn-interact" onclick="toggleML()">Switch Data View</button>
+            </div>
+
+            <div class="section-header">
+                <h2>2.2 Machine Learning Categories</h2>
+            </div>
+
+            <h3>Supervised Learning</h3>
+            <p>The system is trained on a labeled dataset, meaning that it is provided with both the input data and the corresponding correct output.</p>
+            <p><strong>Common Tasks:</strong> Spam detection, property price prediction, image classification.</p>
+
+            <h3>Unsupervised Learning</h3>
+            <p>The system is given unlabeled data and must find patterns or structures on its own.</p>
+            <p><strong>Common Tasks:</strong> Customer segmentation, anomaly detection, topic modeling.</p>
+
+            <h3>Reinforcement Learning</h3>
+            <p>The system learns through trial and error by receiving rewards or penalties based on its actions.</p>
+            <p><strong>Common Tasks:</strong> Game AI, robotics, stock market trading.</p>
+
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2026 KVJ. All Rights Reserved.
+    </footer>
+
+    <script>
+        let mode = 'supervised';
+        function toggleML() {
+            const s = document.getElementById('card-supervised');
+            const u = document.getElementById('card-unsupervised');
+            if(mode === 'supervised') {
+                s.style.opacity = '0.3';
+                u.style.border = '2px solid var(--ai-accent)';
+                u.style.background = 'rgba(16, 185, 129, 0.05)';
+                mode = 'unsupervised';
+            } else {
+                s.style.opacity = '1';
+                u.style.border = '1px solid rgba(255,255,255,0.1)';
+                u.style.background = 'rgba(255,255,255,0.03)';
+                mode = 'supervised';
+            }
+        }
+    </script>
+    </div>
+
+</body>
+</html>

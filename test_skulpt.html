@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+</head>
+<body>
+    <textarea id="code">
+x = int("500")
+print("Type:", type(x))
+    </textarea>
+    <button onclick="runCode()">Run</button>
+    <pre id="output"></pre>
+    <script>
+        function runCode() {
+            var prog = document.getElementById("code").value;
+            var outText = "";
+            document.getElementById("output").innerHTML = "";
+            
+            Sk.configure({
+                output: function(text) { outText += text; },
+                read: function(x) {
+                    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+                        throw "File not found: '" + x + "'";
+                    return Sk.builtinFiles["files"][x];
+                },
+                inputfun: function(prompt) {
+                    return new Promise((resolve) => {
+                        resolve("TestUser"); 
+                    });
+                }
+            });
+
+            var myPromise = Sk.misceval.asyncToPromise(function() {
+                return Sk.importMainWithBody("<stdin>", false, prog, true);
+            });
+
+            myPromise.then(function(mod) {
+                console.log("Success! Output:", outText);
+                document.getElementById("output").innerHTML = outText;
+                
+                // Example check for Module 1 Practice 1
+                if (outText.includes("<class 'int'>")) {
+                    document.getElementById("output").innerHTML += "[VALIDATION: CORRECT]";
+                } else {
+                    document.getElementById("output").innerHTML += "[VALIDATION: FAILED - missed type output]";
+                }
+
+            }, function(err) {
+                console.log(err.toString());
+                document.getElementById("output").innerHTML = err.toString();
+            });
+        }
+    </script>
+    </div>
+
+</body>
+</html>

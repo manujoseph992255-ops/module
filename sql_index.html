@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Strategy - KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .typing-container {
+            display: inline-block;
+            min-height: 2.2em;
+            position: relative;
+        }
+        .blinking-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: var(--blue-dark);
+            margin-left: 2px;
+            animation: blink-caret 1s step-end infinite;
+            vertical-align: text-bottom;
+        }
+        @keyframes blink-caret {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="landing-body">
+    <!-- Navbar -->
+    <nav class="kvj-navbar">
+        <div class="kvj-container nav-wrapper">
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="index.html" class="nav-back">
+                    Back
+                </a>
+                <a href="index.html" class="kvj-logo">
+                    <div class="logo-box">
+                        <img src="Kvj logo.jpeg" alt="KVJ" style="max-height: 45px; width: auto;">
+                    </div>
+                </a>
+            </div>
+            <div class="nav-links-right">
+                <a href="sql_intro.html" class="kvj-btn kvj-btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="kvj-hero">
+        <div class="kvj-container hero-grid">
+            
+            <!-- Left Content -->
+            <div class="hero-left fade-in-up" style="animation-delay: 0.1s;">
+                <h1 class="hero-title typing-container">
+                    <span id="typewriter"></span><span class="blinking-cursor"></span>
+                </h1>
+                
+                <h2 class="hero-subtitle">
+                    KVJ Advanced SQL Certification
+                </h2>
+                
+                <p class="hero-desc">
+                    Architect data and craft complex queries. The engine of modern business intelligence. Experience liftoff with KVJ.
+                </p>
+                
+                <div class="hero-action">
+                    <a href="sql_intro.html" class="kvj-btn kvj-btn-dark">Explore SQL</a>
+                </div>
+            </div>
+            
+            <!-- Right Content - SQL Graphic -->
+            <div class="hero-right fade-in-up" style="animation-delay: 0.3s;">
+                <div class="dashboard-mockup" style="background-color: #0f172a; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+                    <div class="window-controls" style="background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <div class="dot dot-r"></div>
+                        <div class="dot dot-y"></div>
+                        <div class="dot dot-g"></div>
+                        <div class="fy-text" style="color: #94a3b8; font-family: monospace;">query.sql</div>
+                    </div>
+                    <div class="dash-content" style="padding: 30px; font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95rem; line-height: 1.7; color: #e2e8f0; overflow-x: auto;">
+                        <span style="color: #c678dd;">SELECT</span> student_name, mastery_level<br>
+                        <span style="color: #c678dd;">FROM</span> kvj_students<br>
+                        <span style="color: #c678dd;">WHERE</span> skills <span style="color: #c678dd;">LIKE</span> <span style="color: #98c379;">'%SQL%'</span><br>
+                        <span style="color: #c678dd;">ORDER BY</span> achievement_points <span style="color: #c678dd;">DESC</span>;<br>
+                        <br>
+                        <span style="color: #5c6370; font-style: italic;">-- Success: Query executed in 0.02s</span><span class="blinking-cursor" style="background-color: #528bff; width: 8px; margin-left: 5px;"></span><br>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </header>
+
+    <script>
+        // Typing Effect logic
+        const line1 = "Master the Syntax of ";
+        const line2 = "Data Architecture &<br>";
+        const line3 = "Mastery";
+        const typewriterEl = document.getElementById('typewriter');
+        let typeIndex = 0;
+        const blueStyle = "<span class='text-blue'>";
+        const tealStyle = "<span class='text-teal'>";
+        const closeSpan = "</span>";
+        let fullHTML = "";
+
+        function typeWriter() {
+            if (typeIndex < line1.length) {
+                fullHTML = blueStyle + line1.substring(0, typeIndex + 1) + closeSpan;
+                typewriterEl.innerHTML = fullHTML;
+                typeIndex++;
+                setTimeout(typeWriter, 40);
+            } 
+            else if (typeIndex < line1.length + line2.length) {
+                let idx2 = typeIndex - line1.length;
+                fullHTML = blueStyle + line1 + closeSpan + tealStyle + line2.substring(0, idx2 + 1) + closeSpan;
+                typewriterEl.innerHTML = fullHTML;
+                typeIndex++;
+                setTimeout(typeWriter, 40);
+            }
+            else if (typeIndex < line1.length + line2.length + line3.length) {
+                let idx3 = typeIndex - line1.length - line2.length;
+                fullHTML = blueStyle + line1 + closeSpan + tealStyle + line2 + closeSpan + blueStyle + line3.substring(0, idx3 + 1) + closeSpan;
+                typewriterEl.innerHTML = fullHTML;
+                typeIndex++;
+                setTimeout(typeWriter, 40);
+            }
+        }
+        setTimeout(typeWriter, 500);
+    </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel Learning Roadmap | KVJ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --blue-dark: #1e3a5f;
+            --blue-primary: #4285F4;
+            --pink-accent: #EA4335;
+            --green-accent: #34A853;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .header-banner {
+            background: #f1f5f9;
+            padding: 100px 20px 60px;
+            text-align: center;
+        }
+
+        .header-banner h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-bottom: 15px;
+        }
+
+        .header-banner p {
+            color: #64748b;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+        }
+
+        .roadmap-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .roadmap-title {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--blue-dark);
+            margin-bottom: 50px;
+            letter-spacing: -1px;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .module-card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+            border-left: 6px solid var(--blue-dark);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+        }
+
+        .module-card h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--blue-dark);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .module-card ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .module-card ul li {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            padding-left: 15px;
+            position: relative;
+        }
+
+        .module-card ul li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Palette Overrides */
+        .module-blue { border-left-color: var(--blue-primary); background: #e0f2ff; }
+        .module-blue li::before { color: var(--blue-primary); }
+        
+        .module-pink { border-left-color: var(--pink-accent); background: #fdf2f8; }
+        .module-pink li::before { color: var(--pink-accent); }
+        
+        .module-green { border-left-color: var(--green-accent); background: #f0fdf4; }
+        .module-green li::before { color: var(--green-accent); }
+
+        .card-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-roadmap {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            background: #ffffff;
+        }
+
+        .btn-study { color: var(--blue-dark); }
+        .btn-study:hover { background: #f8fafc; border-color: var(--blue-dark); }
+        
+        .btn-quiz { color: #ffffff; background: var(--blue-dark); border: none; }
+        .btn-quiz:hover { background: #152b47; transform: translateY(-2px); }
+
+        @media (max-width: 992px) { .modules-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .modules-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="kvj-navbar">
+        <div class="kvj-container nav-wrapper">
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <a href="excel_index.html" class="nav-back">← Back</a>
+                <a href="excel_index.html"><img src="Kvj logo.jpeg" alt="KVJ Logo" style="max-height: 40px; width: auto;"></a>
+            </div>
+            <a onclick="logout()" class="nav-logout" style="cursor: pointer; font-weight: 700; color: var(--blue-primary); text-decoration: none;">Log Out</a>
+        </div>
+    </nav>
+
+    <header class="header-banner">
+        <div style="max-width: 900px; margin: 0 auto; padding: 20px;">
+            <p>Architect Resilient Models & Strategic Dashboards</p>
+            <h1>
+                <span style="color: #1e3a5f;">Advanced Excel for</span><br>
+                <span style="color: #0891b2;">Strategic Decision Making</span>
+            </h1>
+        </div>
+    </header>
+
+    <main class="roadmap-container">
+        <h2 class="roadmap-title">Your Learning Path</h2>
+
+        <div class="modules-grid">
+            <!-- Module 1 -->
+            <div class="module-card module-blue">
+                <h3>1. Data Foundations & Business Variance</h3>
+                <ul>
+                    <li>Structural design principles</li>
+                    <li>Scalable model architecture</li>
+                    <li>Workbook & worksheet hierarchies</li>
+                </ul>
+                <div class="card-buttons">
+                    <a href="Excel-Module-1-1.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?mod=ex1" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="module-card module-pink">
+                <h3>2. Logical Functions</h3>
+                <ul>
+                    <li>XLOOKUP & nested logics</li>
+                    <li>INDEX-MATCH fundamentals</li>
+                    <li>Boolean logic in retrieval</li>
+                    <li>Strategic logic & functions</li>
+                </ul>
+                <div class="card-buttons">
+                    <a href="Excel-Module-2.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?mod=ex2" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 3 -->
+            <div class="module-card module-green">
+                <h3>3. The Power of Referencing</h3>
+                <ul>
+                    <li>Relative formulas & positioning</li>
+                    <li>Absolute cell locking (F4)</li>
+                    <li>Mixed row/column references</li>
+                </ul>
+                <div class="card-buttons">
+                    <a href="Excel-Module-3.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?mod=ex3" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 4 -->
+            <div class="module-card module-blue">
+                <h3>4. Structured Data</h3>
+                <ul>
+                    <li>Self-Healing Data (Ctrl+T)</li>
+                    <li>Structured Referencing</li>
+                    <li>Interactive Slicers</li>
+                </ul>
+                <div class="card-buttons">
+                    <a href="Excel-Module-4.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?mod=ex4" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 5 -->
+            <div class="module-card module-pink">
+                <h3>5. Conditional Formatting (The Warning System)</h3>
+                <ul>
+                    <li>Color Scales for Inventory Age</li>
+                    <li>Traffic Light Icon Sets for Sales</li>
+                    <li>Formula-Based Exception Rules</li>
+                </ul>
+                <div class="card-buttons">
+                    <a href="Excel-Module-5-1.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?mod=ex5" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 6 -->
+            <div class="module-card module-green">
+                <h3>6. Advanced Conditional Analysis</h3>
+                <ul>
+                    <li>SUMIFS & COUNTIFS for Queries</li>
+                    <li>AVERAGEIFS for Benchmarking</li>
+                    <li>Detecting Profit Leakage Logic</li>
+                </ul>
+                <div class="card-buttons">
+                    <a href="Excel-Module-6-1.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?mod=ex6" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 7 -->
+            <div class="module-card module-blue">
+                <h3>7. Data Relationship & Retrieval</h3>
+                <ul>
+                    <li>The XLOOKUP Bridge Logic</li>
+                    <li>INDEX & MATCH Professionals Choice</li>
+                    <li>Clean Error Handling (IFERROR)</li>
+                </ul>
+                <div class="card-buttons">
+                    <a href="Excel-Module-7-1.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?mod=ex7" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 8 -->
+            <div class="module-card module-pink">
+                <h3>8. Business Intelligence</h3>
+                <ul>
+                    <li>Automated Cleaning (ETL)</li>
+                    <li>Data Modeling Relationships</li>
+                    <li>Revenue per Rupee (DAX logic)</li>
+                </ul>
+                <div class="card-buttons">
+                    <a href="Excel-Module-8-1.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?mod=ex8" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 9 -->
+            <div class="module-card module-green">
+                <h3>9. Statistical Analysis & Forecasting</h3>
+                <ul>
+                    <li>Marketing Correlation Analysis</li>
+                    <li>Descriptive Statistics (Skewness)</li>
+                    <li>Seasonal Trendline Projections</li>
+                </ul>
+                <div class="card-buttons">
+                    <a href="Excel-Module-9-1.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?mod=ex9" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 10 -->
+            <div class="module-card module-blue">
+                <h3>10. Visual Storytelling & Advanced Charts</h3>
+                <ul>
+                    <li>Stacked Charts (Product Mix %)</li>
+                    <li>Waterfall Charts (Profit Bridge)</li>
+                    <li>Pareto Distributions (80/20 Rule)</li>
+                </ul>
+                <div class="card-buttons">
+                    <a href="Excel-Module-10-1.html" class="btn-roadmap btn-study">Study Material</a>
+                    <a href="module_quiz.html?mod=ex10" class="btn-roadmap btn-quiz">Assessment</a>
+                </div>
+            </div>
+
+            <!-- Module 11 -->
+            <div class="module-card module-pink">
+                <h3>11. Practicals</h3>
+                <ul>
+                    <li>Real-world business case execution</li>
+                    <li>Hands-on dataset manipulation</li>
+                    <li>Comprehensive logic implementation</li>
+                    <li>Final project delivery & review</li>
+                </ul>
+                <div class="card-buttons">
+                    <a href="Excel-Module-11.html" class="btn-roadmap btn-quiz" style="font-size: 14px; padding: 15px;">Start Practicals</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer style="padding: 40px 0; text-align: center; color: #94a3b8; font-size: 0.85rem;">
+        &copy; 2024 KVJ. All Rights Reserved.
+    </footer>
+
+    <script>
+        function logout() {
+            sessionStorage.clear();
+            localStorage.removeItem('strategist_user');
+            localStorage.removeItem('strategist_phone');
+            localStorage.removeItem('gmail');
+            localStorage.removeItem('class_code');
+            window.location.href = 'login.html';
+        }
+    </script>
+    </div>
+</body>
+</html>

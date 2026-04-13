@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 4: Data Visualization | KVJ Analytics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-blue: #1e3a5f;
+            --accent-blue: #38bdf8;
+            --bg-light: #f6f8fb;
+            --text-main: #1d1d1f;
+            --text-muted: #4b5563;
+            --border-color: #e2e8f0;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .kvj-logo-img { max-height: 35px; width: auto; }
+
+        .logout-btn {
+            background: #dc2626; color: white; padding: 8px 18px;
+            text-decoration: none; font-size: 12px; font-weight: 700;
+            border-radius: 6px; transition: opacity 0.3s; text-transform: uppercase;
+        }
+
+        .header-banner {
+            background: var(--primary-blue); color: white;
+            padding: 120px 20px 60px; text-align: center;
+        }
+
+        .header-banner h1 {
+            font-family: 'Montserrat', sans-serif; font-size: 38px;
+            font-weight: 900; letter-spacing: -1px; text-transform: uppercase;
+        }
+
+        .layout-container {
+            display: flex; max-width: 1400px;
+            margin: 40px auto; gap: 40px; width: 95%; padding-bottom: 60px;
+        }
+
+        .sidebar {
+            width: 300px; background: white; padding: 30px;
+            border: 1px solid var(--border-color); position: sticky;
+            top: 100px; border-radius: 12px; height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-family: 'Montserrat', sans-serif; font-size: 12px;
+            color: var(--accent-blue); text-transform: uppercase;
+            margin-bottom: 20px; border-bottom: 2px solid var(--bg-light);
+            padding-bottom: 10px; font-weight: 800; letter-spacing: 1px;
+        }
+
+        .sidebar a {
+            display: block; padding: 12px 15px;
+            color: var(--text-muted); text-decoration: none; font-size: 14px;
+            font-weight: 500; margin-bottom: 5px; border-radius: 8px;
+            transition: all 0.2s;
+        }
+
+        .sidebar a.active {
+            color: var(--primary-blue); font-weight: 700;
+            background: #eff6ff; border-left: 4px solid var(--primary-blue);
+        }
+
+        .sidebar a:hover:not(.active) { background: #f8fafc; color: var(--primary-blue); }
+
+        .main-content {
+            flex: 1; background: #ffffff; border: 1px solid var(--border-color);
+            padding: 40px 60px; border-radius: 12px;
+        }
+
+        .section-header {
+            margin-bottom: 30px; border-bottom: 3px solid var(--bg-light);
+            padding-bottom: 15px;
+        }
+
+        .section-header h2 {
+            font-family: 'Montserrat', sans-serif; color: var(--primary-blue);
+            font-size: 28px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        p { line-height: 1.8; margin-bottom: 25px; color: #334155; font-size: 17px; }
+        strong { color: var(--primary-blue); font-weight: 700; }
+        h3 {
+            font-family: 'Montserrat', sans-serif; color: var(--primary-blue);
+            margin: 40px 0 20px; font-size: 22px; font-weight: 700;
+        }
+
+        .content-list { list-style: none; margin-bottom: 25px; }
+        .content-list li {
+            position: relative; padding-left: 28px; margin-bottom: 12px;
+            color: #334155; font-size: 16px;
+        }
+        .content-list li::before {
+            content: ""; position: absolute; left: 0; top: 8px; width: 8px; height: 8px;
+            background: var(--accent-blue); border-radius: 2px; transform: rotate(45deg);
+        }
+
+        .interaction-box {
+            background-color: #f7f9fc; border-left: 5px solid var(--accent-blue);
+            padding: 25px; margin: 30px 0; border-radius: 0 10px 10px 0; font-size: 15px;
+        }
+
+        
+        
+
+        
+        
+        
+        
+        
+        
+
+        
+        
+        
+        
+        
+
+        
+        
+        
+
+        
+        
+        
+
+        
+        
+
+        /* Module Illustrations */
+        .illustration-container {
+            position: fixed;
+            right: 20px;
+            top: 200px;
+            width: 280px;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .illustration-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .illustration-card img { width: 80px; margin-bottom: 10px; }
+        .illustration-card span { display: block; font-weight: 800; color: var(--primary-blue); font-size: 14px; text-transform: uppercase; }
+
+        .quiz-cta { 
+            background: linear-gradient(135deg, #1e3a5f 0%, #38bdf8 100%); 
+            color: white; padding: 40px; border-radius: 12px; text-align: center; margin-top: 60px;
+            box-shadow: 0 10px 30px rgba(0, 142, 171, 0.2);
+        }
+        .btn-start-quiz { 
+            display: inline-block; background: #ffffff; color: var(--primary-blue); padding: 16px 40px; 
+            border-radius: 30px; text-decoration: none; font-weight: 800; font-size: 15px;
+            text-transform: uppercase; letter-spacing: 1px; margin-top: 20px; transition: all 0.3s; 
+        }
+        .btn-start-quiz:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1); background: #f8fafc; }
+
+        pre { background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color); color: #1e293b; margin: 20px 0; font-family: 'Fira Code', monospace; font-size: 14px; overflow-x: auto; }
+        
+        .dnd-option { display: inline-block; background: #334155; color: white; padding: 8px 15px; border-radius: 6px; cursor: grab; margin: 5px; font-weight: 600; font-size: 14px; }
+        .dnd-target { border: 2px dashed #475569; padding: 10px; border-radius: 6px; color: #94a3b8; text-align: center; min-height: 40px; }
+        .dnd-target.filled { background: #0f172a; color: #00d2ff; border-style: solid; }
+
+        @media (max-width: 1600px) { .illustration-container { display: none; } }
+        @media (max-width: 992px) { .layout-container { flex-direction: column; } .sidebar { width: 100%; position: static; } .main-content { padding: 30px; } }
+
+    
+        /* Dark UI for Practice (matching Python coding-practice) */
+        .practice-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            color: #f8fafc;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            border: none;
+        }
+        .practice-badge {
+            display: none;
+        }
+        .practice-card h3 { 
+            margin-top: 0; color: #38bdf8; font-size: 22px; font-weight: 700; border: none; padding-bottom: 0; margin-bottom: 20px; font-family: 'Outfit', sans-serif;
+        }
+        .practice-card p { color: #e2e8f0; font-size: 16px; margin-bottom: 20px; }
+        .practice-card strong { color: #f8fafc; font-weight: 800; }
+        
+        .mcq-option {
+            background: #0f172a; border: 1px solid #334155;
+            padding: 15px 20px; border-radius: 8px; margin-bottom: 10px;
+            cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 15px;
+            color: #e2e8f0;
+        }
+        .mcq-option:hover { background: #1e293b; border-color: #38bdf8; }
+        .mcq-option.selected { border-width: 2px; border-color: #38bdf8; }
+        .mcq-option.correct { border-color: #10b981; background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .mcq-option.wrong { border-color: #ef4444; background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .mcq-prefix { font-weight: 800; color: #38bdf8; }
+
+        .tf-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #334155; }
+        .tf-statement { color: #e2e8f0; font-size: 15px; }
+        .tf-btn { padding: 6px 15px; border: 1px solid #334155; background: #0f172a; color: #e2e8f0; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; }
+        .tf-btn.selected { background: #38bdf8; color: #0f172a; border-color: #38bdf8; }
+        .tf-btn.correct { background: #10b981 !important; border-color: #10b981 !important; color: white !important; }
+        .tf-btn.wrong { background: #ef4444 !important; border-color: #ef4444 !important; color: white !important; }
+
+        .practice-dark-btn {
+            background: #38bdf8; color: #0f172a; border: none;
+            padding: 12px 25px; border-radius: 8px; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s; margin-top: 20px;
+            margin-right: 10px; font-family: 'Outfit', sans-serif;
+        }
+        .practice-reset-btn {
+            background: #334155; color: #f8fafc; border: none;
+            padding: 12px 25px; border-radius: 8px; font-weight: 700;
+            font-size: 16px; cursor: pointer; transition: transform 0.2s; margin-top: 20px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .practice-dark-btn:hover, .practice-reset-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .practice-reset-btn:hover { background: #475569; }
+
+        .feedback-dark { margin-top: 15px; padding: 12px; border-radius: 8px; font-weight: 600; font-size: 14px; display: none; }
+        .feedback-dark.correct { background: rgba(16, 185, 129, 0.1); color: #10b981; border: 1px solid #10b981; display: block; }
+        .feedback-dark.wrong { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; display: block; }
+
+        .dd-container select { 
+            padding: 10px 15px; border-radius: 8px; background: #0f172a; 
+            color: #f8fafc; border: 1px solid #334155; font-weight: 600;
+            width: 220px; outline: none; transition: border-color 0.2s;
+        }
+        .dd-container select:focus { border-color: #38bdf8; }
+        
+        .mcq-option strong { margin-right: 10px; color: #f8fafc; }
+        .dd-container select option { background: #0f172a; color: #f8fafc; }
+
+        /* Visualization Lab Dashbaord Styles */
+        .viz-container { background: #f0f2f5; border: 1px solid #d1d5db; border-radius: 4px; padding: 15px; overflow: hidden; margin: 40px 0; display: flex; gap: 15px; color: #1e293b; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .viz-sidebar { width: 220px; background: #ffffff; padding: 10px; border: 1px solid #d1d5db; border-radius: 20px; }
+        .viz-main { flex: 1; background: #ffffff; padding: 20px; border: 1px solid #d1d5db; border-radius: 4px; min-height: 400px; display: flex; flex-direction: column; }
+        .viz-pane-header { font-weight: 600; font-size: 16px; color: #333; margin-bottom: 10px; padding-left: 5px; }
+        .viz-sub-header { font-weight: 500; font-size: 11px; color: #666; margin-bottom: 8px; padding-left: 5px; text-transform: none; }
+        
+        .viz-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; padding: 5px; margin-bottom: 20px; border-bottom: 1px solid #eee; }
+        .viz-icon-btn { width: 30px; height: 30px; background: #fff; border: 1px solid #eee; border-radius: 2px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .viz-icon-btn img { width: 18px; filter: grayscale(1); opacity: 0.6; }
+        .viz-icon-btn:hover { background: #eff6ff; border-color: #38bdf8; }
+        .viz-icon-btn:hover img { filter: none; opacity: 1; }
+        .viz-icon-btn.active { background: #e0f2fe; border: 1px solid #38bdf8; }
+        .viz-icon-btn.active img { filter: none; opacity: 1; }
+
+        .viz-bucket { margin-top: 15px; padding: 8px; background: #f9fafb; border: 1px dashed #ccc; border-radius: 4px; font-size: 11px; color: #999; text-align: center; }
+        .viz-bucket.filled { background: #fff; border: 1px solid #38bdf8; color: #333; font-weight: 600; text-align: left; padding: 8px 12px; }
+
+        .viz-field-list { margin-top: 20px; }
+        .viz-field-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; font-size: 12px; color: #444; cursor: pointer; border-radius: 4px; }
+        .viz-field-item:hover { background: #f3f4f6; }
+        .viz-field-item.active { background: #eff6ff; color: #2563eb; font-weight: 600; }
+        .viz-field-item i { font-size: 10px; color: #38bdf8; }
+
+        .chart-canvas-container { flex: 1; position: relative; margin-top: 15px; }
+        .viz-table-container { flex: 1; margin-top: 15px; display: none; overflow-y: auto; }
+        .viz-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .viz-table th, .viz-table td { padding: 10px; border: 1px solid #e2e8f0; text-align: left; }
+        .viz-table th { background: #f8fafc; color: #1e3a5f; font-weight: 700; width: 50%; }
+        .viz-table tr:hover { background: #f1f5f9; }
+
+        /* Mini-chart styles */
+        .mini-chart-layout { display: flex; gap: 20px; align-items: center; margin: 20px 0; background: #fff; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .mini-chart-text { flex: 1; }
+        .mini-chart-canvas { width: 220px !important; height: 140px !important; flex-shrink: 0; }
+
+        /* Concept Visual styles */
+        .concept-visual-container { display: flex; align-items: center; justify-content: space-around; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #e2e8f0; margin: 20px 0; }
+        .comparison-side { flex: 1; text-align: center; max-width: 45%; }
+        .comparison-side h4 { color: #1e3a5f; margin-bottom: 10px; font-size: 14px; }
+        .mini-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        .mini-table th, .mini-table td { border: 1px solid #e2e8f0; padding: 6px; text-align: left; }
+        .mini-table th { background: #f8fafc; }
+        .comparison-arrow { font-size: 24px; color: #0ea5e9; font-weight: bold; margin: 0 10px; }
+
+</style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="data_index.html"><img src="Kvj logo.jpeg" alt="Logo" class="kvj-logo-img"></a>
+        <a href="data_roadmap.html" class="logout-btn">EXIT</a>
+    </nav>
+    <header class="header-banner">
+        <h1>MODULE 4: DATA VISUALIZATION</h1>
+    </header>
+
+    <div class="illustration-container">
+        <div class="illustration-card" style="animation-delay: 0s;">
+            <img src="https://img.icons8.com/color/100/microsoft-excel-2019.svg" alt="Excel">
+            <span>Data Analysis</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 2s;">
+            <img src="https://img.icons8.com/isometric/100/line-chart.png" alt="Chart">
+            <span>Insights</span>
+        </div>
+        <div class="illustration-card" style="animation-delay: 4s;">
+            <img src="https://img.icons8.com/isometric/100/database.png" alt="DB">
+            <span>Management</span>
+        </div>
+    </div>
+
+    <div class="layout-container">
+        <aside class="sidebar">
+            <h3>Module Path</h3>
+            <a href="Data-Module-1.html">01 Data Basics</a>
+            <a href="Data-Module-2.html">02 Data Lifecycle</a>
+            <a href="Data-Module-3.html">03 Data Analysis</a>
+            <a href="Data-Module-4.html" class="active">04 Data Visualization</a>
+            <a href="Data-Module-5.html">05 Responsible Analytics</a>
+
+            <h3 style="margin-top:35px;">Navigation</h3>
+            <a href="data_roadmap.html" style="background: #f8fafc;">&larr; Return to Roadmap</a>
+        </aside>
+
+        <main class="main-content">
+            <div class="section-header">
+                <h2>1. Data Visualization</h2>
+            </div>
+            <h3>Concept</h3>
+            <p><strong>Data visualization</strong> is the process of representing data using visual elements such as <strong>charts, graphs, and dashboards</strong>. It helps transform complex data into easy-to-understand visuals.</p>
+            
+            <div class="interaction-box">
+                <strong>Example:</strong> Instead of showing a table of sales numbers, a bar chart can quickly show which product sells the most or which region performs better.
+            </div>
+
+            <!-- Concept Comparison Visual -->
+            <div class="concept-visual-container">
+                <div class="comparison-side">
+                    <h4>Raw Sales Data</h4>
+                    <table class="mini-table">
+                        <thead><tr><th>Product</th><th>Sales</th></tr></thead>
+                        <tbody>
+                            <tr><td>Smartphones</td><td>$12,400</td></tr>
+                            <tr><td>Laptops</td><td>$18,200</td></tr>
+                            <tr><td>Tablets</td><td>$8,300</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="comparison-arrow">&rarr;</div>
+                <div class="comparison-side">
+                    <h4>Vibrant Visualization</h4>
+                    <canvas id="conceptChart" width="220" height="120"></canvas>
+                </div>
+            </div>
+
+            <div class="interaction-box" style="border-left-color: #10b981; background: #f0fdf4;">
+                <strong>Insight:</strong> Humans understand visuals faster than numbers. Visualization helps in quick decision-making and better communication.
+            </div>
+
+            <!-- Practice 1.1 -->
+            <div class="practice-card">
+                <div class="practice-badge">PRACTICE</div>
+                <h3>Quick Check: Visualization Purpose</h3>
+                <p>What is the main purpose of data visualization?</p>
+                <div id="mcq-m4-1">
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m4-1')"><span class="mcq-prefix">A.</span> Store data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m4-1')"><span class="mcq-prefix">B.</span> Make data easier to understand</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m4-1')"><span class="mcq-prefix">C.</span> Delete data</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m4-1')"><span class="mcq-prefix">D.</span> Collect data</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m4-1', 'B', 'Correct! Visuals simplify interpretation by highlighting patterns and trends.')">Run & Check</button>
+                <button class="practice-reset-btn" onclick="resetPractice('mcq', 'mcq-m4-1', 'feedback-mcq-m4-1')">Reset</button>
+                <div class="feedback-dark" id="feedback-mcq-m4-1"></div>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>2. Reporting Data Effectively</h2>
+            </div>
+            <h3>Concept</h3>
+            <p><strong>Data reporting</strong> involves presenting data in a structured format so that stakeholders can understand it easily. Common formats include tables, dashboards, and charts.</p>
+            
+            <div class="content-list">
+                <li><strong>Clear:</strong> Avoid confusing labels or crowded visuals.</li>
+                <li><strong>Simple:</strong> Don't overcomplicate with excessive data points.</li>
+                <li><strong>Meaningful:</strong> Always highlight the key insights that drive decisions.</li>
+            </div>
+
+            <div class="interaction-box" style="border-left-color: #38bdf8; background: #eff6ff;">
+                <strong>Insight:</strong> A good report does not just show data — it tells a story.
+            </div>
+
+            <div class="practice-card">
+                <h3>Quick Check: Effective Reporting</h3>
+                <p>Which of the following is used to present data effectively?</p>
+                <div id="mcq-m4-2">
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m4-2')"><span class="mcq-prefix">A.</span> Raw data only</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m4-2')"><span class="mcq-prefix">B.</span> Tables and charts</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m4-2')"><span class="mcq-prefix">C.</span> Programming code</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m4-2', 'B', 'Correct! Structured visuals are the key to effective reporting.')">Run & Check</button>
+                <button class="practice-reset-btn" onclick="resetPractice('mcq', 'mcq-m4-2', 'feedback-mcq-m4-2')">Reset</button>
+                <div class="feedback-dark" id="feedback-mcq-m4-2"></div>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>3. Types of Data Visualization</h2>
+            </div>
+            <p>Different visualizations are used for different purposes. Choosing the right one is critical for accuracy.</p>
+
+            <div class="mini-chart-layout">
+                <div class="mini-chart-text">
+                    <h3>3.1 Comparison Charts</h3>
+                    <p>Used to compare values between categories (e.g., Bar charts, Column charts).</p>
+                    <div class="interaction-box">
+                        <strong>Example:</strong> Comparing sales performance across five different retail stores.
+                    </div>
+                </div>
+                <canvas id="miniBar" width="220" height="140" class="mini-chart-canvas"></canvas>
+            </div>
+
+            <div class="mini-chart-layout">
+                <div class="mini-chart-text">
+                    <h3>3.2 Trend Charts</h3>
+                    <p>Used to show changes over time (e.g., Line charts).</p>
+                    <div class="interaction-box">
+                        <strong>Example:</strong> Tracking monthly revenue growth over a 12-month period.
+                    </div>
+                </div>
+                <canvas id="miniLine" width="220" height="140" class="mini-chart-canvas"></canvas>
+            </div>
+
+            <div class="mini-chart-layout">
+                <div class="mini-chart-text">
+                    <h3>3.3 Distribution Charts</h3>
+                    <p>Used to show how data is spread across values (e.g., Histograms).</p>
+                    <div class="interaction-box">
+                        <strong>Example:</strong> Analyzing the age ranges of customers in a survey.
+                    </div>
+                </div>
+                <canvas id="miniDist" width="220" height="140" class="mini-chart-canvas"></canvas>
+            </div>
+
+            <div class="mini-chart-layout">
+                <div class="mini-chart-text">
+                    <h3>3.4 Correlation Charts</h3>
+                    <p>Used to show relationship between two variables (e.g., Scatter plots).</p>
+                    <div class="interaction-box" style="border-left-color: #ef4444; background: #fef2f2;">
+                        <strong>Warning:</strong> Correlation does not always mean causation! Just because two variables move together doesn't mean one caused the other.
+                    </div>
+                </div>
+                <canvas id="miniScatter" width="220" height="140" class="mini-chart-canvas"></canvas>
+            </div>
+
+            <div class="practice-card">
+                <h3>Interpreting Visualization Types</h3>
+                <p>Match the requirement to the correct chart type.</p>
+                
+                <div class="tf-row" id="tf-row-m4-3-1">
+                    <div class="tf-statement">1. Best for comparing categories?</div>
+                    <div class="dd-container">
+                        <select id="dd-m4-3-1">
+                            <option value="">Select...</option>
+                            <option value="Bar">Bar Chart</option>
+                            <option value="Line">Line Chart</option>
+                            <option value="Hist">Histogram</option>
+                            <option value="Scatter">Scatter Plot</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="tf-row" id="tf-row-m4-3-2">
+                    <div class="tf-statement">2. Best for showing trends over time?</div>
+                    <div class="dd-container">
+                        <select id="dd-m4-3-2">
+                            <option value="">Select...</option>
+                            <option value="Bar">Bar Chart</option>
+                            <option value="Line">Line Chart</option>
+                            <option value="Hist">Histogram</option>
+                            <option value="Scatter">Scatter Plot</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button class="practice-dark-btn" onclick="checkAllDD(['dd-m4-3-1', 'dd-m4-3-2'], ['Bar', 'Line'], 'feedback-m4-3')">Run & Check</button>
+                <button class="practice-reset-btn" onclick="resetPractice('dd', ['dd-m4-3-1', 'dd-m4-3-2'], 'feedback-m4-3')">Reset</button>
+                <div class="feedback-dark" id="feedback-m4-3"></div>
+            </div>
+
+            <!-- Section 4 -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>4. Interpreting & Avoiding Bias</h2>
+            </div>
+            <h3>Concept</h3>
+            <p>Interpreting visualization means understanding what the data is telling us. This involves identifying trends, comparing values, and spotting patterns.</p>
+            
+            <p>Visualizations can sometimes be misleading due to <strong>incorrect scaling</strong>, <strong>missing data</strong>, or <strong>exaggerated differences</strong>.</p>
+
+            <div class="interaction-box" style="border-left-color: #f59e0b; background: #fffbeb;">
+                <strong>Insight:</strong> Always check the <strong>axis scale</strong>, <strong>labels</strong>, and <strong>data source</strong> before trusting a visualization.
+            </div>
+
+            <div class="practice-card">
+                <h3>Visual Integrity Check</h3>
+                <p>Which of the following can make a chart misleading?</p>
+                <div id="mcq-m4-4">
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m4-4')"><span class="mcq-prefix">A.</span> Correct labeling</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m4-4')"><span class="mcq-prefix">B.</span> Proper scaling</div>
+                    <div class="mcq-option" onclick="selectMCQ(this, 'mcq-m4-4')"><span class="mcq-prefix">C.</span> Manipulated axis scale</div>
+                </div>
+                <button class="practice-dark-btn" onclick="checkMCQ('mcq-m4-4', 'C', 'Correct! Manipulating the axis (e.g., Y-axis not starting at zero) often exaggerates small differences.')">Run & Check</button>
+                <button class="practice-reset-btn" onclick="resetPractice('mcq', 'mcq-m4-4', 'feedback-mcq-m4-4')">Reset</button>
+                <div class="feedback-dark" id="feedback-mcq-m4-4"></div>
+            </div>
+
+            <!-- Section 5 -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>5. Communicating Insights</h2>
+            </div>
+            <h3>Concept</h3>
+            <p>Communication of data means explaining findings clearly. Good communication uses simple language, clear visuals, and meaningful comparisons.</p>
+
+            <div class="interaction-box">
+                <strong>Example:</strong> Instead of saying "Sales increased", say "Sales increased by <strong>20%</strong> compared to last quarter".
+            </div>
+
+            <div class="interaction-box" style="border-left-color: #0ea5e9; background: #f0f9ff;">
+                <strong>Insight:</strong> Data is valuable only when it is understood and communicated effectively.
+            </div>
+
+            <!-- Section 6: Visualization Lab -->
+            <div class="section-header" style="margin-top: 60px;">
+                <h2>6. Hands-on: Visualization Lab</h2>
+            </div>
+            <p>Modern analytics platforms provide a <strong>Visualization Pane</strong> where you can "build" visuals by dragging data fields and choosing chart types. Experiment with the lab below to see how choices impact data communication.</p>
+
+            <div class="viz-container">
+                <div class="viz-sidebar">
+                    <div class="viz-pane-header">Visualizations</div>
+                    <div class="viz-sub-header">Build visual</div>
+                    <div class="viz-grid">
+                        <div class="viz-icon-btn active" title="Bar Chart" onclick="changeChartType(this, 'bar')"><img src="https://img.icons8.com/fluency-systems-filled/48/0ea5e9/bar-chart.png"></div>
+                        <div class="viz-icon-btn" title="Line Chart" onclick="changeChartType(this, 'line')"><img src="https://img.icons8.com/fluency-systems-filled/48/0ea5e9/line-chart.png"></div>
+                        <div class="viz-icon-btn" title="Pie Chart" onclick="changeChartType(this, 'pie')"><img src="https://img.icons8.com/fluency-systems-filled/48/0ea5e9/pie-chart.png"></div>
+                        <div class="viz-icon-btn" title="Area Chart" onclick="changeChartType(this, 'line', true)"><img src="https://img.icons8.com/fluency-systems-filled/48/0ea5e9/area-chart.png"></div>
+                        <div class="viz-icon-btn" title="Donut Chart" onclick="changeChartType(this, 'doughnut')"><img src="https://img.icons8.com/fluency-systems-filled/48/0ea5e9/doughnut-chart.png"></div>
+                        <div class="viz-icon-btn" title="Tree Map" onclick="changeChartType(this, 'bar')"><img src="https://img.icons8.com/fluency-systems-filled/48/0ea5e9/grid.png"></div>
+                        <div class="viz-icon-btn" title="Scatter" onclick="changeChartType(this, 'scatter')"><img src="https://img.icons8.com/fluency-systems-filled/48/0ea5e9/scatter-plot.png"></div>
+                        <div class="viz-icon-btn" title="Table" onclick="changeChartType(this, 'table')"><img src="https://img.icons8.com/fluency-systems-filled/48/0ea5e9/table.png"></div>
+                    </div>
+
+                    <div class="viz-sub-header">Values</div>
+                    <div id="viz-bucket-val" class="viz-bucket filled">Revenue by Product</div>
+
+                    <div class="viz-field-list">
+                        <div class="viz-sub-header" style="margin-top:15px;">Data Fields</div>
+                        <div class="viz-field-item active" onclick="switchField(this, 'sales_product')">∑ Sales by Product</div>
+                        <div class="viz-field-item" onclick="switchField(this, 'sales_region')">∑ Sales by Region</div>
+                        <div class="viz-field-item" onclick="switchField(this, 'monthly_trend')">📅 Monthly Trend</div>
+                    </div>
+                </div>
+                <div class="viz-main">
+                    <div class="viz-pane-header">Report Canvas</div>
+                    <div class="chart-canvas-container" id="viz-canvas-area">
+                        <canvas id="vizChart"></canvas>
+                    </div>
+                    <div class="viz-table-container" id="viz-table-area">
+                        <table class="viz-table">
+                            <thead>
+                                <tr id="viz-table-head"></tr>
+                            </thead>
+                            <tbody id="viz-table-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-cta">
+                <h3>Ready for the Knowledge Check?</h3>
+                <p>Test your understanding of data visualization principles.</p>
+                <a href="module_quiz.html?mod=data4" class="btn-start-quiz">Start Assessment &rarr;</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let selections = {};
+
+        function triggerConfetti() {
+            if (typeof confetti !== 'undefined') {
+                confetti({ 
+                    particleCount: 150, 
+                    spread: 70, 
+                    origin: { y: 0.6 }, 
+                    colors: ['#1e3a5f', '#008eab', '#ffffff'] 
+                });
+            }
+        }
+
+        function checkAllDD(ids, answers, feedbackId) {
+            const feedback = document.getElementById(feedbackId);
+            let allCorrect = true;
+            ids.forEach((id, i) => {
+                const el = document.getElementById(id);
+                if (el.value !== answers[i]) {
+                    allCorrect = false;
+                    el.style.borderColor = "#ef4444";
+                } else {
+                    el.style.borderColor = "#10b981";
+                }
+            });
+
+            if (allCorrect) {
+                feedback.innerHTML = "Perfect! You correctly identified the chart types.";
+                feedback.className = "feedback-dark correct";
+                triggerConfetti();
+            } else {
+                feedback.innerText = "Some answers are incorrect. Please review the chart purposes.";
+                feedback.className = "feedback-dark wrong";
+            }
+        }
+
+        function selectMCQ(el, qid) {
+            const parent = document.getElementById(qid);
+            if (!parent) return;
+            parent.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('selected', 'correct', 'wrong'));
+            el.classList.add('selected');
+            selections[qid] = el.innerText[0];
+        }
+
+        function checkMCQ(qid, correct, msg) {
+            const parent = document.getElementById(qid);
+            const feedback = document.getElementById('feedback-' + qid);
+            if (!parent || !feedback) return;
+            const sel = parent.querySelector('.selected');
+            if (!sel) return;
+
+            if (selections[qid] === correct) {
+                sel.classList.add('correct');
+                feedback.innerHTML = msg;
+                feedback.className = 'feedback-dark correct';
+                triggerConfetti();
+            } else {
+                sel.classList.add('wrong');
+                feedback.innerText = 'Try again!';
+                feedback.className = 'feedback-dark wrong';
+            }
+        }
+
+        function resetPractice(type, id, feedbackId) {
+            const feedback = document.getElementById(feedbackId);
+            if (feedback) {
+                feedback.style.display = 'none';
+                feedback.classList.remove('correct', 'wrong');
+            }
+
+            if (type === 'mcq') {
+                const parent = document.getElementById(id);
+                if (parent) {
+                    parent.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('selected', 'correct', 'wrong'));
+                }
+                delete selections[id];
+            } else if (type === 'tf') {
+                const qids = Array.isArray(id) ? id : [id];
+                qids.forEach(q => {
+                    const row = document.getElementById('tf-row-' + q);
+                    if (row) row.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('selected', 'correct', 'wrong'));
+                    delete selections[q];
+                });
+            } else if (type === 'dd') {
+                const ids = Array.isArray(id) ? id : [id];
+                ids.forEach(q => {
+                    const el = document.getElementById(q);
+                    if (el) el.value = "";
+                });
+            } else if (type === 'dnd') {
+                const ids = Array.isArray(id) ? id : [id];
+                ids.forEach(q => {
+                    const el = document.getElementById(q);
+                    if (el) {
+                        el.innerText = "Drop here...";
+                        el.classList.remove('filled');
+                        el.style.borderColor = "#e2e8f0";
+                    }
+                });
+            }
+        }
+
+        // Visualization Lab Logic
+        const vizData = {
+            sales_product: {
+                labels: ['Smartphone', 'Laptop', 'Tablet', 'Smartwatch', 'Headphones'],
+                data: [12500, 18200, 8400, 5600, 9100],
+                label: 'Revenue by Product ($)',
+                bucket: 'Revenue by Product'
+            },
+            sales_region: {
+                labels: ['North', 'South', 'East', 'West', 'Central'],
+                data: [22000, 15000, 18000, 24000, 12000],
+                label: 'Revenue by Region ($)',
+                bucket: 'Revenue by Region'
+            },
+            monthly_trend: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                data: [4200, 4800, 5100, 5900, 6200, 7500],
+                label: 'Monthly Growth ($)',
+                bucket: 'Trend Data'
+            }
+        };
+
+        let currentDataset = 'sales_product';
+        let currentChartType = 'bar';
+        let mainChart;
+        let isArea = false;
+
+        function initVizChart() {
+            const ctx = document.getElementById('vizChart').getContext('2d');
+            mainChart = new Chart(ctx, {
+                type: currentChartType,
+                data: {
+                    labels: vizData[currentDataset].labels,
+                    datasets: [{
+                        label: vizData[currentDataset].label,
+                        data: vizData[currentDataset].data,
+                        backgroundColor: 'rgba(56, 189, 248, 0.6)',
+                        borderColor: '#0ea5e9',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: isArea
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'bottom' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+            updateVizChart();
+        }
+
+        function switchField(el, dataset) {
+            document.querySelectorAll('.viz-field-item').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            currentDataset = dataset;
+            document.getElementById('viz-bucket-val').innerText = vizData[dataset].bucket;
+            updateVizChart();
+        }
+
+        function changeChartType(btn, type, area = false) {
+            document.querySelectorAll('.viz-icon-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentChartType = type;
+            isArea = area;
+            updateVizChart();
+        }
+
+        function updateVizChart() {
+            if (!mainChart) return;
+            
+            const canvasArea = document.getElementById('viz-canvas-area');
+            const tableArea = document.getElementById('viz-table-area');
+
+            if (currentChartType === 'table') {
+                canvasArea.style.display = 'none';
+                tableArea.style.display = 'block';
+                renderVizTable();
+            } else {
+                canvasArea.style.display = 'block';
+                tableArea.style.display = 'none';
+                
+                mainChart.config.type = currentChartType;
+                mainChart.data.labels = vizData[currentDataset].labels;
+                mainChart.data.datasets[0].data = vizData[currentDataset].data;
+                mainChart.data.datasets[0].label = vizData[currentDataset].label;
+                mainChart.data.datasets[0].fill = isArea;
+                
+                if (currentChartType === 'pie' || currentChartType === 'doughnut') {
+                    mainChart.data.datasets[0].backgroundColor = ['#38bdf8', '#0ea5e9', '#0284c7', '#0369a1', '#075985'];
+                } else if (currentChartType === 'scatter') {
+                    // Turn categories into points for scatter plot simulation
+                    mainChart.data.datasets[0].data = vizData[currentDataset].data.map((v, i) => ({x: i + 1, y: v}));
+                    mainChart.data.datasets[0].backgroundColor = '#0ea5e9';
+                } else {
+                    mainChart.data.datasets[0].backgroundColor = 'rgba(56, 189, 248, 0.6)';
+                }
+                
+                mainChart.update();
+            }
+        }
+
+        function renderVizTable() {
+            const head = document.getElementById('viz-table-head');
+            const body = document.getElementById('viz-table-body');
+            const data = vizData[currentDataset];
+            
+            head.innerHTML = `<th>Category</th><th>${data.label}</th>`;
+            body.innerHTML = data.labels.map((label, i) => `
+                <tr>
+                    <td>${label}</td>
+                    <td>${data.data[i].toLocaleString()}</td>
+                </tr>
+            `).join('');
+        }
+
+        // Mini Charts Initialization
+        function initMiniCharts() {
+            const commonOptions = {
+                responsive: false,
+                maintainAspectRatio: false,
+                animation: false,
+                plugins: { legend: { display: false } },
+                scales: { 
+                    x: { display: true, grid: { color: '#f1f5f9' }, ticks: { display: false } }, 
+                    y: { display: true, grid: { color: '#f1f5f9' }, ticks: { display: false } } 
+                }
+            };
+
+            // 3.1 Bar
+            new Chart(document.getElementById('miniBar'), {
+                type: 'bar',
+                data: {
+                    labels: ['A', 'B', 'C', 'D', 'E'],
+                    datasets: [{
+                        data: [45, 60, 30, 80, 50],
+                        backgroundColor: '#38bdf8',
+                        borderRadius: 4
+                    }]
+                },
+                options: commonOptions
+            });
+
+            // 3.2 Line
+            new Chart(document.getElementById('miniLine'), {
+                type: 'line',
+                data: {
+                    labels: [1,2,3,4,5,6,7.8,9,10],
+                    datasets: [{
+                        data: [15, 22, 19, 35, 30, 48, 45, 65, 60, 80],
+                        borderColor: '#0ea5e9',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        fill: true,
+                        backgroundColor: 'rgba(14, 165, 233, 0.1)'
+                    }]
+                },
+                options: commonOptions
+            });
+
+            // 3.3 Histogram
+            new Chart(document.getElementById('miniDist'), {
+                type: 'bar',
+                data: {
+                    labels: [1,2,3,4,5,6,7,8,9,10,11,12],
+                    datasets: [{
+                        data: [2, 5, 8, 15, 25, 30, 28, 20, 12, 7, 4, 1],
+                        backgroundColor: '#0ea5e9',
+                        barPercentage: 1.0,
+                        categoryPercentage: 1.0,
+                        borderRadius: 2
+                    }]
+                },
+                options: commonOptions
+            });
+
+            // 3.4 Scatter (Correlation) - FIXED with manual data
+            new Chart(document.getElementById('miniScatter'), {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        data: [
+                            {x: 10, y: 15}, {x: 20, y: 25}, {x: 25, y: 22}, {x: 35, y: 40}, 
+                            {x: 40, y: 35}, {x: 50, y: 55}, {x: 60, y: 50}, {x: 65, y: 70}, 
+                            {x: 75, y: 65}, {x: 85, y: 80}, {x: 90, y: 78}, {x: 95, y: 92}
+                        ],
+                        backgroundColor: '#0ea5e9',
+                        pointRadius: 6,
+                        hoverRadius: 8
+                    }]
+                },
+                options: {
+                    ...commonOptions,
+                    scales: {
+                        x: { display: true, min: 0, max: 100, grid: { color: '#f1f5f9' }, ticks: { display: false } },
+                        y: { display: true, min: 0, max: 100, grid: { color: '#f1f5f9' }, ticks: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // Concept Visuals Initialization
+        function initConceptVisuals() {
+            new Chart(document.getElementById('conceptChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Phone', 'Laptop', 'Tablet'],
+                    datasets: [{
+                        data: [12400, 18200, 8300],
+                        backgroundColor: ['#38bdf8', '#0ea5e9', '#0284c7'],
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    maintainAspectRatio: false,
+                    animation: false,
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        x: { grid: { display: false } },
+                        y: { display:false, beginAtZero: true } 
+                    }
+                }
+            });
+        }
+
+        window.onload = function() {
+            initVizChart();
+            initMiniCharts();
+            initConceptVisuals();
+        };
+    </script>
+    </div>
+
+</body>
+</html>
